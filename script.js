@@ -1,3 +1,4 @@
+// ELENCO ADMIN CON ACCESSO TOTALE
 const ADMIN_AUTORIZZATI = ["Daniel", "Michele", "Mav", "Arduino", "Strepitoso", "Archadian", "Djsamy", "Cobra", "Baj", "Mirko", "Maverick", "Pavel", "Diego"];
 
 const GRADI_LISTA = ["Founder", "Co-Founder", "Owner", "Co Owner", "Community Manager", "Server Supervisor", "Staff Manager", "Supervisor", "Head Admin", "Senior Admin", "Admin", "Trial Admin", "Head Mod", "Senior Mod", "Moderator", "Trial Mod", "Head Helper", "Senior Helper", "Helper", "Trial Helper"];
@@ -22,7 +23,7 @@ let staffDatabase = [
     {nome: "Ash", grado: "Trial Helper"}
 ];
 
-// Carica dati salvati o crea nuovi
+// Caricamento dati da memoria locale per non perdere nulla
 let globalData = JSON.parse(localStorage.getItem('LSC_Data')) || {}; 
 let credentials = JSON.parse(localStorage.getItem('LSC_Credentials')) || {}; 
 let currentUser = null;
@@ -35,9 +36,10 @@ function syncSystem() {
         const userKey = s.nome.toLowerCase();
         if (!globalData[s.nome]) globalData[s.nome] = { warns: 0, totalSeconds: 0 };
         
+        // Se non esistono credenziali, le creiamo ORA
         if (!credentials[userKey]) {
-            // Se è uno dei primi 4, mettiamo password fisse per facilità, altrimenti casuali
             let pass;
+            // Password fisse di emergenza per i capi
             if(s.nome === "Daniel") pass = "D-101";
             else if(s.nome === "Michele") pass = "M-202";
             else if(s.nome === "Mav") pass = "M-303";
@@ -56,27 +58,37 @@ function syncSystem() {
     localStorage.setItem('LSC_Data', JSON.stringify(globalData));
 }
 
+// Avvio sistema
 syncSystem();
 
-// MOSTRA TUTTE LE PASSWORD IN CONSOLE PER L'ADMIN
-console.log("--- ELENCO PASSWORD ATTUALI ---");
-for(let u in credentials) { console.log(`${credentials[u].nomeOriginale}: ${credentials[u].psw}`); }
+// STAMPA TUTTE LE PASSWORD NELLA CONSOLE (F12) PER L'ADMIN
+console.log("--- LOG PASSWORD ATTIVE ---");
+for(let key in credentials) {
+    console.log(credentials[key].nomeOriginale + " -> " + credentials[key].psw);
+}
 
 function checkLogin() {
     const userIn = document.getElementById('username').value.trim().toLowerCase();
     const passIn = document.getElementById('password').value.trim();
     
-    if (credentials[userIn] && credentials[userIn].psw === passIn) {
-        const data = credentials[userIn];
-        currentUser = { nome: data.nomeOriginale, matricola: data.matricola, grado: data.grado };
-        if (ADMIN_AUTORIZZATI.includes(data.nomeOriginale)) {
-            document.getElementById('nav-admin').style.display = 'block';
+    if (credentials[userIn]) {
+        if (credentials[userIn].psw === passIn) {
+            const data = credentials[userIn];
+            currentUser = { nome: data.nomeOriginale, matricola: data.matricola, grado: data.grado };
+            
+            // Permessi Admin
+            if (ADMIN_AUTORIZZATI.includes(data.nomeOriginale)) {
+                document.getElementById('nav-admin').style.display = 'block';
+            }
+
+            document.getElementById('login-overlay').style.display = 'none';
+            document.getElementById('main-content').style.display = 'flex';
+            initData();
+        } else {
+            alert("ERRORE: Password non corretta per " + credentials[userIn].nomeOriginale);
         }
-        document.getElementById('login-overlay').style.display = 'none';
-        document.getElementById('main-content').style.display = 'flex';
-        initData();
     } else {
-        alert("Credenziali Errate!");
+        alert("ERRORE: Utente non trovato.");
     }
 }
 
@@ -88,8 +100,18 @@ function initData() {
     document.getElementById('staffer-logs').innerText = formatTime(globalData[n].totalSeconds);
 
     document.getElementById('new-staff-grade').innerHTML = GRADI_LISTA.map(g => `<option value="${g}">${g}</option>`).join("");
-    document.getElementById('admin-hours-body').innerHTML = staffDatabase.map(s => `<tr><td>${s.nome}</td><td>${s.grado}</td><td>${globalData[s.nome].warns}</td><td>${formatTime(globalData[s.nome].totalSeconds)}</td></tr>`).join("");
-    document.getElementById('staffTableBody').innerHTML = staffDatabase.map((s, i) => `<tr><td>ITD-${(i+1).toString().padStart(2,'0')}</td><td>${s.nome}</td><td>${s.grado}</td></tr>`).join("");
+    document.getElementById('admin-hours-body').innerHTML = staffDatabase.map(s => `
+        <tr>
+            <td>${s.nome}</td>
+            <td>${s.grado}</td>
+            <td>${globalData[s.nome].warns}</td>
+            <td>${formatTime(globalData[s.nome].totalSeconds)}</td>
+        </tr>
+    `).join("");
+    
+    document.getElementById('staffTableBody').innerHTML = staffDatabase.map((s, i) => `
+        <tr><td>ITD-${(i+1).toString().padStart(2,'0')}</td><td>${s.nome}</td><td>${s.grado}</td></tr>
+    `).join("");
 }
 
 function startService() {
@@ -111,7 +133,6 @@ function stopService() {
     document.getElementById('timer-display').innerText = "00:00:00";
     document.getElementById('btn-start').style.display = 'inline-block';
     document.getElementById('btn-stop').style.display = 'none';
-    
     localStorage.setItem('LSC_Data', JSON.stringify(globalData));
     initData();
 }
@@ -137,6 +158,6 @@ function addNewStaff() {
         credentials[n.toLowerCase()] = { psw: p, matricola: "ITD-NEW", grado: g, nomeOriginale: n };
         localStorage.setItem('LSC_Credentials', JSON.stringify(credentials));
         syncSystem(); initData();
-        alert(`Aggiunto! Password: ${p}`);
+        alert("Aggiunto: " + n + " con password: " + p);
     }
 }
