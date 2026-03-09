@@ -81,17 +81,30 @@
             </section>
 
             <section id="gestione-turni" class="tab-content" style="display:none;">
-                <div class="shift-wrapper">
-                    <div class="shift-card-header">
-                        <span class="service-tag">Servizio operativo</span>
-                        <h2>Gestione servizi</h2>
+                <div class="shift-grid">
+                    <div class="shift-wrapper">
+                        <div class="shift-card-header">
+                            <span class="service-tag">Servizio operativo</span>
+                            <h2>Gestione servizi</h2>
+                        </div>
+                        <div class="timer-box">
+                            <p id="status-text">Nessun servizio attivo</p>
+                            <div id="timer-display">00:00:00</div>
+                            <div class="controls">
+                                <button id="btn-start" onclick="startService()" class="btn-action">Inizia il servizio</button>
+                                <button id="btn-pause" onclick="pauseService()" class="btn-action btn-pause" style="display:none;">Pausa</button>
+                                <button id="btn-resume" onclick="startService()" class="btn-action" style="display:none;">Riprendi</button>
+                                <button id="btn-stop" onclick="stopService()" class="btn-action btn-danger" style="display:none;">Fine servizio</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="timer-box">
-                        <p id="status-text">Nessun servizio attivo</p>
-                        <div id="timer-display">00:00:00</div>
-                        <div class="controls">
-                            <button id="btn-start" onclick="startService()" class="btn-action">Inizia il servizio</button>
-                            <button id="btn-stop" onclick="stopService()" class="btn-action btn-danger" style="display:none;">Fine servizio</button>
+
+                    <div class="logs-wrapper">
+                        <div class="shift-card-header">
+                            <h2>Log turni recenti</h2>
+                        </div>
+                        <div class="logs-container" id="logs-list">
+                            <p class="empty-msg">Nessun turno registrato in questa sessione.</p>
                         </div>
                     </div>
                 </div>
