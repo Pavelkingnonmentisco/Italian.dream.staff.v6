@@ -2,105 +2,74 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Staff Portal - ITDR</title>
+    <title>Portale ITDR - Gestione Totale</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-
     <div id="login-overlay">
-        <div class="main-login-container">
-            <div class="info-side">
-                <p class="label">sistema di gestione interna</p>
-                <h1>Dashboard operativa per lo Staff ITDR.</h1>
-            </div>
-            <div class="form-side">
-                <div class="glass-box">
-                    <img src="https://res.cloudinary.com/dbxwiln0a/image/upload/v1773088043/mahwplqpvvuy34vczm3j.webp" class="box-logo">
-                    <h2>riservato staff itdr</h2>
-                    <div class="input-container">
-                        <label>username</label>
-                        <input type="text" id="username" placeholder="Inserisci nome">
-                    </div>
-                    <div class="input-container">
-                        <label>password</label>
-                        <input type="password" id="password" placeholder="••••••••">
-                    </div>
-                    <button onclick="checkLogin()" class="btn-submit">accedi</button>
-                    <div class="pavel-credits">© Portale sviluppato da Pavel</div>
-                </div>
-            </div>
+        <div class="glass-box">
+            <img src="https://res.cloudinary.com/dbxwiln0a/image/upload/v1773088043/mahwplqpvvuy34vczm3j.webp" width="60">
+            <h2>ITDR LOGIN</h2>
+            <input type="text" id="username" placeholder="Nome Utente">
+            <input type="password" id="password" placeholder="Password">
+            <button onclick="checkLogin()" class="btn-primary">ACCEDI</button>
         </div>
     </div>
 
     <div id="main-content" style="display:none;">
-        <header class="top-nav">
-            <div class="nav-left">
-                <img src="https://res.cloudinary.com/dbxwiln0a/image/upload/v1773088043/mahwplqpvvuy34vczm3j.webp" class="nav-logo">
-                <div class="logo-text">Staff - ITDR</div>
+        <nav class="navbar">
+            <span class="logo">ITDR STAFF</span>
+            <div class="menu">
+                <button onclick="tab('area-personale')">Area Personale</button>
+                <button onclick="tab('turni')">Turni</button>
+                <button id="admin-link" style="display:none;" onclick="tab('admin')">PANNELLO ADMIN</button>
             </div>
-            <nav class="nav-center">
-                <button onclick="showSection('area-personale')">area personale</button>
-                <button onclick="showSection('gestione-turni')">gestione turni</button>
-                <button id="nav-admin" style="display:none;" onclick="showSection('pannello-staff')">pannello staff</button>
-            </nav>
-            <div class="nav-right">
-                <button onclick="location.reload()" class="btn-logout-new">Disconnetti <i class="fas fa-power-off"></i></button>
-            </div>
-        </header>
+            <button onclick="location.reload()" class="logout">ESCI</button>
+        </nav>
 
-        <main class="container">
-            <section id="area-personale" class="tab-content">
-                <div class="stats-grid">
-                    <div class="stat-card"><label>grado</label><div id="staffer-grade" class="val">---</div></div>
-                    <div class="stat-card"><label>richiami</label><div id="staffer-warns" class="val warn-val">0</div></div>
-                    <div class="stat-card"><label>matricola</label><div id="staffer-id" class="val">ITD-00</div></div>
-                    <div class="stat-card" style="border-color: var(--accent);"><label>totale ore servizio</label><div id="staffer-total-hours" class="val">00:00:00</div></div>
+        <div class="container">
+            <section id="area-personale" class="page">
+                <div class="grid">
+                    <div class="card"><h3>GRADO</h3><p id="u-grado">-</p></div>
+                    <div class="card"><h3>MATRICOLA</h3><p id="u-mat">-</p></div>
+                    <div class="card"><h3>ORE TOTALI</h3><p id="u-ore">00:00:00</p></div>
+                    <div class="card"><h3>RICHIAMI</h3><p id="u-warns" style="color:red">0</p></div>
                 </div>
             </section>
 
-            <section id="gestione-turni" class="tab-content" style="display:none;">
-                <div class="shift-wrapper">
-                    <div id="timer-display">00:00:00</div>
-                    <div class="controls">
-                        <button id="btn-start" onclick="startService()" class="btn-action">inizia servizio</button>
-                        <button id="btn-stop" onclick="stopService()" class="btn-action btn-danger" style="display:none;">fine servizio</button>
-                    </div>
+            <section id="turni" class="page" style="display:none;">
+                <div class="timer-card">
+                    <h2 id="timer">00:00:00</h2>
+                    <button id="b-start" onclick="startT()">INIZIA</button>
+                    <button id="b-stop" style="display:none;" onclick="stopT()">FINE</button>
                 </div>
-                <div class="logs-wrapper"><h3>Log Recenti</h3><div id="logs-list"></div></div>
+                <div id="logs"></div>
             </section>
 
-            <section id="pannello-staff" class="tab-content" style="display:none;">
-                <div class="admin-container">
-                    <div class="admin-card" style="background: rgba(0, 212, 255, 0.1);">
-                        <h3><i class="fas fa-plus"></i> Arruola Nuovo Staff</h3>
-                        <div class="admin-input-grid">
-                            <input type="text" id="new-name" placeholder="Nome">
-                            <input type="text" id="new-pass" placeholder="Password">
-                            <input type="text" id="new-grade" placeholder="Grado">
-                            <input type="text" id="new-mat" placeholder="Matricola">
-                        </div>
-                        <button class="btn-submit" style="margin-top:10px" onclick="addNewStaff()">Aggiungi Staffer</button>
+            <section id="admin" class="page" style="display:none;">
+                <div class="admin-grid">
+                    <div class="card-admin">
+                        <h3>AGGIUNGI STAFF</h3>
+                        <input type="text" id="n-n" placeholder="Nome">
+                        <input type="text" id="n-p" placeholder="Password">
+                        <input type="text" id="n-g" placeholder="Grado">
+                        <input type="text" id="n-m" placeholder="Matricola">
+                        <button onclick="addS()">AGGIUNGI</button>
                     </div>
-
-                    <div class="admin-card" style="margin-top:20px">
-                        <h3>Gestisci / Rimuovi Staffer</h3>
-                        <select id="staff-selector" onchange="loadStaffMember()">
-                            <option value="">Seleziona...</option>
-                        </select>
-                        <div id="admin-controls" style="display:none; margin-top:15px;">
-                            <input type="text" id="edit-grado" placeholder="Grado" style="width:48%; padding:10px; background:#000; color:#fff; border:1px solid #333;">
-                            <input type="text" id="edit-matricola" placeholder="Matricola" style="width:48%; padding:10px; background:#000; color:#fff; border:1px solid #333;">
-                            <div style="margin-top:10px;">
-                                <button class="btn-action" onclick="updateStaffData()">Salva Modifiche</button>
-                                <button class="btn-action btn-danger" onclick="removeStaff()">Rimuovi Staffer</button>
-                            </div>
+                    <div class="card-admin">
+                        <h3>GESTISCI STAFF</h3>
+                        <select id="staff-list" onchange="loadS()"></select>
+                        <div id="edit-zone" style="display:none; margin-top:10px;">
+                            <input type="text" id="e-g">
+                            <input type="text" id="e-m">
+                            <button onclick="saveS()">SALVA</button>
+                            <button onclick="delS()" style="background:red">ELIMINA STAFF</button>
                         </div>
                     </div>
                 </div>
             </section>
-        </main>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
