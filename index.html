@@ -12,10 +12,10 @@
     <div id="login-overlay">
         <div class="login-box">
             <div class="brand">
-                <i class="fas fa-shield-halved"></i>
+                <img src="https://res.cloudinary.com/dbxwiln0a/image/upload/v1773088043/mahwplqpvvuy34vczm3j.webp" class="main-logo">
                 <span>STAFF - ITDR</span>
             </div>
-            <h2>Area Dipendenti</h2>
+            <h2>Riservato Staff ITDR</h2>
             <div class="input-group">
                 <label>USERNAME</label>
                 <input type="text" id="username" placeholder="Inserisci username">
@@ -26,12 +26,14 @@
             </div>
             <button onclick="checkLogin()" class="btn-login">Accedi</button>
             <p id="login-error">Credenziali errate o formato non valido.</p>
+            <div class="copyright-login">© Tutti i diritti riservati a Pavel</div>
         </div>
     </div>
 
     <div id="main-content" style="display:none;">
         <header class="top-nav">
             <div class="nav-left">
+                <img src="https://res.cloudinary.com/dbxwiln0a/image/upload/v1773088043/mahwplqpvvuy34vczm3j.webp" class="nav-logo">
                 <div class="logo-text">STAFF - ITDR</div>
             </div>
             <nav class="nav-center">
@@ -89,8 +91,7 @@
                             <thead>
                                 <tr><th>DATA INIZIO</th><th>FINE</th><th>DURATA</th><th>STATO</th></tr>
                             </thead>
-                            <tbody id="personal-history">
-                                </tbody>
+                            <tbody id="personal-history"></tbody>
                         </table>
                     </div>
                 </div>
@@ -114,7 +115,7 @@
                 </div>
                 <div class="admin-tools">
                     <div class="card">
-                        <h3>Gestione Richiami</h3>
+                        <h3>Gestione Staffer</h3>
                         <select id="select-staff-admin"></select>
                         <div class="btn-group">
                             <button onclick="modifyWarn(1)" class="btn-danger">+1 Richiamo</button>
@@ -131,6 +132,10 @@
                 </div>
             </section>
         </main>
+        
+        <footer class="main-footer">
+            Tutti i diritti d'autore sono riservati a <strong>Pavel</strong>
+        </footer>
     </div>
 
     <script src="script.js"></script>
