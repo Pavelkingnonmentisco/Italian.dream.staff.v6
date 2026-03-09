@@ -1,0 +1,67 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Staff ITDR Panel</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="login">
+  <img src="logo.png" width="120">
+  <h2>Accesso Staff</h2>
+  <input id="username" placeholder="Username">
+  <input id="password" type="password" placeholder="Password">
+  <button onclick="login()">Accedi</button>
+  <p id="error"></p>
+</div>
+
+<div id="panel">
+  <nav>
+    <img src="logo.png">
+    <button onclick="showSection('regolamenti')">Regolamenti</button>
+    <button onclick="showSection('turni')">Turni Staff</button>
+    <button onclick="showSection('matricole')">Matricole</button>
+    <button onclick="showSection('servizio')">Servizio</button>
+  </nav>
+
+  <section id="regolamenti" class="active">
+    <h1>Regolamenti Staff</h1>
+    <ul>
+      <li>Rispetto verso tutti</li>
+      <li>Non abusare dei poteri</li>
+      <li>Seguire i superiori</li>
+      <li>Comportamento professionale</li>
+    </ul>
+  </section>
+
+  <section id="turni">
+    <h1>Turni Staff</h1>
+    <img src="turni.png" class="turniImg">
+    <p>Qui verranno pubblicati i turni dello staff.</p>
+  </section>
+
+  <section id="matricole">
+    <h1>Matricole</h1>
+    <ul>
+      <li>Nome1</li>
+      <li>Nome2</li>
+      <li>Nome3</li>
+    </ul>
+  </section>
+
+  <section id="servizio">
+    <h1>Gestione Servizio</h1>
+    <button class="attiva" onclick="attivaServizio()">Attiva Servizio</button>
+    <button class="pausa" onclick="pausaServizio()">Metti Servizio in Pausa</button>
+    <button class="termina" onclick="terminaServizio()">Termina Servizio</button>
+    <h3 id="statoServizio">Stato: Offline</h3>
+    <h3 id="tempoTotale">Tempo Totale: 0h 0m</h3>
+    <h3 id="turniTotali">Turni Totali: 0</h3>
+  </section>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
