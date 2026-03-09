@@ -60,13 +60,13 @@
                 <div class="logo-text">STAFF - ITDR</div>
             </div>
             <nav class="nav-center">
-                <button onclick="showSection('area-personale')"><i class="fas fa-user"></i> Area Personale</button>
-                <button onclick="showSection('gestione-turni')"><i class="fas fa-stopwatch"></i> Gestione Turni</button>
-                <button onclick="showSection('lista-staff')"><i class="fas fa-users"></i> Lista Staff</button>
-                <button id="nav-admin" onclick="showSection('admin-panel')" style="display:none;"><i class="fas fa-user-shield"></i> Admin Panel</button>
+                <button onclick="showSection('area-personale')">Area Personale</button>
+                <button onclick="showSection('gestione-turni')">Gestione Turni</button>
+                <button onclick="showSection('lista-staff')">Lista Staff</button>
+                <button id="nav-admin" onclick="showSection('admin-panel')" style="display:none;">Admin Panel</button>
             </nav>
             <div class="nav-right">
-                <button onclick="location.reload()" class="btn-logout">Esci <i class="fas fa-sign-out-alt"></i></button>
+                <button onclick="location.reload()" class="btn-logout">Esci</button>
             </div>
         </header>
 
@@ -76,27 +76,15 @@
                     <h1>Benvenuto, <span id="user-display-name">---</span></h1>
                 </div>
                 <div class="stats-grid">
-                    <div class="stat-card">
-                        <label>GRADO</label>
-                        <div id="staffer-grade" class="val">---</div>
-                    </div>
-                    <div class="stat-card">
-                        <label>RICHIAMI</label>
-                        <div id="staffer-warns" class="val warn-val">0</div>
-                    </div>
-                    <div class="stat-card">
-                        <label>MATRICOLA</label>
-                        <div id="staffer-id" class="val">ITD-00</div>
-                    </div>
+                    <div class="stat-card"><label>GRADO</label><div id="staffer-grade" class="val">---</div></div>
+                    <div class="stat-card"><label>RICHIAMI</label><div id="staffer-warns" class="val warn-val">0</div></div>
+                    <div class="stat-card"><label>MATRICOLA</label><div id="staffer-id" class="val">ITD-00</div></div>
                 </div>
             </section>
 
             <section id="gestione-turni" class="tab-content" style="display:none;">
                 <div class="card shift-card">
-                    <div class="card-header">
-                        <span class="tag">SERVIZIO OPERATIVO</span>
-                        <h2>Gestione Servizi</h2>
-                    </div>
+                    <div class="card-header"><span class="tag">SERVIZIO OPERATIVO</span><h2>Gestione Servizi</h2></div>
                     <div class="timer-box">
                         <span id="status-text">NESSUN SERVIZIO ATTIVO</span>
                         <div id="timer-display">00:00:00</div>
@@ -106,7 +94,6 @@
                 </div>
             </section>
         </main>
-        <footer class="main-footer">© Riservato Pavel</footer>
     </div>
 
     <script src="script.js"></script>
