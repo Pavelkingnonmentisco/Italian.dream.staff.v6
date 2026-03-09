@@ -1,50 +1,37 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700;800&display=swap');
+/* ... (Mantenere gli stili precedenti) ... */
 
-:root {
-    --bg: #011627;
-    --accent: #00d4ff;
-    --primary: #007bff;
-    --danger: #ff4747;
+.admin-card.arruolamento {
+    background: rgba(0, 212, 255, 0.05);
+    border: 1px solid rgba(0, 212, 255, 0.2);
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-body { background-color: #000; color: white; }
+.input-grid-admin {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 10px;
+}
 
-h1, h2, h3, .logo-text, #timer-display, .btn-submit, .btn-action, .val { font-weight: 800; }
+.input-grid-admin input {
+    background: #000;
+    border: 1px solid #333;
+    padding: 10px;
+    color: white;
+    border-radius: 6px;
+    font-size: 13px;
+}
 
-#login-overlay { min-height: 100vh; background: radial-gradient(circle at center, #012a4a 0%, #000 100%); display: flex; align-items: center; justify-content: center; }
-.main-login-container { display: flex; width: 100%; max-width: 1000px; gap: 50px; align-items: center; padding: 20px; }
-.info-side h1 { font-size: 45px; color: var(--accent); line-height: 1.1; }
-.glass-box { background: rgba(255,255,255,0.02); border: 1px solid rgba(0,212,255,0.1); border-radius: 24px; padding: 40px; text-align: center; width: 400px; }
-.box-logo { width: 60px; margin-bottom: 20px; }
-.input-container { text-align: left; margin-bottom: 15px; }
-.input-container label { font-size: 10px; color: #888; text-transform: uppercase; }
-.input-container input { width: 100%; background: #000; border: 1px solid #222; padding: 12px; color: white; border-radius: 8px; margin-top: 5px; }
-.btn-submit { width: 100%; padding: 14px; background: var(--primary); border: none; color: white; border-radius: 8px; cursor: pointer; text-transform: uppercase; }
+.input-group {
+    display: flex;
+    gap: 10px;
+}
 
-.top-nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 40px; background: var(--bg); border-bottom: 1px solid #111; }
-.nav-center button { background: none; border: none; color: #888; margin: 0 10px; cursor: pointer; font-size: 12px; text-transform: uppercase; }
-.nav-center button:hover { color: var(--accent); }
-.btn-logout-new { background: #1a1a1a; color: var(--danger); border: 1px solid #333; padding: 8px 18px; border-radius: 20px; cursor: pointer; font-size: 11px; }
-
-.container { padding: 40px; max-width: 1100px; margin: auto; }
-/* Griglia a 2 colonne per Area Personale */
-.stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-.stat-card { background: var(--bg); padding: 25px; border-radius: 15px; border: 1px solid #111; }
-.stat-card label { font-size: 10px; color: #888; text-transform: uppercase; }
-.stat-card .val { font-size: 24px; color: var(--accent); margin-top: 5px; }
-.warn-val { color: var(--danger) !important; }
-
-.shift-wrapper { background: var(--bg); border-radius: 20px; padding: 40px; text-align: center; margin-bottom: 25px; border: 1px solid #111; }
-#timer-display { font-size: 80px; color: #fff; margin: 15px 0; }
-.btn-action { padding: 10px 20px; border-radius: 6px; border: none; cursor: pointer; color: white; background: #1e293b; margin: 5px; font-size: 12px; }
-.btn-pause { background: #f59e0b; color: #000; }
-.btn-danger { background: #7f1d1d; }
-
-.admin-container { background: var(--bg); padding: 30px; border-radius: 20px; border: 1px solid #111; }
-#staff-selector { width: 100%; padding: 12px; background: #000; color: white; border: 1px solid #333; border-radius: 8px; }
-.admin-card { background: rgba(0,0,0,0.3); padding: 20px; border-radius: 12px; margin-top: 15px; }
-.input-group { display: flex; gap: 10px; }
-.input-group input { flex: 1; background: #000; border: 1px solid #333; padding: 10px; color: white; border-radius: 5px; }
-.logs-wrapper { background: var(--bg); padding: 20px; border-radius: 15px; margin-top: 20px; }
-.log-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #111; font-size: 13px; }
+.input-group input {
+    flex: 1;
+    background: #000;
+    border: 1px solid #333;
+    padding: 10px;
+    color: white;
+    border-radius: 6px;
+}
+/* ... */
