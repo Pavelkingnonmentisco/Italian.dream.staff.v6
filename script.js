@@ -1,3 +1,6 @@
+// LISTA ADMIN AUTORIZZATI
+const ADMIN_AUTORIZZATI = ["Daniel", "Michele", "Mav", "Arduino", "Strepitoso", "Archadian", "Djsamy", "Cobra", "Baj", "Mirko", "Maverick", "Pavel", "Diego"];
+
 const GRADI_LISTA = [
     "Founder", "Co-Founder", "Owner", "Co Owner", "Community Manager", 
     "Server Supervisor", "Staff Manager", "Supervisor", "Head Admin", 
@@ -9,50 +12,59 @@ let staffDatabase = [
     {nome: "Daniel", grado: "Founder"}, {nome: "Michele", grado: "Founder"},
     {nome: "Mav", grado: "Co-Founder"}, {nome: "Arduino", grado: "Owner"},
     {nome: "Strepitoso", grado: "Co Owner"}, {nome: "Archadian", grado: "Co Owner"},
-    {nome: "Baj", grado: "Server Supervisor"}, {nome: "Pavel", grado: "Supervisor"},
-    {nome: "Diego", grado: "Supervisor"}
+    {nome: "Baj", grado: "Server Supervisor"}, {nome: "Cobra", grado: "Community Manager"},
+    {nome: "Djsamy", grado: "Community Manager"}, {nome: "Mirko", grado: "Staff Manager"},
+    {nome: "Maverick", grado: "Staff Manager"}, {nome: "Pavel", grado: "Supervisor"},
+    {nome: "Diego", grado: "Supervisor"}, {nome: "Hydro", grado: "Head Admin"},
+    {nome: "Fabbri", grado: "Senior Admin"}, {nome: "Matz", grado: "Senior Admin"},
+    {nome: "Nathalino", grado: "Senior Admin"}, {nome: "Viper", grado: "Admin"},
+    {nome: "Xenoo", grado: "Admin"}, {nome: "Adamo", grado: "Head Mod"},
+    {nome: "Gabriel", grado: "Moderator"}, {nome: "Chorno", grado: "Moderator"},
+    {nome: "Joker", grado: "Moderator"}, {nome: "Nenne", grado: "Trial Mod"},
+    {nome: "Mattia", grado: "Trial Mod"}, {nome: "Lollo", grado: "Senior Helper"},
+    {nome: "Simo", grado: "Helper"}, {nome: "Vortex", grado: "Helper"},
+    {nome: "Void", grado: "Helper"}, {nome: "Sangue", grado: "Trial Helper"},
+    {nome: "Ibra", grado: "Trial Helper"}, {nome: "Noxen", grado: "Trial Helper"},
+    {nome: "Ash", grado: "Trial Helper"}
 ];
 
 let globalData = {}; 
 let credentials = {}; 
-let currentUser = null;
-let seconds = 0, timerInterval = null;
+let currentUser = null, seconds = 0, timerInterval = null;
 
-// Sincronizza il database iniziale
 function syncSystem() {
     staffDatabase.forEach((s, i) => {
         const id = (i + 1).toString().padStart(2, '0');
-        const username = s.nome.toLowerCase();
-        
-        // Crea dati se non esistono
+        const userKey = s.nome.toLowerCase();
         if (!globalData[s.nome]) globalData[s.nome] = { warns: 0, totalSeconds: 0 };
-        
-        // Crea credenziali se non esistono
-        if (!credentials[username]) {
-            credentials[username] = {
+        if (!credentials[userKey]) {
+            credentials[userKey] = {
                 psw: s.nome.charAt(0).toUpperCase() + "-" + id,
                 matricola: "ITD-" + id,
                 grado: s.grado
             };
         } else {
-            // Aggiorna grado e matricola se il nome esiste già
-            credentials[username].grado = s.grado;
-            credentials[username].matricola = "ITD-" + id;
+            credentials[userKey].grado = s.grado;
+            credentials[userKey].matricola = "ITD-" + id;
         }
     });
 }
 syncSystem();
 
 function checkLogin() {
-    const user = document.getElementById('username').value.trim().toLowerCase();
-    const pass = document.getElementById('password').value.trim();
-    
-    if (credentials[user] && credentials[user].psw === pass) {
-        currentUser = { nome: user, ...credentials[user] };
-        const adminGradi = ["Founder", "Owner", "Co-Founder", "Co Owner", "Server Supervisor", "Supervisor"];
-        if (adminGradi.includes(currentUser.grado)) {
+    const userIn = document.getElementById('username').value.trim();
+    const passIn = document.getElementById('password').value.trim();
+    const userKey = userIn.toLowerCase();
+
+    if (credentials[userKey] && credentials[userKey].psw === passIn) {
+        currentUser = { nome: userIn, ...credentials[userKey] };
+        
+        // CONTROLLO PERMESSI ADMIN NOMINATIVO
+        const nomePulito = userIn.charAt(0).toUpperCase() + userIn.slice(1).toLowerCase();
+        if (ADMIN_AUTORIZZATI.includes(nomePulito)) {
             document.getElementById('nav-admin').style.display = 'block';
         }
+
         document.getElementById('login-overlay').style.display = 'none';
         document.getElementById('main-content').style.display = 'flex';
         initData();
@@ -61,74 +73,43 @@ function checkLogin() {
     }
 }
 
-// AGGIUNTA NUOVA PERSONA
+// Funzioni Admin
 function addNewStaff() {
-    const nome = document.getElementById('new-staff-name').value.trim();
-    const grado = document.getElementById('new-staff-grade').value;
-    const pass = document.getElementById('new-staff-pass').value.trim();
-
-    if (!nome || !pass) {
-        alert("Inserisci Nome e Password!");
-        return;
-    }
-
-    // Aggiungi al database
-    staffDatabase.push({ nome: nome, grado: grado });
-    
-    // Forza la password custom nelle credenziali
-    credentials[nome.toLowerCase()] = { psw: pass };
-    
-    // Sincronizza tutto
-    syncSystem();
-    initData();
-
-    // Reset campi
-    document.getElementById('new-staff-name').value = "";
-    document.getElementById('new-staff-pass').value = "";
-    alert("Staffer " + nome + " aggiunto! Ora può loggare.");
+    const n = document.getElementById('new-staff-name').value.trim();
+    const g = document.getElementById('new-staff-grade').value;
+    const p = document.getElementById('new-staff-pass').value.trim();
+    if(n && p) {
+        staffDatabase.push({ nome: n, grado: g });
+        credentials[n.toLowerCase()] = { psw: p };
+        syncSystem(); initData();
+        alert("Staffer aggiunto!");
+    } else { alert("Compila Nome e Password!"); }
 }
 
 function removeStaff() {
-    const target = document.getElementById('select-staff-admin').value;
-    if(confirm("Rimuovere " + target + "?")) {
-        staffDatabase = staffDatabase.filter(s => s.nome !== target);
-        delete credentials[target.toLowerCase()];
-        syncSystem();
-        initData();
+    const t = document.getElementById('select-staff-admin').value;
+    if(confirm("Rimuovere " + t + "?")) {
+        staffDatabase = staffDatabase.filter(s => s.nome !== t);
+        delete credentials[t.toLowerCase()];
+        syncSystem(); initData();
     }
 }
 
 function initData() {
-    const dispName = currentUser.nome.charAt(0).toUpperCase() + currentUser.nome.slice(1);
-    document.getElementById('staffer-name').innerText = dispName;
+    const dName = currentUser.nome.charAt(0).toUpperCase() + currentUser.nome.slice(1);
+    document.getElementById('staffer-name').innerText = dName.toUpperCase();
     document.getElementById('staffer-grade').innerText = currentUser.grado;
-    document.getElementById('staffer-warns').innerText = globalData[dispName]?.warns || 0;
-    document.getElementById('staffer-logs').innerText = formatTime(globalData[dispName]?.totalSeconds || 0);
+    document.getElementById('staffer-warns').innerText = globalData[dName]?.warns || 0;
+    document.getElementById('staffer-logs').innerText = formatTime(globalData[dName]?.totalSeconds || 0);
 
-    // Popola select gradi
-    const gradeSelect = document.getElementById('new-staff-grade');
-    gradeSelect.innerHTML = GRADI_LISTA.map(g => `<option value="${g}">${g}</option>`).join("");
-
-    // Popola select admin
+    // Update UI
+    document.getElementById('new-staff-grade').innerHTML = GRADI_LISTA.map(g => `<option value="${g}">${g}</option>`).join("");
     document.getElementById('select-staff-admin').innerHTML = staffDatabase.map(s => `<option value="${s.nome}">${s.nome}</option>`).join("");
-
-    // Tabella Report Ore
-    document.getElementById('admin-hours-body').innerHTML = staffDatabase.map(s => `
-        <tr>
-            <td>${s.nome}</td>
-            <td>${s.grado}</td>
-            <td>${globalData[s.nome].warns}</td>
-            <td>${formatTime(globalData[s.nome].totalSeconds)}</td>
-        </tr>
-    `).join("");
-
-    // Tabella Matricole
-    document.getElementById('staffTableBody').innerHTML = staffDatabase.map((s, i) => `
-        <tr><td>ITD-${(i+1).toString().padStart(2,'0')}</td><td>${s.nome}</td><td>${s.grado}</td></tr>
-    `).join("");
+    document.getElementById('admin-hours-body').innerHTML = staffDatabase.map(s => `<tr><td>${s.nome}</td><td>${s.grado}</td><td>${globalData[s.nome].warns}</td><td>${formatTime(globalData[s.nome].totalSeconds)}</td></tr>`).join("");
+    document.getElementById('staffTableBody').innerHTML = staffDatabase.map((s, i) => `<tr><td>ITD-${(i+1).toString().padStart(2,'0')}</td><td>${s.nome}</td><td>${s.grado}</td></tr>`).join("");
 }
 
-// TIMER
+// Timer e Utility
 function startService() {
     document.getElementById('btn-start').style.display = 'none';
     document.getElementById('btn-stop').style.display = 'inline-block';
@@ -143,8 +124,8 @@ function startService() {
 
 function stopService() {
     clearInterval(timerInterval);
-    const dispName = currentUser.nome.charAt(0).toUpperCase() + currentUser.nome.slice(1);
-    globalData[dispName].totalSeconds += seconds;
+    const dName = currentUser.nome.charAt(0).toUpperCase() + currentUser.nome.slice(1);
+    globalData[dName].totalSeconds += seconds;
     seconds = 0;
     document.getElementById('timer-display').innerText = "00:00:00";
     document.getElementById('btn-start').style.display = 'inline-block';
