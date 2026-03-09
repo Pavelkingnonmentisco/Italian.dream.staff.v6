@@ -64,16 +64,38 @@ function exportTableToCSV(tableId, filename) {
 }
 
 function initData() {
-    const mBody = document.querySelector('#staffTable tbody');
-    staffData.forEach((nome, i) => {
-        mBody.innerHTML += `<tr><td>ITD-${(i+1).toString().padStart(2,'0')}</td><td>${nome}</td><td style="color:#44ff44">● Attivo</td></tr>`;
-    });
+    // ... (parte delle matricole resta uguale)
+
     const tBody = document.querySelector('#scheduleTable tbody');
+    tBody.innerHTML = "";
     const giorni = ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato", "Domenica"];
-    const turniMembri = staffData.slice(13); 
-    giorni.forEach((g, i) => {
-        let p = turniMembri.slice((i*6)%turniMembri.length, (i*6)%turniMembri.length + 3);
-        let s = turniMembri.slice((i*6+3)%turniMembri.length, (i*6+3)%turniMembri.length + 3);
-        tBody.innerHTML += `<tr><td><strong>${g}</strong></td><td>${p.join(", ")}</td><td>${s.join(", ")}</td></tr>`;
+    
+    // Solo i membri destinati ai turni
+    const turniMembri = ["Hydro","Fabbri","Matz","Nathalino","Viper","Xenoo","Adamo","Gabriel","Chorno","Joker","Nenne","Mattia","Lollo","Simo","Vortex","Void","Sangue","Ibra","Noxen","Ash"];
+
+    let index = 0; // Puntatore per scorrere la lista
+
+    giorni.forEach((g) => {
+        let p = [];
+        let s = [];
+
+        // Prendi 3 per il Pomeriggio
+        for (let i = 0; i < 3; i++) {
+            p.push(turniMembri[index % turniMembri.length]);
+            index++;
+        }
+
+        // Prendi 3 per la Sera
+        for (let i = 0; i < 3; i++) {
+            s.push(turniMembri[index % turniMembri.length]);
+            index++;
+        }
+
+        tBody.innerHTML += `
+            <tr>
+                <td><strong>${g}</strong></td>
+                <td>${p.join(", ")}</td>
+                <td>${s.join(", ")}</td>
+            </tr>`;
     });
 }
