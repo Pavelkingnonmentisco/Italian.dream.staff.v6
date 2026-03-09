@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LSC Staff Portal</title>
+    <title>Staff - ITDR Portal</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -11,51 +11,95 @@
 
     <div id="login-overlay">
         <div class="login-box">
-            <img src="https://res.cloudinary.com/dbxwiln0a/image/upload/v1773080841/msb6eamry0kagf21gttx.png" class="login-logo">
-            <h2>Accedi al Portale</h2>
-            <input type="text" id="username" placeholder="Nome Utente">
-            <input type="password" id="password" placeholder="Password (es. D-101)">
-            <button onclick="checkLogin()">ACCEDI</button>
-            <p id="login-error" style="color: #ff4444; display:none; margin-top:15px; font-weight:bold;">Credenziali Errate!</p>
+            <div class="brand">
+                <i class="fas fa-shield-halved"></i>
+                <span>STAFF - ITDR</span>
+            </div>
+            <h2>Area Dipendenti</h2>
+            <div class="input-group">
+                <label>USERNAME</label>
+                <input type="text" id="username" placeholder="Inserisci username">
+            </div>
+            <div class="input-group">
+                <label>PASSWORD</label>
+                <input type="password" id="password" placeholder="••••••••">
+            </div>
+            <button onclick="checkLogin()" class="btn-login">Accedi</button>
+            <p id="login-error">Credenziali errate o formato non valido.</p>
         </div>
     </div>
 
     <div id="main-content" style="display:none;">
-        <nav class="sidebar">
-            <img src="https://res.cloudinary.com/dbxwiln0a/image/upload/v1773080841/msb6eamry0kagf21gttx.png" class="nav-logo">
-            <button onclick="showSection('servizio')"><i class="fas fa-clock"></i> Servizio</button>
-            <button onclick="showSection('matricole')"><i class="fas fa-list"></i> Lista Staff</button>
-            <button id="nav-admin" onclick="showSection('admin-panel')" style="display:none; color: #ff4444; border: 1px solid #ff4444; margin-top: 20px;">
-                <i class="fas fa-user-shield"></i> ADMIN PANEL
-            </button>
-            <button onclick="location.reload()" style="margin-top: auto; color: #888;"><i class="fas fa-sign-out-alt"></i> Logout</button>
-        </nav>
+        <header class="top-nav">
+            <div class="nav-left">
+                <div class="logo-text">STAFF - ITDR</div>
+            </div>
+            <nav class="nav-center">
+                <button onclick="showSection('area-personale')"><i class="fas fa-user"></i> Area Personale</button>
+                <button onclick="showSection('gestione-turni')"><i class="fas fa-stopwatch"></i> Gestione Turni</button>
+                <button onclick="showSection('lista-staff')"><i class="fas fa-users"></i> Lista Staff</button>
+                <button id="nav-admin" onclick="showSection('admin-panel')" style="display:none;"><i class="fas fa-lock"></i> Admin Panel</button>
+            </nav>
+            <div class="nav-right">
+                <button onclick="location.reload()" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Esci</button>
+            </div>
+        </header>
 
-        <main class="content">
-            <section id="servizio" class="tab-content">
-                <div class="card profile-card">
-                    <h1 id="staffer-name">NOME UTENTE</h1>
-                    <p id="staffer-grade">Grado Staff</p>
-                    <div class="stats-grid">
-                        <div class="stat-item">ID: <span id="staffer-id">ITD-00</span></div>
-                        <div class="stat-item">Richiami: <span id="staffer-warns">0</span></div>
-                        <div class="stat-item">Totale Ore: <span id="staffer-logs">0h 0m</span></div>
-                    </div>
+        <main class="container">
+            <section id="area-personale" class="tab-content">
+                <div class="header-section">
+                    <h1>Benvenuto, <span id="user-display-name">Utente</span></h1>
+                    <p>Visualizza il tuo stato attuale e i tuoi richiami.</p>
                 </div>
-
-                <div class="card timer-card">
-                    <div id="timer-display">00:00:00</div>
-                    <div class="timer-controls">
-                        <button id="btn-start" onclick="startService()" class="btn-primary">INIZIA SERVIZIO</button>
-                        <button id="btn-stop" onclick="stopService()" class="btn-danger" style="display:none;">FINE SERVIZIO</button>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <label>GRADO ATTUALE</label>
+                        <div id="staffer-grade" class="val">Grado</div>
+                    </div>
+                    <div class="stat-card">
+                        <label>RICHIAMI ATTIVI</label>
+                        <div id="staffer-warns" class="val warn-val">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <label>MATRICOLA</label>
+                        <div id="staffer-id" class="val">ITD-00</div>
                     </div>
                 </div>
             </section>
 
-            <section id="matricole" class="tab-content" style="display:none;">
+            <section id="gestione-turni" class="tab-content" style="display:none;">
+                <div class="card shift-card">
+                    <div class="card-header">
+                        <div class="tag">SERVIZIO OPERATIVO</div>
+                        <h2>Gestione Servizi</h2>
+                    </div>
+                    
+                    <div class="timer-box">
+                        <span id="status-text">NESSUN SERVIZIO ATTIVO</span>
+                        <div id="timer-display">00:00:00</div>
+                        <div class="shift-controls">
+                            <button id="btn-start" onclick="startService()" class="btn-action">Inizia il Servizio</button>
+                            <button id="btn-stop" onclick="stopService()" class="btn-action btn-danger" style="display:none;">Fine Servizio</button>
+                        </div>
+                    </div>
+
+                    <div class="history-section">
+                        <h3>Storico dei Miei Servizi</h3>
+                        <table class="data-table">
+                            <thead>
+                                <tr><th>DATA INIZIO</th><th>FINE</th><th>DURATA</th><th>STATO</th></tr>
+                            </thead>
+                            <tbody id="personal-history">
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="lista-staff" class="tab-content" style="display:none;">
                 <div class="card">
-                    <h3>Elenco Personale ITD</h3>
-                    <table class="staff-table">
+                    <h3>Anagrafica Personale</h3>
+                    <table class="data-table">
                         <thead>
                             <tr><th>Matricola</th><th>Nome</th><th>Grado</th></tr>
                         </thead>
@@ -65,37 +109,25 @@
             </section>
 
             <section id="admin-panel" class="tab-content" style="display:none;">
-                <div class="card admin-header">
-                    <h2>Gestione Staff (Solo Autorizzati)</h2>
+                <div class="header-section">
+                    <h1>Pannello Amministrazione</h1>
                 </div>
-                
-                <div class="admin-grid">
+                <div class="admin-tools">
                     <div class="card">
-                        <h3>Aggiungi Nuovo</h3>
-                        <input type="text" id="new-staff-name" placeholder="Nome">
-                        <select id="new-staff-grade"></select>
-                        <input type="text" id="new-staff-pass" placeholder="Password (es. X-123)">
-                        <button onclick="addNewStaff()" class="btn-primary">SALVA</button>
-                    </div>
-
-                    <div class="card">
-                        <h3>Azioni Rapide</h3>
+                        <h3>Gestione Richiami</h3>
                         <select id="select-staff-admin"></select>
                         <div class="btn-group">
                             <button onclick="modifyWarn(1)" class="btn-danger">+1 Richiamo</button>
                             <button onclick="modifyWarn(-1)" class="btn-warn">-1 Richiamo</button>
                         </div>
                     </div>
-                </div>
-
-                <div class="card">
-                    <h3>Report Ore Totali</h3>
-                    <table class="staff-table">
-                        <thead>
-                            <tr><th>Nome</th><th>Grado</th><th>Richiami</th><th>Ore</th></tr>
-                        </thead>
-                        <tbody id="admin-hours-body"></tbody>
-                    </table>
+                    <div class="card">
+                        <h3>Report Ore Globali</h3>
+                        <table class="data-table">
+                            <thead><tr><th>Nome</th><th>Grado</th><th>Richiami</th><th>Totale Ore</th></tr></thead>
+                            <tbody id="admin-hours-body"></tbody>
+                        </table>
+                    </div>
                 </div>
             </section>
         </main>
