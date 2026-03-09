@@ -1,24 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700;800&display=swap');
-:root { --bg: #011627; --accent: #00d4ff; --primary: #007bff; --danger: #ff4747; }
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-body { background: #000; color: #fff; }
-#login-overlay { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, #012a4a, #000); }
-.main-login-container { display: flex; gap: 50px; max-width: 1000px; width: 100%; padding: 20px; }
-.info-side h1 { font-size: 40px; color: var(--accent); }
-.glass-box { background: rgba(255,255,255,0.02); padding: 40px; border-radius: 20px; border: 1px solid #222; width: 400px; text-align: center; }
-.input-container { text-align: left; margin-top: 15px; }
-.input-container input { width: 100%; padding: 12px; background: #000; border: 1px solid #333; color: #fff; border-radius: 8px; }
-.btn-submit { width: 100%; padding: 15px; background: var(--primary); border: none; color: #fff; font-weight: 800; cursor: pointer; border-radius: 8px; text-transform: uppercase; }
-.top-nav { display: flex; justify-content: space-between; padding: 15px 40px; background: var(--bg); border-bottom: 1px solid #222; }
-.nav-center button { background: none; border: none; color: #888; margin: 0 10px; cursor: pointer; text-transform: uppercase; font-size: 11px; }
-.btn-logout-new { background: #111; color: var(--danger); border: 1px solid var(--danger); padding: 5px 15px; border-radius: 20px; cursor: pointer; }
-.container { padding: 40px; max-width: 1000px; margin: auto; }
-.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-.stat-card { background: var(--bg); padding: 20px; border-radius: 12px; border: 1px solid #222; }
-.stat-card .val { font-size: 24px; color: var(--accent); }
-.shift-wrapper { background: var(--bg); padding: 50px; text-align: center; border-radius: 20px; }
-#timer-display { font-size: 70px; margin: 20px 0; }
-.btn-action { padding: 10px 20px; border-radius: 5px; border: none; cursor: pointer; background: #1e293b; color: #fff; margin-right: 5px; }
-.admin-input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
-.admin-input-grid input { padding: 10px; background: #000; border: 1px solid #333; color: #fff; }
-#staff-selector { width: 100%; padding: 10px; background: #000; color: #fff; }
+body { background: #000; color: #fff; font-family: sans-serif; margin: 0; }
+#login-overlay { height: 100vh; display: flex; justify-content: center; align-items: center; background: #011627; }
+.glass-box { background: #051e34; padding: 30px; border-radius: 15px; text-align: center; border: 1px solid #102a43; }
+input, select { display: block; width: 100%; margin: 10px 0; padding: 10px; background: #000; border: 1px solid #333; color: #fff; box-sizing: border-box;}
+.btn-primary, button { width: 100%; padding: 10px; background: #007bff; border: none; color: #fff; cursor: pointer; font-weight: bold; }
+.navbar { display: flex; justify-content: space-between; padding: 15px; background: #051e34; border-bottom: 2px solid #007bff; }
+.container { padding: 20px; max-width: 900px; margin: auto; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.card { background: #051e34; padding: 20px; border-radius: 10px; text-align: center; border: 1px solid #102a43; }
+.admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.card-admin { background: #102a43; padding: 15px; border-radius: 10px; }
+.timer-card { text-align: center; background: #051e34; padding: 40px; border-radius: 20px; }
+#timer { font-size: 50px; margin: 10px 0; }
+.logout { width: auto; background: #dc3545; }
