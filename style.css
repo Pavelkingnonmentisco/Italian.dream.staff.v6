@@ -1,64 +1,211 @@
+/* --- CONFIGURAZIONE GENERALE --- */
 :root {
-    --primary: #f17b43;
-    --bg-dark: #0a0e14;
-    --card-bg: rgba(18, 24, 32, 0.95);
-    --sidebar: #0f131a;
+    --bg-color: #0f0f13;
+    --card-bg: #1a1a24;
+    --primary: #ff4444; /* Rosso LSC */
+    --accent: #3b82f6;
     --text: #ffffff;
+    --text-dim: #a0a0b0;
+    --success: #22c55e;
+    --border: rgba(255, 255, 255, 0.05);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
 body {
-    background-color: var(--bg-dark);
-    background-image: url('https://res.cloudinary.com/dbxwiln0a/image/upload/v1773081531/z0cs7hkxffmrhaugbzhv.webp');
-    background-size: cover; background-attachment: fixed; background-blend-mode: overlay;
-    color: var(--text); font-family: 'Segoe UI', sans-serif; margin: 0; display: flex;
+    background-color: var(--bg-color);
+    color: var(--text);
+    overflow: hidden; /* Evita scroll strani fuori dal main */
 }
 
-/* SIDEBAR */
-.sidebar { width: 250px; height: 100vh; background: var(--sidebar); padding: 20px; border-right: 1px solid #1f2937; position: sticky; top: 0; }
-.nav-logo { width: 100%; margin-bottom: 20px; }
-.sidebar button { width: 100%; padding: 15px; background: none; border: none; color: #94a3b8; text-align: left; cursor: pointer; font-size: 14px; font-weight: bold; transition: 0.3s; }
-.sidebar button:hover { color: var(--primary); background: #1e293b; border-radius: 8px; }
-.sidebar-decor { width: 100%; border-radius: 10px; margin-top: 40px; opacity: 0.5; }
+/* --- SCHERMATA LOGIN --- */
+#login-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at center, #1a1a24 0%, #08080a 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
 
-/* CONTENT */
-.content { flex: 1; padding: 30px; overflow-y: auto; background: rgba(10, 14, 20, 0.85); }
-.section-banner { width: 100%; height: 150px; background-size: cover; background-position: center; border-radius: 15px; display: flex; align-items: center; justify-content: center; margin-bottom: 25px; border: 2px solid var(--primary); }
-.section-banner h1 { text-shadow: 2px 2px 10px black; font-size: 35px; margin: 0; }
-.full-banner { width: 100%; border-radius: 15px; margin-bottom: 20px; }
+.login-box {
+    background: var(--card-bg);
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    width: 380px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    border: 1px solid var(--border);
+}
 
-/* INFO CARDS */
-.info-card { background: #0d1117; padding: 25px; border-radius: 15px; border: 1px solid #1f2937; margin-bottom: 25px; }
-.info-header { display: flex; align-items: center; margin-bottom: 20px; }
-.info-icon { font-size: 40px; color: var(--primary); margin-right: 15px; }
-.info-titles h2 { margin: 0; font-size: 24px; color: white; }
-.info-details { display: flex; gap: 15px; margin-bottom: 15px; }
-.detail-box { flex: 1; background: #000; padding: 12px; border-radius: 8px; border: 1px solid #333; }
-.detail-label { color: #64748b; font-size: 10px; text-transform: uppercase; margin-bottom: 5px; }
-.detail-value { font-size: 14px; font-weight: bold; margin: 0; }
+.login-logo {
+    width: 120px;
+    margin-bottom: 20px;
+}
 
-.info-stats { display: flex; gap: 15px; }
-.stat-box { flex: 1; display: flex; align-items: center; background: rgba(18, 24, 32, 0.6); padding: 12px; border-radius: 8px; border: 1px solid #333; }
-.stat-icon { font-size: 25px; margin-right: 12px; }
-.stat-icon.warn { color: #f59e0b; }
-.stat-icon.logs { color: #3b82f6; }
-.stat-value { font-size: 18px; font-weight: bold; }
+.login-box input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    background: #0f0f13;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+}
 
-/* TIMER */
-.timer-card { background: #0d1117; padding: 40px; border-radius: 20px; text-align: center; margin-bottom: 30px; border: 1px solid var(--primary); }
-#timer-display { font-size: 65px; font-family: monospace; color: white; margin: 15px 0; }
-.btn-main { background: var(--primary); color: white; padding: 12px 25px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
-.btn-warn { background: #f59e0b; color: white; padding: 12px 25px; border: none; border-radius: 5px; cursor: pointer; }
-.btn-danger { background: #ef4444; color: white; padding: 12px 25px; border: none; border-radius: 5px; cursor: pointer; }
+.login-box button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    background: var(--primary);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
 
-/* TABLES */
-.table-wrapper { background: var(--card-bg); border-radius: 12px; padding: 15px; border: 1px solid #1f2937; }
-table { width: 100%; border-collapse: collapse; }
-th { color: var(--primary); text-align: left; padding: 12px; border-bottom: 1px solid #333; font-size: 11px; text-transform: uppercase; }
-td { padding: 12px; border-bottom: 1px solid #222; font-size: 13px; color: #94a3b8; }
-.btn-export { background: #10b981; color: white; border: none; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-size: 11px; }
+.login-box button:hover {
+    background: #cc0000;
+    transform: translateY(-2px);
+}
 
-/* LOGIN */
-#login-overlay { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center; }
-.login-box { background: #111; padding: 40px; border-radius: 15px; border: 1px solid var(--primary); text-align: center; width: 320px; }
-.login-logo { width: 120px; margin-bottom: 20px; }
-input, select { display: block; width: 100%; padding: 10px; margin-bottom: 10px; background: #222; border: 1px solid #444; color: white; border-radius: 5px; box-sizing: border-box; }
+/* --- STRUTTURA PRINCIPALE --- */
+#main-content {
+    display: flex;
+    height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 260px;
+    background: var(--card-bg);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.nav-logo {
+    width: 100px;
+    margin: 0 auto 30px;
+}
+
+.sidebar button {
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    padding: 15px;
+    text-align: left;
+    font-size: 15px;
+    cursor: pointer;
+    border-radius: 10px;
+    margin-bottom: 5px;
+    transition: 0.2s;
+}
+
+.sidebar button i { margin-right: 10px; }
+
+.sidebar button:hover {
+    background: rgba(255,255,255,0.05);
+    color: white;
+}
+
+/* Main Content Area */
+.content {
+    flex: 1;
+    padding: 40px;
+    overflow-y: auto;
+}
+
+/* --- CARDS & UI --- */
+.card {
+    background: var(--card-bg);
+    padding: 25px;
+    border-radius: 15px;
+    border: 1px solid var(--border);
+    margin-bottom: 25px;
+}
+
+.profile-card h1 { font-size: 32px; letter-spacing: 2px; color: var(--primary); }
+.profile-card p { color: var(--text-dim); margin-bottom: 20px; }
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.stat-item {
+    background: rgba(0,0,0,0.2);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    border: 1px solid var(--border);
+}
+
+.stat-item span { display: block; font-size: 20px; font-weight: bold; color: var(--accent); }
+
+/* Timer Display */
+#timer-display {
+    font-size: 60px;
+    font-weight: bold;
+    text-align: center;
+    margin: 20px 0;
+    font-family: 'Courier New', Courier, monospace;
+    color: var(--success);
+    text-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+}
+
+.timer-controls { display: flex; justify-content: center; gap: 20px; }
+
+/* Tabelle */
+.staff-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.staff-table th {
+    text-align: left;
+    padding: 15px;
+    color: var(--text-dim);
+    border-bottom: 1px solid var(--border);
+}
+
+.staff-table td {
+    padding: 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.02);
+}
+
+/* Bottoni Admin */
+.btn-primary { background: var(--accent); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+.btn-danger { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+.btn-warn { background: #f59e0b; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+
+/* Admin Grid */
+.admin-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+}
+
+.admin-grid input, .admin-grid select {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0 15px;
+    background: #0f0f13;
+    border: 1px solid var(--border);
+    color: white;
+    border-radius: 5px;
+}
+
+.btn-group { display: flex; gap: 10px; }
