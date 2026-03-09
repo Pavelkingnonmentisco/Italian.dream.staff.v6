@@ -26,6 +26,9 @@
             <button onclick="showSection('servizio')"><i class="fas fa-clock"></i> Gestione Servizio</button>
             <button onclick="showSection('turni')"><i class="fas fa-calendar-alt"></i> Turni Settimanali</button>
             <button onclick="showSection('matricole')"><i class="fas fa-id-badge"></i> Lista Matricole</button>
+            <button id="nav-admin" onclick="showSection('admin-panel')" style="display:none; color: #ff4444;">
+                <i class="fas fa-user-cog"></i> Gestione Admin
+            </button>
             <img src="https://res.cloudinary.com/dbxwiln0a/image/upload/v1773081531/z0cs7hkxffmrhaugbzhv.webp" class="sidebar-decor">
         </nav>
 
@@ -44,12 +47,18 @@
                         </div>
                     </div>
                     <div class="info-details">
-                        <div class="detail-box"><p class="detail-label">Matricola</p><p class="detail-value" id="staffer-id">ITD-XX</p></div>
+                        <div class="detail-box"><p class="detail-label">Matricola</p><p class="detail-value" id="staffer-id">---</p></div>
                         <div class="detail-box"><p class="detail-label">Grado</p><p class="detail-value" id="staffer-grade">---</p></div>
                     </div>
                     <div class="info-stats">
-                        <div class="stat-box"><i class="fas fa-exclamation-triangle stat-icon warn"></i><div class="stat-texts"><p class="stat-label">Richiami</p><p class="stat-value" id="staffer-warns">0</p></div></div>
-                        <div class="stat-box"><i class="fas fa-history stat-icon logs"></i><div class="stat-texts"><p class="stat-label">Logs Sessioni</p><p class="stat-value" id="staffer-logs">0</p></div></div>
+                        <div class="stat-box">
+                            <i class="fas fa-exclamation-triangle stat-icon warn"></i>
+                            <div class="stat-texts"><p class="stat-label">Richiami</p><p class="stat-value" id="staffer-warns">0</p></div>
+                        </div>
+                        <div class="stat-box">
+                            <i class="fas fa-history stat-icon logs"></i>
+                            <div class="stat-texts"><p class="stat-label">Sessioni</p><p class="stat-value" id="staffer-logs">0</p></div>
+                        </div>
                     </div>
                 </div>
 
@@ -58,13 +67,13 @@
                     <div id="timer-display">00:00:00</div>
                     <div class="timer-controls">
                         <button id="btn-start" onclick="startService()" class="btn-main">Inizia il Servizio</button>
-                        <button id="btn-pause" onclick="pauseService()" class="btn-warn" style="display:none;">Pausa</button>
-                        <button id="btn-stop" onclick="stopService()" class="btn-danger" style="display:none;">Termina</button>
+                        <button id="btn-pause" onclick="pauseService()" class="btn-warn" style="display:none;">Metti in Pausa</button>
+                        <button id="btn-stop" onclick="stopService()" class="btn-danger" style="display:none;">Termina Servizio</button>
                     </div>
                 </div>
 
                 <div class="header-with-btn">
-                    <h3>Storico Servizi</h3>
+                    <h3>Storico Personale</h3>
                     <button onclick="exportTableToCSV('history-body', 'storico.csv')" class="btn-export">📥 Export Sheets</button>
                 </div>
                 <div class="table-wrapper">
@@ -72,6 +81,20 @@
                         <thead><tr><th>INIZIO</th><th>FINE</th><th>DURATA</th><th>STATO</th></tr></thead>
                         <tbody id="history-body"></tbody>
                     </table>
+                </div>
+            </section>
+
+            <section id="admin-panel" class="tab-content" style="display:none;">
+                <div class="section-banner" style="background: linear-gradient(45deg, #800000, #330000); height: 100px;">
+                    <h1>PANNELLO AMMINISTRAZIONE</h1>
+                </div>
+                <div class="info-card">
+                    <h3>Gestione Richiami Staff</h3>
+                    <div style="display: flex; gap: 10px; margin-top: 15px;">
+                        <select id="select-staff" style="flex: 2; padding: 10px; background: #222; color: white; border: 1px solid #444; border-radius: 5px;"></select>
+                        <button onclick="modifyWarn(1)" class="btn-danger" style="flex: 1;">+1 Richiamo</button>
+                        <button onclick="modifyWarn(-1)" class="btn-warn" style="flex: 1;">-1 Richiamo</button>
+                    </div>
                 </div>
             </section>
 
@@ -96,6 +119,7 @@
             </section>
         </main>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
