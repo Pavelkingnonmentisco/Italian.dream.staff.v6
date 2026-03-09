@@ -5,10 +5,20 @@ staffData.forEach((nome, index) => {
     credentials[nome.toLowerCase()] = nome.charAt(0).toUpperCase() + "-" + matricolaNum;
 });
 
+// --- DATABASE ESEMPIO DATI EXTRA (per Daniel, Hydro, Ash) ---
+const extraStaffData = {
+    "daniel": { matricola: "ITD-01", grado: "Capo Staff", richiami: 0, logs: "Vedi DB" },
+    "hydro": { matricola: "ITD-14", grado: "Supervisore", richiami: 1, logs: "12 Sessioni" },
+    "ash": { matricola: "ITD-33", grado: "Staffer Pro", richiami: 0, logs: "3 Gestite" }
+};
+
+let currentUser = "";
+
 function checkLogin() {
-    const user = document.getElementById('username').value.trim().toLowerCase();
-    const pass = document.getElementById('password').value.trim();
-    if (credentials[user] && credentials[user] === pass) {
+    const userIn = document.getElementById('username').value.trim().toLowerCase();
+    const passIn = document.getElementById('password').value.trim();
+    if (credentials[userIn] && credentials[userIn] === passIn) {
+        currentUser = userIn; // Memorizza chi è entrato
         document.getElementById('login-overlay').style.display = 'none';
         document.getElementById('main-content').style.display = 'flex';
         initData();
@@ -20,7 +30,7 @@ function showSection(id) {
     document.getElementById(id).style.display = 'block';
 }
 
-// Timer Logic (Usa la stessa dell'ultima risposta)
+// Timer Logic (Invariata)
 let seconds = 0, timerInterval = null, startTime = null;
 function startService() {
     startTime = new Date().toLocaleString();
@@ -46,7 +56,7 @@ function stopService() {
     document.getElementById('btn-stop').style.display = 'none';
 }
 
-// Funzione Export per Google Sheets
+// Export Sheets (Invariata)
 function exportTableToCSV(tableId, filename) {
     let csv = [];
     let table = document.getElementById(tableId);
@@ -64,38 +74,43 @@ function exportTableToCSV(tableId, filename) {
 }
 
 function initData() {
-    // ... (parte delle matricole resta uguale)
+    // 1. Popola Dati Extra Staffer Loggato
+    const nameInput = currentUser.toLowerCase();
+    let data;
 
+    // Se l'utente è speciale, usa i suoi dati, altrimenti usa default
+    if (extraStaffData[nameInput]) {
+        data = extraStaffData[nameInput];
+    } else {
+        // Calcola matricola default
+        const index = staffData.map(v => v.toLowerCase()).indexOf(nameInput);
+        const matricolaNum = (index + 1).toString().padStart(2, '0');
+        data = { matricola: `ITD-${matricolaNum}`, grado: "Staffer", richiami: 0, logs: "Vedi DB" };
+    }
+
+    // Aggiorna l'interfaccia
+    document.getElementById('staffer-name').innerText = currentUser.charAt(0).toUpperCase() + currentUser.slice(1);
+    document.getElementById('staffer-id').innerText = data.matricola;
+    document.getElementById('staffer-grade').innerText = data.grado;
+    document.getElementById('staffer-warns').innerText = data.richiami;
+    document.getElementById('staffer-logs').innerText = data.logs;
+
+
+    // 2. Popola Tabelle (Invariato)
+    const mBody = document.querySelector('#staffTable tbody');
+    mBody.innerHTML = "";
+    staffData.forEach((nome, i) => {
+        mBody.innerHTML += `<tr><td>ITD-${(i+1).toString().padStart(2,'0')}</td><td>${nome}</td><td style="color:#44ff44">● Attivo</td></tr>`;
+    });
     const tBody = document.querySelector('#scheduleTable tbody');
     tBody.innerHTML = "";
     const giorni = ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato", "Domenica"];
-    
-    // Solo i membri destinati ai turni
-    const turniMembri = ["Hydro","Fabbri","Matz","Nathalino","Viper","Xenoo","Adamo","Gabriel","Chorno","Joker","Nenne","Mattia","Lollo","Simo","Vortex","Void","Sangue","Ibra","Noxen","Ash"];
-
-    let index = 0; // Puntatore per scorrere la lista
-
-    giorni.forEach((g) => {
-        let p = [];
-        let s = [];
-
-        // Prendi 3 per il Pomeriggio
-        for (let i = 0; i < 3; i++) {
-            p.push(turniMembri[index % turniMembri.length]);
-            index++;
-        }
-
-        // Prendi 3 per la Sera
-        for (let i = 0; i < 3; i++) {
-            s.push(turniMembri[index % turniMembri.length]);
-            index++;
-        }
-
-        tBody.innerHTML += `
-            <tr>
-                <td><strong>${g}</strong></td>
-                <td>${p.join(", ")}</td>
-                <td>${s.join(", ")}</td>
-            </tr>`;
+    const turniMembri = staffData.slice(13); 
+    let index = 0;
+    giorni.forEach((g, i) => {
+        let p = []; let s = [];
+        for (let j = 0; j < 3; j++) { p.push(turniMembri[index % turniMembri.length]); index++; }
+        for (let j = 0; j < 3; j++) { s.push(turniMembri[index % turniMembri.length]); index++; }
+        tBody.innerHTML += `<tr><td><strong>${g}</strong></td><td>${p.join(", ")}</td><td>${s.join(", ")}</td></tr>`;
     });
 }
