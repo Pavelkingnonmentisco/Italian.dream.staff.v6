@@ -1,78 +1,111 @@
-/* --- INPUT FIELDS MODERNI (USERNAME E PASSWORD) --- */
-.input-group {
-    margin-bottom: 20px;
-    text-align: left;
+#login-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: radial-gradient(circle at top right, #1e293b, #000);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
 }
 
-.input-group label {
-    display: block;
-    font-size: 10px;
-    font-weight: 800;
-    color: var(--primary);
-    letter-spacing: 2px;
-    margin-bottom: 8px;
-    margin-left: 5px;
-    text-transform: uppercase;
+.login-container {
+    display: flex;
+    width: 90%;
+    max-width: 1100px;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
-.input-group input {
-    width: 100%;
-    background: rgba(0, 0, 0, 0.4); /* Sfondo scuro semitrasparente */
-    border: 1px solid var(--border);
-    padding: 15px 20px;
-    border-radius: 12px;
-    color: #fff;
-    font-size: 14px;
-    font-weight: 400;
-    transition: all 0.3s ease;
-    outline: none;
+/* --- LATO SINISTRO (INFO) --- */
+.login-info {
+    flex: 1;
+    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-/* Effetto quando clicchi dentro il campo */
-.input-group input:focus {
-    border-color: var(--primary);
-    background: rgba(0, 170, 255, 0.05);
-    box-shadow: 0 0 15px rgba(0, 170, 255, 0.2);
-    transform: scale(1.02);
-}
-
-/* --- BOTTONE LOGIN (STILE GLOSSY) --- */
-.btn-login {
-    width: 100%;
-    background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
-    color: white;
-    border: none;
-    padding: 16px;
-    border-radius: 12px;
-    font-weight: 800;
-    font-size: 14px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    margin-top: 10px;
-    box-shadow: 0 10px 20px rgba(0, 85, 255, 0.3);
-}
-
-.btn-login:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 15px 30px rgba(0, 170, 255, 0.5);
-    filter: brightness(1.1);
-}
-
-.btn-login:active {
-    transform: scale(0.98);
-}
-
-/* --- MESSAGGIO ERRORE --- */
-#login-error {
-    background: rgba(255, 51, 51, 0.1);
-    color: var(--danger);
-    padding: 10px;
-    border-radius: 8px;
+.login-info .subtitle {
+    color: var(--text-muted);
     font-size: 12px;
-    font-weight: 600;
-    margin-top: 20px;
-    border: 1px solid rgba(255, 51, 51, 0.2);
-    display: none; /* Nascosto di base */
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+}
+
+.login-info h1 {
+    font-size: 42px;
+    line-height: 1.2;
+    margin-bottom: 30px;
+    font-weight: 800;
+}
+
+.login-info .description {
+    color: var(--text-muted);
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.features {
+    list-style: none;
+    padding: 0;
+}
+
+.features li {
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: #e2e8f0;
+}
+
+.features li i {
+    color: var(--primary);
+    margin-right: 10px;
+}
+
+/* --- LATO DESTRO (BOX LOGIN) --- */
+.login-box {
+    width: 450px;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 60px;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+}
+
+.login-box h2 {
+    font-size: 20px;
+    margin-bottom: 30px;
+    letter-spacing: 1px;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.remember-me label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+.copyright-pavel {
+    margin-top: 30px;
+    font-size: 10px;
+    color: rgba(255,255,255,0.2);
+}
+
+/* Adattamento Mobile */
+@media (max-width: 900px) {
+    .login-container { flex-direction: column; }
+    .login-info { display: none; }
+    .login-box { width: 100%; border-left: none; }
 }
