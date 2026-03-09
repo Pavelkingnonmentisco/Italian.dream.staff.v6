@@ -1,90 +1,87 @@
 const admins = ["Daniel", "Michele", "Mav", "Arduino", "Strepitoso", "Archadian", "Djsamy", "Cobra", "Baj", "Mirko", "Maverick", "Pavel", "Diego"];
-let db = JSON.parse(localStorage.getItem('DATABASE_V10_FINAL')) || {};
-let user = null; let sec = 0; let timer = null; let target = null;
+let data = JSON.parse(localStorage.getItem('ITDR_V11')) || {};
+let user = null; let sec = 0; let timer = null; let sel = null;
 
-if (Object.keys(db).length === 0) {
-    const start = ["Daniel", "Michele", "Mav", "Arduino", "Strepitoso", "Archadian", "Djsamy", "Cobra", "Baj", "Mirko", "Maverick", "Pavel", "Diego"];
-    start.forEach((n, i) => { db[n] = { pass: n + "-01", grado: "Admin", mat: "ITD-" + (i + 1), warns: 0, total: 0, logs: [] }; });
+// Popolamento iniziale
+if (Object.keys(data).length === 0) {
+    admins.forEach(n => { data[n] = {p: n + "-01", g: "Admin", m: "ITD-00", w: 0, t: 0, l: []}; });
     save();
 }
 
 function checkLogin() {
-    const u = document.getElementById('username').value.trim();
-    const p = document.getElementById('password').value.trim();
-    const found = Object.keys(db).find(name => name.toLowerCase() === u.toLowerCase());
-    if (found && db[found].pass === p) {
-        user = found;
+    let u = document.getElementById('username').value;
+    let p = document.getElementById('password').value;
+    if (data[u] && data[u].p === p) {
+        user = u;
         document.getElementById('login-overlay').style.display = 'none';
         document.getElementById('main-content').style.display = 'block';
-        if (admins.includes(user)) { document.getElementById('nav-admin').style.display = 'block'; refreshList(); }
-        updateUI();
-    } else { alert("Dati errati!"); }
+        if (admins.includes(user)) { document.getElementById('admin-link').style.display = 'inline'; refresh(); }
+        update();
+    } else alert("Sbagliato!");
 }
 
-function updateUI() {
-    document.getElementById('staffer-grade').innerText = db[user].grado;
-    document.getElementById('staffer-warns').innerText = db[user].warns;
-    document.getElementById('staffer-id').innerText = db[user].mat;
-    document.getElementById('staffer-total-hours').innerText = fmt(db[user].total);
-    document.getElementById('logs-list').innerHTML = db[user].logs.map(l => `<div style="border-bottom:1px solid #222; padding:5px;">${l.t} - ${l.d}</div>`).join('');
+function update() {
+    document.getElementById('u-grado').innerText = data[user].g;
+    document.getElementById('u-mat').innerText = data[user].m;
+    document.getElementById('u-warns').innerText = data[user].w;
+    document.getElementById('u-ore').innerText = fmt(data[user].t);
 }
 
-function startService() {
-    document.getElementById('btn-start').style.display = 'none';
-    document.getElementById('btn-stop').style.display = 'inline-block';
-    timer = setInterval(() => { sec++; document.getElementById('timer-display').innerText = fmt(sec); }, 1000);
+function startT() {
+    document.getElementById('b-start').style.display = 'none';
+    document.getElementById('b-stop').style.display = 'block';
+    timer = setInterval(() => { sec++; document.getElementById('timer').innerText = fmt(sec); }, 1000);
 }
 
-function stopService() {
+function stopT() {
     clearInterval(timer);
-    db[user].total += sec;
-    db[user].logs.unshift({ t: fmt(sec), d: new Date().toLocaleString() });
-    sec = 0; save(); updateUI();
-    document.getElementById('timer-display').innerText = "00:00:00";
-    document.getElementById('btn-start').style.display = 'inline-block';
-    document.getElementById('btn-stop').style.display = 'none';
+    data[user].t += sec;
+    data[user].l.unshift(fmt(sec));
+    sec = 0; save(); update();
+    document.getElementById('timer').innerText = "00:00:00";
+    document.getElementById('b-start').style.display = 'block';
+    document.getElementById('b-stop').style.display = 'none';
 }
 
-function addNewStaff() {
-    const n = document.getElementById('new-name').value;
-    const p = document.getElementById('new-pass').value;
-    if (!n || !p) return alert("Manca Nome o Pass");
-    db[n] = { pass: p, grado: document.getElementById('new-grade').value, mat: document.getElementById('new-mat').value, warns: 0, total: 0, logs: [] };
-    save(); refreshList(); alert("Aggiunto!");
+function addS() {
+    let n = document.getElementById('n-n').value;
+    if(!n) return;
+    data[n] = {p: document.getElementById('n-p').value, g: document.getElementById('n-g').value, m: document.getElementById('n-m').value, w: 0, t: 0, l: []};
+    save(); refresh(); alert("Aggiunto!");
 }
 
-function removeStaff() {
-    if (target === user) return alert("Non puoi auto-eliminarti");
-    if (confirm("Eliminare " + target + "?")) { delete db[target]; save(); refreshList(); document.getElementById('admin-controls').style.display = 'none'; }
+function delS() {
+    if(sel === user) return;
+    delete data[sel]; save(); refresh(); document.getElementById('edit-zone').style.display='none';
 }
 
-function loadStaffMember() {
-    target = document.getElementById('staff-selector').value;
-    if (target) {
-        document.getElementById('admin-controls').style.display = 'block';
-        document.getElementById('edit-grado').value = db[target].grado;
-        document.getElementById('edit-matricola').value = db[target].mat;
-    }
+function loadS() {
+    sel = document.getElementById('staff-list').value;
+    if(!sel) return;
+    document.getElementById('edit-zone').style.display='block';
+    document.getElementById('e-g').value = data[sel].g;
+    document.getElementById('e-m').value = data[sel].m;
 }
 
-function updateStaffData() {
-    db[target].grado = document.getElementById('edit-grado').value;
-    db[target].mat = document.getElementById('edit-matricola').value;
-    save(); alert("Aggiornato!"); updateUI();
+function saveS() {
+    data[sel].g = document.getElementById('e-g').value;
+    data[sel].m = document.getElementById('e-m').value;
+    save(); alert("Salvato!"); update();
 }
 
-function refreshList() {
-    const s = document.getElementById('staff-selector');
-    s.innerHTML = '<option value="">Seleziona...</option>';
-    Object.keys(db).forEach(n => s.innerHTML += `<option value="${n}">${n}</option>`);
+function refresh() {
+    let s = document.getElementById('staff-list');
+    s.innerHTML = '<option value="">Scegli...</option>';
+    Object.keys(data).forEach(n => s.innerHTML += `<option value="${n}">${n}</option>`);
 }
 
 function fmt(s) {
-    const h = Math.floor(s/3600).toString().padStart(2,'0');
-    const m = Math.floor((s%3600)/60).toString().padStart(2,'0');
-    const ss = (s%60).toString().padStart(2,'0');
-    return `${h}:${m}:${ss}`;
+    return new Date(s * 1000).toISOString().substr(11, 8);
 }
 
-function showSection(id) { document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none'); document.getElementById(id).style.display = 'block'; }
-function save() { localStorage.setItem('DATABASE_V10_FINAL', JSON.stringify(db)); }
+function tab(id) {
+    document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+    document.getElementById(id).style.display = 'block';
+}
+
+function save() { localStorage.setItem('ITDR_V11', JSON.stringify(data)); }
