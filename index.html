@@ -10,41 +10,74 @@
 
     <div id="login-overlay">
         <div class="login-box">
-            <img src="logo.webp" alt="Logo" class="login-logo">
-            <h2>Accesso Staff</h2>
-            <input type="text" id="username" placeholder="Username (es. Hydro)">
+            <img src="https://res.cloudinary.com/dbxwiln0a/image/upload/v1773080841/msb6eamry0kagf21gttx.png" alt="Logo" class="login-logo">
+            <h2>Area Riservata Staff</h2>
+            <input type="text" id="username" placeholder="Nome Staff (es. Hydro)">
             <input type="password" id="password" placeholder="Password">
-            <button onclick="checkLogin()">Entra</button>
-            <p id="login-error">Credenziali errate!</p>
+            <button onclick="checkLogin()">Accedi</button>
+            <p id="login-error">Credenziali non valide!</p>
         </div>
     </div>
 
     <div id="main-content" style="display:none;">
-        <header>
-            <img src="logo.webp" alt="Logo" class="header-logo">
-            <h1>Gestione Staff ITD</h1>
-        </header>
+        <nav class="sidebar">
+            <img src="https://res.cloudinary.com/dbxwiln0a/image/upload/v1773080841/msb6eamry0kagf21gttx.png" class="nav-logo">
+            <button onclick="showSection('servizio')">⏱ Gestione Servizio</button>
+            <button onclick="showSection('turni')">📅 Turni Settimanali</button>
+            <button onclick="showSection('matricole')">👥 Lista Matricole</button>
+        </nav>
 
-        <div class="container">
-            <section>
-                <h2>📋 Turni Settimanali (Numeri Pari)</h2>
+        <main class="content">
+            <section id="servizio" class="tab-content">
+                <p class="section-label">SERVIZIO OPERATIVO</p>
+                <h1>Gestione Servizio Staff</h1>
+                
+                <div class="timer-card">
+                    <p id="timer-status">NESSUN SERVIZIO ATTIVO</p>
+                    <div id="timer-display">00:00:00</div>
+                    
+                    <div class="timer-controls">
+                        <button id="btn-start" onclick="startService()" class="btn-main">Inizia il Servizio</button>
+                        <button id="btn-pause" onclick="pauseService()" class="btn-warn" style="display:none;">Metti in Pausa</button>
+                        <button id="btn-stop" onclick="stopService()" class="btn-danger" style="display:none;">Termina Servizio</button>
+                    </div>
+                </div>
+
+                <h3>Storico dei Miei Servizi</h3>
                 <div class="table-wrapper">
-                    <table id="scheduleTable">
+                    <table>
                         <thead>
                             <tr>
-                                <th>Giorno</th>
-                                <th>Pomeriggio (15:00 - 19:00)</th>
-                                <th>Sera (21:00 - 01:00)</th>
+                                <th>DATA INIZIO</th>
+                                <th>FINE</th>
+                                <th>DURATA</th>
+                                <th>STATO</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="history-body">
                             </tbody>
                     </table>
                 </div>
             </section>
 
-            <section>
-                <h2>👥 Elenco Completo Matricole</h2>
+            <section id="turni" class="tab-content" style="display:none;">
+                <h1>📅 Turni Settimanali</h1>
+                <div class="table-wrapper">
+                    <table id="scheduleTable">
+                        <thead>
+                            <tr>
+                                <th>Giorno</th>
+                                <th>Pomeriggio</th>
+                                <th>Sera</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="matricole" class="tab-content" style="display:none;">
+                <h1>👥 Elenco Matricole ITD</h1>
                 <div class="table-wrapper">
                     <table id="staffTable">
                         <thead>
@@ -54,12 +87,11 @@
                                 <th>Stato</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            </tbody>
+                        <tbody></tbody>
                     </table>
                 </div>
             </section>
-        </div>
+        </main>
     </div>
 
     <script src="script.js"></script>
