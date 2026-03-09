@@ -1,7 +1,7 @@
 :root {
     --primary: #f17b43;
     --bg-dark: #0a0e14;
-    --card-bg: rgba(18, 24, 32, 0.9);
+    --card-bg: rgba(18, 24, 32, 0.95);
     --sidebar: #0f131a;
     --text: #ffffff;
 }
@@ -9,86 +9,56 @@
 body {
     background-color: var(--bg-dark);
     background-image: url('https://res.cloudinary.com/dbxwiln0a/image/upload/v1773081531/z0cs7hkxffmrhaugbzhv.webp');
-    background-size: cover;
-    background-attachment: fixed;
-    background-blend-mode: overlay;
-    color: var(--text);
-    font-family: 'Segoe UI', sans-serif;
-    margin: 0; display: flex;
+    background-size: cover; background-attachment: fixed; background-blend-mode: overlay;
+    color: var(--text); font-family: 'Segoe UI', sans-serif; margin: 0; display: flex;
 }
 
 /* SIDEBAR */
-.sidebar {
-    width: 250px; height: 100vh; background: var(--sidebar);
-    padding: 20px; border-right: 1px solid #1f2937; position: sticky; top: 0;
-}
+.sidebar { width: 250px; height: 100vh; background: var(--sidebar); padding: 20px; border-right: 1px solid #1f2937; position: sticky; top: 0; }
 .nav-logo { width: 100%; margin-bottom: 20px; }
-.sidebar-decor { width: 100%; border-radius: 10px; margin-top: 50px; opacity: 0.6; }
-.sidebar button {
-    width: 100%; padding: 15px; background: none; border: none;
-    color: #94a3b8; text-align: left; cursor: pointer; font-size: 14px; font-weight: bold;
-}
-.sidebar button i { margin-right: 10px; }
+.sidebar button { width: 100%; padding: 15px; background: none; border: none; color: #94a3b8; text-align: left; cursor: pointer; font-size: 14px; font-weight: bold; transition: 0.3s; }
 .sidebar button:hover { color: var(--primary); background: #1e293b; border-radius: 8px; }
-.sidebar button.active { color: var(--primary); }
+.sidebar-decor { width: 100%; border-radius: 10px; margin-top: 40px; opacity: 0.5; }
 
-/* CONTENT & BANNERS */
+/* CONTENT */
 .content { flex: 1; padding: 30px; overflow-y: auto; background: rgba(10, 14, 20, 0.85); }
+.section-banner { width: 100%; height: 150px; background-size: cover; background-position: center; border-radius: 15px; display: flex; align-items: center; justify-content: center; margin-bottom: 25px; border: 2px solid var(--primary); }
+.section-banner h1 { text-shadow: 2px 2px 10px black; font-size: 35px; margin: 0; }
+.full-banner { width: 100%; border-radius: 15px; margin-bottom: 20px; }
 
-.full-banner { width: 100%; border-radius: 15px; margin-bottom: 20px; border: 1px solid #333; }
+/* INFO CARDS (image_2.png style) */
+.info-card { background: #0d1117; padding: 25px; border-radius: 15px; border: 1px solid #1f2937; margin-bottom: 25px; }
+.info-header { display: flex; align-items: center; margin-bottom: 20px; }
+.info-icon { font-size: 40px; color: var(--primary); margin-right: 15px; }
+.info-titles h2 { margin: 0; font-size: 24px; color: white; }
+.info-details { display: flex; gap: 15px; margin-bottom: 15px; }
+.detail-box { flex: 1; background: #000; padding: 12px; border-radius: 8px; border: 1px solid #333; }
+.detail-label { color: #64748b; font-size: 10px; text-transform: uppercase; margin-bottom: 5px; }
+.detail-value { font-size: 14px; font-weight: bold; margin: 0; }
 
-.section-banner {
-    width: 100%; height: 150px; background-size: cover; background-position: center;
-    border-radius: 15px; display: flex; align-items: center; justify-content: center;
-    margin-bottom: 30px; border: 2px solid var(--primary);
-}
-.section-banner h1 { text-shadow: 2px 2px 10px black; font-size: 40px; }
-
-.decor-img { width: 300px; margin-top: 30px; border-radius: 10px; opacity: 0.8; }
-
-/* NUOVA SEZIONE: INFO STAFF */
-.info-card {
-    background: #0d1117; padding: 30px; border-radius: 15px;
-    border: 1px solid #1f2937; margin-bottom: 30px;
-}
-.info-header { display: flex; align-items: center; margin-bottom: 25px; }
-.info-icon { font-size: 50px; color: var(--primary); margin-right: 20px; }
-.info-titles h2 { margin: 0; font-size: 28px; }
-
-.info-details { display: flex; gap: 20px; margin-bottom: 20px; }
-.detail-box { flex: 1; background: #000; padding: 15px; border-radius: 8px; border: 1px solid #333; }
-.detail-label { color: #64748b; font-size: 11px; text-transform: uppercase; margin: 0 0 5px 0; }
-.detail-value { font-size: 16px; margin: 0; font-weight: bold; }
-
-.info-stats { display: flex; gap: 20px; }
-.stat-box { flex: 1; display: flex; align-items: center; background: rgba(18, 24, 32, 0.6); padding: 15px; border-radius: 8px; border: 1px solid #333; }
-.stat-icon { font-size: 30px; margin-right: 15px; }
+.info-stats { display: flex; gap: 15px; }
+.stat-box { flex: 1; display: flex; align-items: center; background: rgba(18, 24, 32, 0.6); padding: 12px; border-radius: 8px; border: 1px solid #333; }
+.stat-icon { font-size: 25px; margin-right: 12px; }
 .stat-icon.warn { color: #f59e0b; }
-.stat-icon.logs { color: var(--primary); }
-.stat-texts p { margin: 0; }
-.stat-label { color: #94a3b8; font-size: 13px; }
-.stat-value { font-size: 18px; font-weight: bold; color: white; }
+.stat-icon.logs { color: #3b82f6; }
+.stat-value { font-size: 18px; font-weight: bold; }
 
-/* TIMER */
-.timer-card {
-    background: #0d1117; padding: 40px; border-radius: 20px;
-    text-align: center; margin-bottom: 30px; border: 1px solid var(--primary);
-}
-#timer-display { font-size: 70px; font-family: 'Courier New', monospace; color: var(--primary); }
-.section-label { color: #64748b; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
+/* TIMER (image_1.png style) */
+.timer-card { background: #0d1117; padding: 40px; border-radius: 20px; text-align: center; margin-bottom: 30px; border: 1px solid var(--primary); }
+#timer-display { font-size: 65px; font-family: monospace; color: white; margin: 15px 0; }
+.btn-main { background: var(--primary); color: white; padding: 12px 25px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+.btn-warn { background: #f59e0b; color: white; padding: 12px 25px; border: none; border-radius: 5px; margin: 0 5px; cursor: pointer; }
+.btn-danger { background: #ef4444; color: white; padding: 12px 25px; border: none; border-radius: 5px; cursor: pointer; }
 
-/* TABLES & UTILITY */
+/* TABLES */
 .table-wrapper { background: var(--card-bg); border-radius: 12px; padding: 15px; border: 1px solid #1f2937; }
 table { width: 100%; border-collapse: collapse; }
-th { color: var(--primary); text-align: left; padding: 12px; border-bottom: 1px solid #333; text-transform: uppercase; font-size: 11px; }
+th { color: var(--primary); text-align: left; padding: 12px; border-bottom: 1px solid #333; font-size: 11px; text-transform: uppercase; }
 td { padding: 12px; border-bottom: 1px solid #222; font-size: 13px; color: #94a3b8; }
-
-.header-with-btn { display: flex; justify-content: space-between; align-items: center; margin: 20px 0; }
-.btn-export { background: #10b981; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 11px; }
-.btn-main { background: var(--primary); color: white; padding: 12px 25px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px; }
+.btn-export { background: #10b981; color: white; border: none; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-size: 11px; }
 
 /* LOGIN */
-#login-overlay { position: fixed; width: 100%; height: 100%; background: #000; z-index: 9999; display: flex; justify-content: center; align-items: center; }
-.login-box { background: #111; padding: 40px; border-radius: 15px; border: 1px solid var(--primary); text-align: center; }
-.login-logo { width: 150px; margin-bottom: 20px; }
-input { display: block; width: 250px; padding: 10px; margin: 10px auto; background: #222; border: 1px solid #444; color: white; border-radius: 5px; }
+#login-overlay { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center; }
+.login-box { background: #111; padding: 40px; border-radius: 15px; border: 1px solid var(--primary); text-align: center; width: 320px; }
+.login-logo { width: 120px; margin-bottom: 20px; }
+input { display: block; width: 100%; padding: 10px; margin-bottom: 10px; background: #222; border: 1px solid #444; color: white; border-radius: 5px; box-sizing: border-box; }
