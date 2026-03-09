@@ -20,14 +20,9 @@
         <div class="main-login-container">
             <div class="info-side">
                 <p class="label">sistema di gestione interna</p>
-                <h1>Dashboard reattiva, workflow digitali e notifiche mirate.</h1>
-                <p class="desc">Dashboard reattiva, workflow digitali e notifiche mirate ti aiutano ad arrivare preparato su ogni intervento. Accedi con le tue credenziali per continuare.</p>
-                <ul class="check-list">
-                    <li><i class="fas fa-check"></i> monitoraggio equipaggi in tempo reale</li>
-                    <li><i class="fas fa-check"></i> richieste digitali con tracciamento automatico</li>
-                    <li><i class="fas fa-check"></i> supporto it dedicato h24</li>
-                </ul>
+                <h1>Dashboard operativa per lo Staff ITDR.</h1>
             </div>
+            
             <div class="form-side">
                 <div class="glass-box">
                     <img src="https://res.cloudinary.com/dbxwiln0a/image/upload/v1773088043/mahwplqpvvuy34vczm3j.webp" class="box-logo">
@@ -39,10 +34,6 @@
                     <div class="input-container">
                         <label>password</label>
                         <input type="password" id="password" placeholder="••••••••">
-                    </div>
-                    <div class="remember-row">
-                        <input type="checkbox" id="rem">
-                        <label for="rem">Ricordami su questo dispositivo</label>
                     </div>
                     <button onclick="checkLogin()" class="btn-submit">accedi</button>
                     <div class="pavel-credits">© Portale sviluppato da Pavel</div>
@@ -58,21 +49,17 @@
                 <div class="logo-text">Staff - ITDR</div>
             </div>
             <nav class="nav-center">
-                <button onclick="showSection('area-personale')"><i class="fas fa-user-circle"></i> area personale</button>
-                <button onclick="showSection('gestione-turni')"><i class="fas fa-clock"></i> gestione turni</button>
-                <button id="nav-admin" style="display:none;" onclick="showSection('admin-panel')"><i class="fas fa-user-shield"></i> pannello admin</button>
+                <button onclick="showSection('area-personale')">area personale</button>
+                <button onclick="showSection('gestione-turni')">gestione turni</button>
             </nav>
-            <div class="nav-right"><button onclick="location.reload()" class="btn-logout">esci <i class="fas fa-sign-out-alt"></i></button></div>
+            <div class="nav-right"><button onclick="location.reload()" class="btn-logout">esci</button></div>
         </header>
 
         <main class="container">
             <section id="area-personale" class="tab-content">
-                <div class="header-section">
-                    <h1>Benvenuto, <span id="user-display-name">---</span></h1>
-                </div>
                 <div class="stats-grid">
                     <div class="stat-card"><label>grado</label><div id="staffer-grade" class="val">---</div></div>
-                    <div class="stat-card"><label>richiami</label><div id="staffer-warns" class="val warn-val">0</div></div>
+                    <div class="stat-card"><label>richiami</label><div id="staffer-warns" class="val">0</div></div>
                     <div class="stat-card"><label>matricola</label><div id="staffer-id" class="val">ITD-00</div></div>
                 </div>
             </section>
@@ -94,12 +81,8 @@
                     </div>
                 </div>
                 <div class="logs-wrapper">
-                    <div class="shift-card-header">
-                        <h2>Log turni recenti</h2>
-                    </div>
-                    <div class="logs-container" id="logs-list">
-                        <p class="empty-msg">Nessun turno registrato.</p>
-                    </div>
+                    <h3>log turni</h3>
+                    <div id="logs-list"></div>
                 </div>
             </section>
         </main>
