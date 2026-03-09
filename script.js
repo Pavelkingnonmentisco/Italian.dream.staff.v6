@@ -1,13 +1,11 @@
-// Lista autorizzati al Pannello Staff
 const authorizedAdmins = ["Daniel", "Michele", "Mav", "Arduino", "Strepitoso", "Archadian", "Djsamy", "Cobra", "Baj", "Mirko", "Maverick", "Pavel", "Diego"];
 
-let globalData = JSON.parse(localStorage.getItem('ITDR_DATA_V7')) || {};
+let globalData = JSON.parse(localStorage.getItem('ITDR_DATA_V8')) || {};
 let currentUser = null;
 let seconds = 0;
 let timer = null;
 let selectedStaffer = null;
 
-// Popolamento iniziale database
 const initialStaff = [
     {nome: "Daniel", grado: "Founder"}, {nome: "Michele", grado: "Founder"}, {nome: "Mav", grado: "Co-Founder"},
     {nome: "Arduino", grado: "Owner"}, {nome: "Strepitoso", grado: "Co Owner"}, {nome: "Archadian", grado: "Co Owner"},
@@ -24,9 +22,9 @@ const initialStaff = [
 
 if (Object.keys(globalData).length === 0) {
     initialStaff.forEach((s, i) => {
-        globalData[s.nome] = { grado: s.grado, matricola: "ITD-" + (i + 1).toString().padStart(2, '0'), warns: 0, logs: [] };
+        globalData[s.nome] = { grado: s.grado, matricola: "ITD-" + (i + 1).toString().padStart(2, '0'), warns: 0, totalSeconds: 0, logs: [] };
     });
-    localStorage.setItem('ITDR_DATA_V7', JSON.stringify(globalData));
+    localStorage.setItem('ITDR_DATA_V8', JSON.stringify(globalData));
 }
 
 function checkLogin() {
@@ -51,6 +49,7 @@ function updateUI() {
     document.getElementById('staffer-grade').innerText = d.grado;
     document.getElementById('staffer-warns').innerText = d.warns;
     document.getElementById('staffer-id').innerText = d.matricola;
+    document.getElementById('staffer-total-hours').innerText = formatTime(d.totalSeconds || 0);
     renderLogs();
 }
 
@@ -74,11 +73,15 @@ function pauseService() {
 function stopService() {
     clearInterval(timer);
     const time = document.getElementById('timer-display').innerText;
+    
+    // Aggiornamento dati globali
+    globalData[currentUser].totalSeconds += seconds;
     globalData[currentUser].logs.unshift({ time, date: new Date().toLocaleString() });
+    
     seconds = 0;
     save();
     updateTimerDisplay();
-    renderLogs();
+    updateUI();
     document.getElementById('btn-start').innerText = "Inizia Servizio";
     document.getElementById('btn-start').style.display = 'inline-block';
     document.getElementById('btn-pause').style.display = 'none';
@@ -87,13 +90,17 @@ function stopService() {
 }
 
 function updateTimerDisplay() {
-    const h = Math.floor(seconds/3600).toString().padStart(2,'0');
-    const m = Math.floor((seconds%3600)/60).toString().padStart(2,'0');
-    const s = (seconds%60).toString().padStart(2,'0');
-    document.getElementById('timer-display').innerText = `${h}:${m}:${s}`;
+    document.getElementById('timer-display').innerText = formatTime(seconds);
 }
 
-// Admin
+function formatTime(totalSec) {
+    const h = Math.floor(totalSec/3600).toString().padStart(2,'0');
+    const m = Math.floor((totalSec%3600)/60).toString().padStart(2,'0');
+    const s = (totalSec%60).toString().padStart(2,'0');
+    return `${h}:${m}:${s}`;
+}
+
+// Admin Functions
 function populateStaffSelector() {
     const sel = document.getElementById('staff-selector');
     sel.innerHTML = '<option value="">Seleziona uno staffer...</option>';
@@ -127,9 +134,10 @@ function modifyWarns(n) {
 }
 
 function resetHours() {
-    if(confirm("Resettare tutto?")) {
+    if(confirm("Sei sicuro di voler azzerare le ore e i log di " + selectedStaffer + "?")) {
+        globalData[selectedStaffer].totalSeconds = 0;
         globalData[selectedStaffer].logs = [];
-        save(); renderLogs();
+        save(); updateUI();
     }
 }
 
@@ -143,4 +151,4 @@ function showSection(id) {
     document.getElementById(id).style.display = 'block';
 }
 
-function save() { localStorage.setItem('ITDR_DATA_V7', JSON.stringify(globalData)); }
+function save() { localStorage.setItem('ITDR_DATA_V8', JSON.stringify(globalData)); }
