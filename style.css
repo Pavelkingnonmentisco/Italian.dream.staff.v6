@@ -1,31 +1,102 @@
-:root { --bg: #05070a; --accent: #3b82f6; --text: #94a3b8; }
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-body { background: var(--bg); color: white; }
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;800&display=swap');
 
-#login-overlay { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a0505 0%, #05070a 100%); }
-.main-login-container { display: flex; max-width: 1000px; gap: 50px; padding: 20px; }
-.info-side { flex: 1; }
-.info-side h1 { font-size: 40px; margin: 20px 0; }
-.glass-box { background: rgba(255,255,255,0.03); padding: 40px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); text-align: center; }
-.input-container { text-align: left; margin-bottom: 15px; }
-.input-container label { font-size: 10px; text-transform: uppercase; color: var(--text); }
-.input-container input { width: 100%; background: #000; border: 1px solid #222; padding: 12px; color: white; border-radius: 8px; margin-top: 5px; }
-.btn-submit { width: 100%; padding: 12px; background: var(--accent); border: none; color: white; border-radius: 8px; cursor: pointer; text-transform: uppercase; font-weight: bold; }
+:root {
+    /* NUOVA PALETTE COLORI PRESI DAL LOGO ITDR */
+    --bg-gradient: linear-gradient(135deg, #011627 0%, #01121d 60%, #000 100%);
+    --primary: #007bff; /* Blu ITDR */
+    --accent: #00d4ff; /* Azzurro ITDR */
+    --danger: #ff4747; /* Rosso ITDR per i richiami */
+    --text-primary: #ffffff;
+    --text-muted: #8d9eb5;
+    --border: rgba(0, 212, 255, 0.1);
+    --glass: rgba(0, 0, 0, 0.5);
+    
+    /* FONT MATH SANS BOLD ALTERNATIVA */
+    --font-math-sans: 'Poppins', sans-serif;
+}
 
-.top-nav { display: flex; justify-content: space-between; padding: 15px 40px; background: #0a0e17; border-bottom: 1px solid #111; }
-.nav-center button { background: none; border: none; color: var(--text); margin: 0 10px; cursor: pointer; font-size: 14px; }
-.nav-logo { width: 30px; }
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; text-transform: none; }
+body { background-color: #000; color: white; overflow-x: hidden; }
 
-.container { padding: 40px; max-width: 1000px; margin: auto; }
+/* Font Math Sans Bold per i testi principali */
+h1, h2, .logo-text, #timer-display, .btn-submit, .btn-action, .stat-card .val, .pavel-credits {
+    font-family: var(--font-math-sans);
+    font-weight: 800; /* Bold */
+}
+
+/* Schermata Login */
+#login-overlay { width: 100%; min-height: 100vh; background: var(--bg-gradient); display: flex; flex-direction: column; align-items: center; padding: 20px; }
+.login-header-top { width: 100%; max-width: 1200px; display: flex; justify-content: space-between; align-items: center; padding: 20px 0; }
+.header-logo { display: flex; align-items: center; gap: 12px; }
+.header-logo img { width: 35px; }
+.header-logo span { font-size: 13px; font-weight: 700; color: var(--text-muted); }
+
+.main-login-container { display: flex; width: 100%; max-width: 1100px; margin-top: 60px; gap: 60px; align-items: center; }
+.info-side { flex: 1.2; }
+.info-side h1 { font-size: 46px; margin: 20px 0; line-height: 1.1; color: var(--accent); }
+.info-side .desc { color: var(--text-muted); font-size: 16px; line-height: 1.6; margin-bottom: 30px; }
+.info-side .label { color: var(--primary); font-size: 11px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; }
+
+.check-list li { margin-bottom: 12px; display: flex; align-items: center; gap: 10px; color: #cbd5e1; font-size: 14px; list-style: none; }
+.check-list i { color: var(--accent); font-size: 12px; }
+
+.glass-box { flex: 1; background: var(--glass); backdrop-filter: blur(25px); border: 1px solid rgba(0,212,255,0.08); border-radius: 24px; padding: 50px; text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.6); }
+.box-logo { width: 65px; margin-bottom: 20px; }
+.glass-box h2 { color: var(--accent); font-size: 20px; margin-bottom: 30px; }
+
+.input-container { text-align: left; margin-bottom: 20px; }
+.input-container label { display: block; font-size: 10px; color: var(--text-muted); margin-bottom: 8px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; }
+.input-container input { width: 100%; background: #000; border: 1px solid #111; padding: 14px; border-radius: 10px; color: white; outline: none; transition: 0.3s; }
+.input-container input:focus { border-color: var(--accent); background: rgba(0,212,255,0.05); }
+
+.remember-row { display: flex; align-items: center; gap: 10px; margin: 20px 0; }
+.remember-row label { font-size: 12px; color: var(--text-muted); cursor: pointer; }
+
+.btn-submit { width: 100%; padding: 16px; border-radius: 10px; border: none; background: var(--primary); color: white; cursor: pointer; transition: 0.3s; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+.btn-submit:hover { background: #0056b3; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,123,255,0.3); }
+
+/* Portale Navbar Sopra */
+.top-nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background: rgba(1, 22, 39, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(0,212,255,0.05); position: sticky; top: 0; z-index: 100; }
+.nav-left { display: flex; align-items: center; gap: 15px; }
+.nav-logo { width: 35px; }
+.logo-text { font-weight: 800; font-size: 20px; color: #fff; letter-spacing: 1px; }
+
+.nav-center button { background: transparent; border: none; color: var(--text-muted); margin: 0 10px; font-weight: bold; cursor: pointer; transition: 0.3s; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; }
+.nav-center button:hover { color: var(--accent); }
+.nav-center button i { margin-right: 8px; color: var(--accent); font-size: 14px; }
+
+.btn-logout { background: rgba(255, 71, 71, 0.1); color: var(--danger); border: 1px solid rgba(255,71,71,0.2); padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: bold; text-transform: uppercase; }
+.btn-logout:hover { background: rgba(255, 71, 71, 0.2); }
+
+/* Contenuto Portale */
+.container { padding: 40px 50px; max-width: 1200px; margin: auto; }
+.header-section h1 { font-size: 28px; color: #fff; margin-bottom: 5px; }
+.header-section h1 span { color: var(--accent); }
+.header-section p { color: var(--text-muted); font-size: 14px; margin-bottom: 30px; }
+
 .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-.stat-card { background: #0f131a; padding: 20px; border-radius: 12px; border: 1px solid #111; }
-.stat-card label { font-size: 10px; color: var(--text); text-transform: uppercase; }
-.stat-card .val { font-size: 22px; margin-top: 10px; color: var(--accent); font-weight: bold; }
+.stat-card { background: #011627; padding: 25px; border-radius: 15px; border: 1px solid rgba(0,212,255,0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+.stat-card label { font-size: 10px; color: var(--text-muted); font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+.stat-card .val { font-size: 24px; color: var(--accent); margin-top: 10px; }
+.stat-card .val.warn-val { color: var(--danger); }
 
-.shift-box { background: #0f131a; padding: 40px; border-radius: 20px; text-align: center; margin-bottom: 20px; }
-.timer-display { font-size: 70px; font-weight: 100; margin-bottom: 10px; }
-.btn-red { background: #7f1d1d !important; }
-.controls button { padding: 10px 20px; margin: 5px; border-radius: 5px; border: none; background: #1e293b; color: white; cursor: pointer; }
+/* Gestione Turni (Stile Ares/ITDR) */
+.shift-wrapper { background: #011627; border-radius: 20px; border: 1px solid rgba(0,212,255,0.05); overflow: hidden; margin-bottom: 30px; }
+.shift-card-header { padding: 25px 30px; border-bottom: 1px solid rgba(0,212,255,0.05); }
+.service-tag { background: rgba(0, 212, 255, 0.1); color: var(--accent); padding: 5px 12px; border-radius: 5px; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+.shift-card-header h2 { color: #fff; font-size: 20px; margin-top: 5px; }
 
-.logs-box { background: #0f131a; padding: 20px; border-radius: 12px; }
-.log-item { padding: 10px; border-bottom: 1px solid #222; font-size: 13px; display: flex; justify-content: space-between; }
+.timer-box { padding: 60px 30px; text-align: center; }
+#status-text { color: var(--text-muted); text-transform: uppercase; font-size: 11px; font-weight: bold; letter-spacing: 2px; }
+#timer-display { font-size: 90px; font-weight: 200; margin: 15px 0; color: white; letter-spacing: -3px; font-family: monospace; } /* Font sottile e pulito per il tempo */
+
+.controls { display: flex; gap: 10px; justify-content: center; margin-top: 30px; }
+.btn-action { background: #1a0505; color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 14px; }
+.btn-action:hover { opacity: 0.8; }
+.btn-pause { background: #f59e0b; color: #000; }
+.btn-danger { background: #7f1d1d; }
+
+/* Logs */
+.logs-wrapper { background: #011627; padding: 20px; border-radius: 12px; border: 1px solid rgba(0,212,255,0.05); }
+.log-item { padding: 10px; border-bottom: 1px solid #111; font-size: 13px; display: flex; justify-content: space-between; }
+.pavel-credits { margin-top: 30px; font-size: 11px; color: var(--text-muted); opacity: 0.5; font-weight: normal; }
