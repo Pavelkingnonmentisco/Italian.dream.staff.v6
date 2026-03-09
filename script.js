@@ -1,30 +1,44 @@
-// Liste dati
-const turniStaff = ["Hydro","Fabbri","Matz","Nathalino","Viper","Xenoo","Adamo","Gabriel","Chorno","Joker","Nenne","Mattia","Lollo","Simo","Vortex","Void","Sangue","Ibra","Noxen","Ash"];
-const matricole = ["Daniel","Michele","Mav","Arduino","Strepitoso","Archadian","Baj","Cobra","Djsamy","Mirko","Maverick","Pavel","Diego", ...turniStaff];
+// 1. DATABASE COMPLETO STAFF (Nomi forniti)
+const staffData = [
+    "Daniel", "Michele", "Mav", "Arduino", "Strepitoso", "Archadian", "Baj", "Cobra", 
+    "Djsamy", "Mirko", "Maverick", "Pavel", "Diego", "Hydro", "Fabbri", "Matz", 
+    "Nathalino", "Viper", "Xenoo", "Adamo", "Gabriel", "Chorno", "Joker", "Nenne", 
+    "Mattia", "Lollo", "Simo", "Vortex", "Void", "Sangue", "Ibra", "Noxen", "Ash"
+];
 
-// Variabili Timer
+// 2. GENERAZIONE AUTOMATICA CREDENZIALI
+// Questo oggetto conterrà: { "Hydro": "H-14", "Daniel": "D-01", ... }
+const credentials = {};
+staffData.forEach((nome, index) => {
+    const matricolaNum = (index + 1).toString().padStart(2, '0');
+    const passwordGenerata = nome.charAt(0).toUpperCase() + "-" + matricolaNum;
+    credentials[nome.toLowerCase()] = passwordGenerata;
+});
+
+// Stampa in console per te (F12 nel browser per vedere la lista completa)
+console.log("DATABASE CREDENZIALI CARICATO:", credentials);
+
+// --- LOGICA LOGIN ---
+function checkLogin() {
+    const userIn = document.getElementById('username').value.trim().toLowerCase();
+    const passIn = document.getElementById('password').value.trim();
+
+    if (credentials[userIn] && credentials[userIn] === passIn) {
+        document.getElementById('login-overlay').style.display = 'none';
+        document.getElementById('main-content').style.display = 'flex';
+        initData();
+    } else {
+        const errorMsg = document.getElementById('login-error');
+        errorMsg.style.display = 'block';
+        errorMsg.innerText = "Username o Password errata! (Es: Hydro / H-14)";
+    }
+}
+
+// --- LOGICA TIMER ---
 let seconds = 0;
 let timerInterval = null;
 let startTime = null;
 
-// Gestione Navigazione
-function showSection(id) {
-    document.querySelectorAll('.tab-content').forEach(s => s.style.display = 'none');
-    document.getElementById(id).style.display = 'block';
-}
-
-// Login
-function checkLogin() {
-    const user = document.getElementById('username').value;
-    const pass = document.getElementById('password').value;
-    if(user && pass === user.charAt(0).toUpperCase() + "123") {
-        document.getElementById('login-overlay').style.display = 'none';
-        document.getElementById('main-content').style.display = 'flex';
-        initData();
-    } else { alert("Credenziali Errate!"); }
-}
-
-// Logica Timer
 function startService() {
     startTime = new Date().toLocaleString();
     document.getElementById('timer-status').innerText = "SERVIZIO IN CORSO";
@@ -57,22 +71,11 @@ function resumeService() {
 
 function stopService() {
     clearInterval(timerInterval);
-    const endTime = new Date().toLocaleString();
     const duration = document.getElementById('timer-display').innerText;
-    
-    // Aggiungi allo storico
-    const row = `<tr>
-        <td>${startTime}</td>
-        <td>${endTime}</td>
-        <td>${duration}</td>
-        <td><span class="status-pill">COMPLETATO</span></td>
-    </tr>`;
+    const row = `<tr><td>${startTime}</td><td>${new Date().toLocaleTimeString()}</td><td>${duration}</td><td><span class="status-pill">COMPLETATO</span></td></tr>`;
     document.getElementById('history-body').innerHTML += row;
-
-    // Reset
     seconds = 0;
     updateDisplay();
-    document.getElementById('timer-status').innerText = "NESSUN SERVIZIO ATTIVO";
     document.getElementById('btn-start').style.display = 'inline-block';
     document.getElementById('btn-pause').style.display = 'none';
     document.getElementById('btn-stop').style.display = 'none';
@@ -85,15 +88,36 @@ function updateDisplay() {
     document.getElementById('timer-display').innerText = `${h}:${m}:${s}`;
 }
 
+// --- NAVIGAZIONE ---
+function showSection(id) {
+    document.querySelectorAll('.tab-content').forEach(s => s.style.display = 'none');
+    document.getElementById(id).style.display = 'block';
+}
+
+// --- INIZIALIZZAZIONE DATI NELLE TABELLE ---
 function initData() {
-    // Popola Matricole
     const mBody = document.querySelector('#staffTable tbody');
-    matricole.forEach((m, i) => {
-        mBody.innerHTML += `<tr><td>ITD-${(i+1).toString().padStart(2,'0')}</td><td>${m}</td><td>Attivo</td></tr>`;
+    mBody.innerHTML = "";
+    staffData.forEach((nome, i) => {
+        const id = (i + 1).toString().padStart(2, '0');
+        mBody.innerHTML += `<tr><td><span class="badge">ITD-${id}</span></td><td>${nome}</td><td style="color:#44ff44">● Attivo</td></tr>`;
     });
-    // Popola Turni
+
     const tBody = document.querySelector('#scheduleTable tbody');
-    ["Lunedì","Martedì","Mercoledì","Giovedì","Venerdì","Sabato","Domenica"].forEach((g, i) => {
-        tBody.innerHTML += `<tr><td>${g}</td><td>${turniStaff.slice(0,3).join(", ")}</td><td>${turniStaff.slice(3,6).join(", ")}</td></tr>`;
+    tBody.innerHTML = "";
+    const giorni = ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato", "Domenica"];
+    
+    // Filtriamo i membri per i turni (da Hydro in poi)
+    const turniMembri = staffData.slice(13); 
+
+    giorni.forEach((g, i) => {
+        let p1 = turniMembri[(i * 6) % turniMembri.length];
+        let p2 = turniMembri[(i * 6 + 1) % turniMembri.length];
+        let p3 = turniMembri[(i * 6 + 2) % turniMembri.length];
+        let s1 = turniMembri[(i * 6 + 3) % turniMembri.length];
+        let s2 = turniMembri[(i * 6 + 4) % turniMembri.length];
+        let s3 = turniMembri[(i * 6 + 5) % turniMembri.length];
+
+        tBody.innerHTML += `<tr><td><strong>${g}</strong></td><td>${p1}, ${p2}, ${p3}</td><td>${s1}, ${s2}, ${s3}</td></tr>`;
     });
 }
