@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ITDR STAFF PORTAL v20</title>
+    <title>ITDR STAFF PORTAL v21</title>
     <style>
         :root {
             --blue: #007bff;
@@ -132,11 +132,11 @@
         }
         .m-table th, .m-table td { padding: 15px; border: 1px solid rgba(255,255,255,0.05); text-align: left; }
         .m-table th { background: var(--blue); text-transform: uppercase; font-size: 12px; }
-        .m-table tr:hover { background: rgba(0, 123, 255, 0.05); }
 
         /* --- ADMIN --- */
-        .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; text-align: left; }
+        .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; text-align: left; }
         .admin-card { background: #0a2540; padding: 25px; border-radius: 15px; border: 1px solid #1a3a5a; }
+        .admin-card h3 { margin-top: 0; border-bottom: 1px solid var(--blue); padding-bottom: 10px; font-size: 14px; }
 
         input, select, textarea {
             width: 100%;
@@ -162,6 +162,7 @@
         }
         .btn-danger { background: var(--danger); }
         .btn-warn { background: #f39c12; }
+        .btn-add { background: #28a745; }
 
         #timer-val { font-size: 60px; font-weight: 900; margin: 20px 0; display: block; color: #fff; }
     </style>
@@ -237,14 +238,24 @@
             <section id="admin" class="hidden">
                 <div class="admin-grid">
                     <div class="admin-card">
-                        <h3>GESTIONE STAFF</h3>
+                        <h3>GESTIONE STAFF ESISTENTE</h3>
                         <select id="s-sel" onchange="loadStaffData()"><option value="">Scegli Staffer...</option></select>
                         <input type="text" id="ed-g" placeholder="Grado">
                         <input type="text" id="ed-m" placeholder="Matricola">
                         <input type="number" id="ed-h" placeholder="Secondi di Servizio">
                         <button class="btn-primary" onclick="saveStaffData()">SALVA MODIFICHE</button>
-                        <button class="btn-primary btn-danger" onclick="resetOre()">RESET ORE SERVIZIO</button>
+                        <button class="btn-primary btn-danger" onclick="resetOre()">RESET ORE</button>
                     </div>
+
+                    <div class="admin-card">
+                        <h3>AGGIUNGI NUOVO MEMBRO</h3>
+                        <input type="text" id="new-n" placeholder="Nome Utente">
+                        <input type="text" id="new-g" placeholder="Grado">
+                        <input type="text" id="new-m" placeholder="Matricola (es. ITD-50)">
+                        <input type="text" id="new-p" placeholder="Password Iniziale">
+                        <button class="btn-primary btn-add" onclick="addNewStaff()">AGGIUNGI MEMBRO</button>
+                    </div>
+
                     <div class="admin-card">
                         <h3>MODIFICA TURNI</h3>
                         <select id="e-day">
@@ -253,8 +264,8 @@
                             <option value="Venerdi">Venerdi</option><option value="Sabato">Sabato</option>
                             <option value="Domenica">Domenica</option>
                         </select>
-                        <textarea id="e-p" placeholder="3 Nomi Pomeriggio..."></textarea>
-                        <textarea id="e-s" placeholder="3 Nomi Sera..."></textarea>
+                        <textarea id="e-p" placeholder="Pomeriggio..."></textarea>
+                        <textarea id="e-s" placeholder="Sera..."></textarea>
                         <button class="btn-primary btn-warn" onclick="saveT()">SALVA TURNI</button>
                     </div>
                 </div>
@@ -265,8 +276,8 @@
     <script>
         const ADM_LIST = ["Daniel", "Michele", "Mav", "Arduino", "Strepitoso", "Archadian", "Djsamy", "Cobra", "Baj", "Mirko", "Maverick", "Pavel", "Diego"];
         
-        let db = JSON.parse(localStorage.getItem('ITDR_V20_DB')) || {};
-        let tr = JSON.parse(localStorage.getItem('ITDR_V20_TR')) || {
+        let db = JSON.parse(localStorage.getItem('ITDR_V21_DB')) || {};
+        let tr = JSON.parse(localStorage.getItem('ITDR_V21_TR')) || {
             "Lunedi":{p:"Barone, Hydro, Fabbri", s:"Matz, Nathalino, Viper"},
             "Martedi":{p:"Xenoo, Adamo, Gabriel", s:"Chorno, Joker, Nenne"},
             "Mercoledi":{p:"Mattia, Lollo, Simo", s:"Vortex, Void, Sangue"},
@@ -276,19 +287,18 @@
             "Domenica":{p:"Vortex, Void, Sangue", s:"Ibra, Noxen, Ash"}
         };
 
-        const RAW_STAFF = [
-            ["Daniel","Founder","ITD-01"],["Michele","Founder","ITD-02"],["Mav","Co-Founder","ITD-03"],["Arduino","Owner","ITD-04"],
-            ["Strepitoso","Co Owner","ITD-05"],["Archadian","Co Owner","ITD-06"],["Djsamy","Community Manager","ITD-07"],["Cobra","Community Manager","ITD-08"],
-            ["Baj","Server Supervisor","ITD-09"],["Mirko","Staff Manager","ITD-10"],["Maverick","Staff Manager","ITD-11"],["Pavel","Supervisor","ITD-12"],
-            ["Diego","Supervisor","ITD-13"],["Barone","Head Admin","ITD-14"],["Hydro","Head Admin","ITD-15"],["Fabbri","Senior Admin","ITD-16"],
-            ["Matz","Senior Admin","ITD-17"],["Nathalino","Senior Admin","ITD-18"],["Viper","Admin","ITD-19"],["Xenoo","Admin","ITD-20"],
-            ["Adamo","Head Mod","ITD-21"],["Gabriel","Moderator","ITD-22"],["Chorno","Moderator","ITD-23"],["Joker","Moderator","ITD-24"],
-            ["Nenne","Trial Mod","ITD-25"],["Mattia","Trial Mod","ITD-26"],["Lollo","Senior Helper","ITD-27"],["Simo","Helper","ITD-28"],
-            ["Vortex","Helper","ITD-29"],["Void","Helper","ITD-30"],["Sangue","Trial Helper","ITD-31"],["Ibra","Trial Helper","ITD-32"],["Noxen","Trial Helper","ITD-33"],["Ash","Trial Helper","ITD-34"]
-        ];
-
         if(Object.keys(db).length === 0) {
-            RAW_STAFF.forEach(s => { db[s[0]] = { pass: s[0]+"-01", grado: s[1], mat: s[2], ore: 0, warns: 0 }; });
+            const RAW = [
+                ["Daniel","Founder","ITD-01"],["Michele","Founder","ITD-02"],["Mav","Co-Founder","ITD-03"],["Arduino","Owner","ITD-04"],
+                ["Strepitoso","Co Owner","ITD-05"],["Archadian","Co Owner","ITD-06"],["Djsamy","Community Manager","ITD-07"],["Cobra","Community Manager","ITD-08"],
+                ["Baj","Server Supervisor","ITD-09"],["Mirko","Staff Manager","ITD-10"],["Maverick","Staff Manager","ITD-11"],["Pavel","Supervisor","ITD-12"],
+                ["Diego","Supervisor","ITD-13"],["Barone","Head Admin","ITD-14"],["Hydro","Head Admin","ITD-15"],["Fabbri","Senior Admin","ITD-16"],
+                ["Matz","Senior Admin","ITD-17"],["Nathalino","Senior Admin","ITD-18"],["Viper","Admin","ITD-19"],["Xenoo","Admin","ITD-20"],
+                ["Adamo","Head Mod","ITD-21"],["Gabriel","Moderator","ITD-22"],["Chorno","Moderator","ITD-23"],["Joker","Moderator","ITD-24"],
+                ["Nenne","Trial Mod","ITD-25"],["Mattia","Trial Mod","ITD-26"],["Lollo","Senior Helper","ITD-27"],["Simo","Helper","ITD-28"],
+                ["Vortex","Helper","ITD-29"],["Void","Helper","ITD-30"],["Sangue","Trial Helper","ITD-31"],["Ibra","Trial Helper","ITD-32"],["Noxen","Trial Helper","ITD-33"],["Ash","Trial Helper","ITD-34"]
+            ];
+            RAW.forEach(s => { db[s[0]] = { pass: s[0]+"-01", grado: s[1], mat: s[2], ore: 0, warns: 0 }; });
             save();
         }
 
@@ -303,7 +313,7 @@
                 document.getElementById('portal').classList.remove('hidden');
                 if(ADM_LIST.includes(u)) { document.getElementById('adm-btn').classList.remove('hidden'); refreshAdmList(); }
                 updateArea(); renderMatricole();
-            } else alert("Accesso Negato!");
+            } else alert("Credenziali errate!");
         }
 
         function updateArea() {
@@ -313,30 +323,25 @@
             document.getElementById('u-warns').innerText = db[user].warns;
         }
 
-        function toggleT() {
-            let b = document.getElementById('t-btn');
-            if(!on) {
-                on = true; b.innerText = "FINE SERVIZIO"; b.classList.add('btn-danger');
-                interval = setInterval(() => { sec++; document.getElementById('timer-val').innerText = fmt(sec); }, 1000);
-            } else {
-                on = false; b.innerText = "INIZIA SERVIZIO"; b.classList.remove('btn-danger');
-                clearInterval(interval); db[user].ore += sec; sec = 0; save(); updateArea();
-                document.getElementById('timer-val').innerText = "00:00:00";
-            }
-        }
+        function addNewStaff() {
+            let n = document.getElementById('new-n').value.trim();
+            let g = document.getElementById('new-g').value.trim();
+            let m = document.getElementById('new-m').value.trim();
+            let p = document.getElementById('new-p').value.trim();
 
-        function showDay(d, e) {
-            document.getElementById('day-title').innerText = d;
-            document.getElementById('p-list').innerText = tr[d].p;
-            document.getElementById('s-list').innerText = tr[d].s;
-            document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active-day'));
-            e.target.classList.add('active-day');
-        }
+            if(!n || !g || !m || !p) return alert("Compila tutti i campi!");
+            if(db[n]) return alert("Questo nome esiste già!");
 
-        function renderMatricole() {
-            let b = document.getElementById('m-body');
-            const sorted = Object.keys(db).sort((x,y) => db[x].mat.localeCompare(db[y].mat, undefined, {numeric: true}));
-            b.innerHTML = sorted.map(k => `<tr><td>${db[k].mat}</td><td>${k}</td><td>${db[k].grado}</td></tr>`).join('');
+            db[n] = { pass: p, grado: g, mat: m, ore: 0, warns: 0 };
+            save();
+            refreshAdmList();
+            renderMatricole();
+            alert("Membro aggiunto con successo!");
+            
+            document.getElementById('new-n').value = "";
+            document.getElementById('new-g').value = "";
+            document.getElementById('new-m').value = "";
+            document.getElementById('new-p').value = "";
         }
 
         function loadStaffData() {
@@ -353,15 +358,13 @@
             db[s].grado = document.getElementById('ed-g').value;
             db[s].mat = document.getElementById('ed-m').value;
             db[s].ore = parseInt(document.getElementById('ed-h').value);
-            save(); 
-            renderMatricole(); 
-            if(s === user) updateArea();
-            alert("Sincronizzazione completata!");
+            save(); renderMatricole(); if(s === user) updateArea();
+            alert("Dati aggiornati!");
         }
 
         function resetOre() {
             let s = document.getElementById('s-sel').value;
-            if(confirm("Resettare le ore di "+s+"?")) { db[s].ore = 0; save(); loadStaffData(); if(s === user) updateArea(); }
+            if(confirm("Vuoi azzerare le ore di "+s+"?")) { db[s].ore = 0; save(); loadStaffData(); if(s === user) updateArea(); }
         }
 
         function saveT() {
@@ -370,16 +373,42 @@
             save(); alert("Turni salvati!");
         }
 
+        function showDay(d, e) {
+            document.getElementById('day-title').innerText = d;
+            document.getElementById('p-list').innerText = tr[d].p;
+            document.getElementById('s-list').innerText = tr[d].s;
+            document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active-day'));
+            e.target.classList.add('active-day');
+        }
+
+        function renderMatricole() {
+            let b = document.getElementById('m-body');
+            const sorted = Object.keys(db).sort((x,y) => db[x].mat.localeCompare(db[y].mat, undefined, {numeric: true}));
+            b.innerHTML = sorted.map(k => `<tr><td>${db[k].mat}</td><td>${k}</td><td>${db[k].grado}</td></tr>`).join('');
+        }
+
         function refreshAdmList() {
             let s = document.getElementById('s-sel');
             s.innerHTML = '<option value="">Scegli Staffer...</option>';
             Object.keys(db).sort().forEach(k => s.innerHTML += `<option value="${k}">${k}</option>`);
         }
 
+        function toggleT() {
+            let b = document.getElementById('t-btn');
+            if(!on) {
+                on = true; b.innerText = "FINE SERVIZIO"; b.classList.add('btn-danger');
+                interval = setInterval(() => { sec++; document.getElementById('timer-val').innerText = fmt(sec); }, 1000);
+            } else {
+                on = false; b.innerText = "INIZIA SERVIZIO"; b.classList.remove('btn-danger');
+                clearInterval(interval); db[user].ore += sec; sec = 0; save(); updateArea();
+                document.getElementById('timer-val').innerText = "00:00:00";
+            }
+        }
+
         function fmt(s) { return new Date(s * 1000).toISOString().substr(11, 8); }
         function save() { 
-            localStorage.setItem('ITDR_V20_DB', JSON.stringify(db)); 
-            localStorage.setItem('ITDR_V20_TR', JSON.stringify(tr)); 
+            localStorage.setItem('ITDR_V21_DB', JSON.stringify(db)); 
+            localStorage.setItem('ITDR_V21_TR', JSON.stringify(tr)); 
         }
         function tab(id) {
             ["area", "servizio", "turni", "matricole", "admin"].forEach(t => document.getElementById(t).classList.add('hidden'));
