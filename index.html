@@ -81,7 +81,7 @@
         nav button:hover { background: var(--gold); color: #000; }
 
         /* --- LAYOUT --- */
-        .container { padding: 30px; max-width: 1100px; margin: auto; text-align: center; flex: 1; }
+        .container { padding: 30px; max-width: 1200px; margin: auto; text-align: center; flex: 1; }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px; }
         .card { background: var(--card-bg); padding: 25px; border-radius: 15px; border: 1px solid rgba(212, 175, 55, 0.2); }
         .card h3 { color: var(--gold); margin: 0; font-size: 11px; text-transform: uppercase; }
@@ -93,11 +93,34 @@
         .m-table th { background: var(--gold); color: black; padding: 15px; text-align: left; font-size: 12px; }
         .m-table td { padding: 12px 15px; border-bottom: 1px solid rgba(212, 175, 55, 0.1); text-align: left; }
 
-        /* --- ADMIN --- */
-        .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; text-align: left; }
-        .admin-card { background: #080808; padding: 20px; border-radius: 12px; border: 1px solid rgba(212, 175, 55, 0.3); }
+        /* --- ADMIN AGGIUSTATO --- */
+        .admin-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 20px; 
+            text-align: left; 
+            align-items: start;
+        }
+        .admin-card { 
+            background: #080808; 
+            padding: 20px; 
+            border-radius: 12px; 
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            height: fit-content;
+            box-sizing: border-box;
+        }
 
-        input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; background: #000; border: 1px solid #333; color: #fff; border-radius: 6px; }
+        input, select, textarea { 
+            width: 100%; 
+            padding: 12px; 
+            margin: 8px 0; 
+            background: #000; 
+            border: 1px solid #333; 
+            color: #fff; 
+            border-radius: 6px; 
+            box-sizing: border-box; /* Evita che escano dai bordi */
+        }
+        
         .btn-primary { width: 100%; padding: 12px; background: var(--gold); border: none; color: #000; font-weight: bold; border-radius: 6px; cursor: pointer; text-transform: uppercase; }
         .btn-danger { background: var(--danger); color: #fff; }
         .btn-warn { background: #b8860b; color: #fff; }
@@ -179,35 +202,35 @@
             <section id="admin" class="hidden">
                 <div class="admin-grid">
                     <div class="admin-card">
-                        <h3 style="color:var(--gold)">AGGIUNGI NUOVO MEMBRO</h3>
+                        <h3 style="color:var(--gold); font-size: 14px; margin-top: 0;">AGGIUNGI MEMBRO</h3>
                         <input type="text" id="new-u" placeholder="Nome Staffer">
-                        <input type="text" id="new-g" placeholder="Grado (es. Staff)">
-                        <input type="text" id="new-m" placeholder="Matricola (es. ITD-00)">
-                        <button class="btn-primary" onclick="addMember()">AGGIUNGI STAFF</button>
-                        <p style="font-size:9px; color:gray; margin-top:5px;">*La password iniziale sarà: Nome-01</p>
+                        <input type="text" id="new-g" placeholder="Grado">
+                        <input type="text" id="new-m" placeholder="Matricola">
+                        <button class="btn-primary" onclick="addMember()">AGGIUNGI</button>
+                        <p style="font-size:9px; color:gray; margin-top:10px;">*Password default: Nome-01</p>
                     </div>
 
                     <div class="admin-card">
-                        <h3 style="color:var(--gold)">GESTIONE STAFF</h3>
+                        <h3 style="color:var(--gold); font-size: 14px; margin-top: 0;">GESTIONE STAFF</h3>
                         <select id="s-sel" onchange="loadStaffData()"><option value="">Scegli...</option></select>
                         <input type="text" id="ed-g" placeholder="Grado">
                         <input type="text" id="ed-m" placeholder="Matricola">
                         <input type="number" id="ed-h" placeholder="Secondi totali">
                         <button class="btn-primary" onclick="saveStaffData()">AGGIORNA</button>
                         <div style="display:flex; gap:5px; margin-top:10px;">
-                            <button class="btn-primary btn-warn" onclick="changeWarns(1)">+1 SANZIONE</button>
-                            <button class="btn-primary btn-danger" onclick="changeWarns(-1)">-1 SANZIONE</button>
+                            <button class="btn-primary btn-warn" onclick="changeWarns(1)">+1</button>
+                            <button class="btn-primary btn-danger" onclick="changeWarns(-1)">-1</button>
                         </div>
                     </div>
 
                     <div class="admin-card">
-                        <h3 style="color:var(--gold)">TURNI</h3>
+                        <h3 style="color:var(--gold); font-size: 14px; margin-top: 0;">TURNI</h3>
                         <select id="e-day">
                             <option value="Lunedi">Lunedi</option><option value="Martedi">Martedi</option><option value="Mercoledi">Mercoledi</option><option value="Giovedi">Giovedi</option><option value="Venerdi">Venerdi</option><option value="Sabato">Sabato</option><option value="Domenica">Domenica</option>
                         </select>
-                        <textarea id="e-p" placeholder="Staff Pomeriggio..."></textarea>
-                        <textarea id="e-s" placeholder="Staff Sera..."></textarea>
-                        <button class="btn-primary" onclick="saveT()">SALVA TURNI</button>
+                        <textarea id="e-p" placeholder="Pomeriggio..." rows="2"></textarea>
+                        <textarea id="e-s" placeholder="Sera..." rows="2"></textarea>
+                        <button class="btn-primary" onclick="saveT()">SALVA</button>
                     </div>
                 </div>
             </section>
@@ -255,7 +278,7 @@
             document.getElementById('new-u').value = "";
             document.getElementById('new-g').value = "";
             document.getElementById('new-m').value = "";
-            alert("Membro aggiunto con successo!");
+            alert("Membro aggiunto!");
         }
 
         function updateArea() {
@@ -283,8 +306,8 @@
                 }]
             };
             if(tipo === "FINE") {
-                embed.embeds[0].fields.push({ name: "Totale tempo sessione", value: fmt(sessione), inline: true });
-                embed.embeds[0].fields.push({ name: "Ore totali accumulate", value: fmt(db[user].ore), inline: true });
+                embed.embeds[0].fields.push({ name: "Totale sessione", value: fmt(sessione), inline: true });
+                embed.embeds[0].fields.push({ name: "Ore totali", value: fmt(db[user].ore), inline: true });
             }
             await fetch(DISCORD_WEBHOOK, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(embed) });
         }
