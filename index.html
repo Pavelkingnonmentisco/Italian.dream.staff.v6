@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ITDR STAFF PORTAL v25</title>
+    <title>ITDR STAFF PORTAL v27</title>
     <style>
         :root {
             --blue: #007bff;
@@ -52,10 +52,7 @@
             backdrop-filter: blur(5px);
         }
 
-        .login-box h2 { letter-spacing: 3px; margin: 15px 0; }
-        .login-copy { font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 20px; }
-
-        /* --- NAVBAR CON LOGHI SIMMETRICI --- */
+        /* --- NAVBAR --- */
         nav {
             background: var(--dark);
             padding: 10px 20px;
@@ -69,7 +66,6 @@
         }
 
         .nav-logo { height: 45px; width: 45px; object-fit: cover; border-radius: 50%; border: 2px solid var(--blue); box-shadow: 0 0 10px var(--blue); }
-
         .nav-links { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; flex: 1; margin: 0 20px; }
 
         nav button {
@@ -86,10 +82,46 @@
         }
 
         nav button:hover { background: var(--blue); box-shadow: 0 0 10px var(--blue); }
-        .btn-adm { border-color: #f39c12 !important; color: #f39c12 !important; }
-        .btn-adm:hover { background: #f39c12 !important; color: #fff !important; }
-        .btn-exit { border-color: var(--danger) !important; color: var(--danger) !important; }
-        .btn-exit:hover { background: var(--danger) !important; color: #fff !important; }
+
+        /* --- TASTI TURNI (NUOVO DESIGN) --- */
+        .turni-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .day-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            color: #fff;
+            padding: 15px 25px;
+            font-weight: 800;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 13px;
+            min-width: 100px;
+            backdrop-filter: blur(10px);
+        }
+
+        .day-btn:hover {
+            background: var(--blue);
+            border-color: var(--accent);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 123, 255, 0.4);
+        }
+
+        .day-btn.active-day {
+            background: var(--blue);
+            border-color: #fff;
+            box-shadow: 0 0 15px var(--accent);
+            transform: scale(1.1);
+            z-index: 2;
+        }
 
         /* --- LAYOUT --- */
         .container { padding: 30px; max-width: 1100px; margin: auto; text-align: center; flex: 1; }
@@ -100,16 +132,13 @@
 
         .img-header { width: 100%; max-width: 550px; border-radius: 15px; margin-bottom: 30px; border: 2px solid var(--blue); box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
 
-        /* --- TABELLA --- */
         .m-table { width: 100%; border-collapse: collapse; background: var(--dark); border-radius: 10px; overflow: hidden; }
         .m-table th { background: var(--blue); color: white; padding: 15px; text-align: left; font-size: 12px; text-transform: uppercase;}
         .m-table td { padding: 12px 15px; border-bottom: 1px solid rgba(255,255,255,0.05); text-align: left; font-size: 14px; }
-        .m-table tr:hover { background: rgba(255,255,255,0.02); }
 
         /* --- ADMIN --- */
         .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; text-align: left; }
         .admin-card { background: #0a2540; padding: 20px; border-radius: 12px; border: 1px solid #1a3a5a; }
-        .admin-card h3 { color: #fff; margin-top: 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
 
         input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; background: #000; border: 1px solid #333; color: #fff; border-radius: 6px; box-sizing: border-box; }
         .btn-primary { width: 100%; padding: 12px; background: var(--blue); border: none; color: #fff; font-weight: bold; border-radius: 6px; cursor: pointer; text-transform: uppercase; font-size: 12px;}
@@ -119,7 +148,6 @@
 
         #timer-val { font-size: 70px; font-weight: 900; margin: 20px 0; display: block; text-shadow: 0 0 20px var(--blue); }
 
-        /* --- FOOTER COPYRIGHT Pavel --- */
         footer {
             background: var(--dark);
             padding: 15px;
@@ -140,23 +168,21 @@
             <input type="text" id="user-in" placeholder="Username">
             <input type="password" id="pass-in" placeholder="Password">
             <button class="btn-primary" onclick="login()">ACCEDI</button>
-            <p class="login-copy">© Sviluppato da Pavel | Tutti i diritti riservati</p>
+            <p style="font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 20px;">© Sviluppato da Pavel | Tutti i diritti riservati</p>
         </div>
     </div>
 
     <div id="portal" class="hidden">
         <nav>
             <img src="https://res.cloudinary.com/dbxwiln0a/image/upload/v1773155102/q616frliniciy9cdxhsk.gif" class="nav-logo" alt="Logo">
-            
             <div class="nav-links">
                 <button onclick="tab('area')">Home</button>
                 <button onclick="tab('servizio')">Servizio</button>
                 <button onclick="tab('turni')">Turni</button>
                 <button onclick="tab('matricole')">Membri</button>
-                <button id="adm-btn" class="hidden btn-adm" onclick="tab('admin')">Admin</button>
-                <button onclick="location.reload()" class="btn-exit">Esci</button>
+                <button id="adm-btn" class="hidden nav-button btn-adm" onclick="tab('admin')">Admin</button>
+                <button onclick="location.reload()" class="nav-button btn-exit">Esci</button>
             </div>
-
             <img src="https://res.cloudinary.com/dbxwiln0a/image/upload/v1773155102/q616frliniciy9cdxhsk.gif" class="nav-logo" alt="Logo">
         </nav>
 
@@ -184,20 +210,28 @@
 
             <section id="turni" class="hidden">
                 <img src="https://res.cloudinary.com/dbxwiln0a/image/upload/v1773151042/g2bk1uwpi9jybgexnerm.png" class="img-header">
-                <div style="display:flex; justify-content: center; gap:5px; margin-bottom:20px; flex-wrap:wrap;">
-                    <button class="day-btn" onclick="showDay('Lunedi', event)">LUN</button>
-                    <button class="day-btn" onclick="showDay('Martedi', event)">MAR</button>
-                    <button class="day-btn" onclick="showDay('Mercoledi', event)">MER</button>
-                    <button class="day-btn" onclick="showDay('Giovedi', event)">GIO</button>
-                    <button class="day-btn" onclick="showDay('Venerdi', event)">VEN</button>
-                    <button class="day-btn" onclick="showDay('Sabato', event)">SAB</button>
-                    <button class="day-btn" onclick="showDay('Domenica', event)">DOM</button>
+                
+                <div class="turni-container">
+                    <button class="day-btn" onclick="showDay('Lunedi', event)">Lunedì</button>
+                    <button class="day-btn" onclick="showDay('Martedi', event)">Martedì</button>
+                    <button class="day-btn" onclick="showDay('Mercoledi', event)">Mercoledì</button>
+                    <button class="day-btn" onclick="showDay('Giovedi', event)">Giovedì</button>
+                    <button class="day-btn" onclick="showDay('Venerdi', event)">Venerdì</button>
+                    <button class="day-btn" onclick="showDay('Sabato', event)">Sabato</button>
+                    <button class="day-btn" onclick="showDay('Domenica', event)">Domenica</button>
                 </div>
-                <div class="card">
-                    <h2 id="day-title" style="color:var(--accent);">Pianificazione Settimanale</h2>
+
+                <div class="card" style="border: 2px solid var(--blue); background: rgba(5, 30, 52, 0.9);">
+                    <h2 id="day-title" style="color:var(--accent); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px;">Seleziona un giorno</h2>
                     <div class="grid">
-                        <div class="card"><h3>Pomeriggio</h3><p id="p-list" style="font-size:15px;">-</p></div>
-                        <div class="card"><h3>Sera</h3><p id="s-list" style="font-size:15px;">-</p></div>
+                        <div class="card" style="background: rgba(0,0,0,0.3);">
+                            <h3 style="font-size: 14px;">Fascia Pomeridiana</h3>
+                            <p id="p-list" style="font-size:16px; color: #fff; border-top: 1px solid var(--blue); padding-top: 10px; margin-top: 10px;">-</p>
+                        </div>
+                        <div class="card" style="background: rgba(0,0,0,0.3);">
+                            <h3 style="font-size: 14px;">Fascia Serale</h3>
+                            <p id="s-list" style="font-size:16px; color: #fff; border-top: 1px solid var(--blue); padding-top: 10px; margin-top: 10px;">-</p>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -249,9 +283,9 @@
     </div>
 
     <script>
-        const ADM_LIST = ["Daniel", "Michele", "Mav", "Arduino", "Strepitoso", "Archadian", "Djsamy", "Cobra", "Baj", "Mirko", "Maverick", "Pavel", "Diego"];
-        let db = JSON.parse(localStorage.getItem('ITDR_V25_DB')) || {};
-        let tr = JSON.parse(localStorage.getItem('ITDR_V25_TR')) || {
+        const ADM_LIST = ["Daniel", "Michele", "Mav", "Arduino", "Strepitoso", "Archadian", "Djsamy", "Cobra", "Baj", "Mirko", "Maverick", "Pavel"];
+        let db = JSON.parse(localStorage.getItem('ITDR_V27_DB')) || {};
+        let tr = JSON.parse(localStorage.getItem('ITDR_V27_TR')) || {
             "Lunedi":{p:"Barone, Hydro, Fabbri", s:"Matz, Nathalino, Viper"},
             "Martedi":{p:"Xenoo, Adamo, Gabriel", s:"Chorno, Joker, Nenne"},
             "Mercoledi":{p:"Mattia, Lollo, Simo", s:"Vortex, Void, Sangue"},
@@ -380,8 +414,8 @@
 
         function fmt(s) { return new Date(s * 1000).toISOString().substr(11, 8); }
         function save() { 
-            localStorage.setItem('ITDR_V25_DB', JSON.stringify(db)); 
-            localStorage.setItem('ITDR_V25_TR', JSON.stringify(tr)); 
+            localStorage.setItem('ITDR_V27_DB', JSON.stringify(db)); 
+            localStorage.setItem('ITDR_V27_TR', JSON.stringify(tr)); 
         }
         function tab(id) {
             ["area", "servizio", "turni", "matricole", "admin"].forEach(t => document.getElementById(t).classList.add('hidden'));
