@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ITDR STAFF PORTAL v37.0 | 2026</title>
+    <title>ITDR STAFF PORTAL v38.0 | 2026</title>
     <style>
         :root {
             --gold: #D4AF37;
@@ -199,18 +199,29 @@
                         <input type="text" id="ed-g" placeholder="Grado">
                         <input type="text" id="ed-m" placeholder="Matricola">
                         <input type="number" id="ed-h" placeholder="Secondi totali">
-                        <button class="btn-primary" onclick="saveStaffData()">AGGIORNA</button>
+                        <button class="btn-primary" onclick="saveStaffData()">AGGIORNA DATI</button>
                         <div style="display:flex; gap:5px; margin-top:10px;">
                             <button class="btn-primary btn-warn" onclick="changeWarns(1)">+1 Warn</button>
                             <button class="btn-primary btn-danger" onclick="changeWarns(-1)">-1 Warn</button>
                         </div>
                     </div>
+
+                    <div class="admin-card">
+                        <h3 style="color:var(--gold)">GESTIONE TURNI</h3>
+                        <select id="t-day">
+                            <option value="Lunedi">Lunedi</option><option value="Martedi">Martedi</option><option value="Mercoledi">Mercoledi</option><option value="Giovedi">Giovedi</option><option value="Venerdi">Venerdi</option><option value="Sabato">Sabato</option><option value="Domenica">Domenica</option>
+                        </select>
+                        <select id="t-slot"><option value="p">Pomeriggio</option><option value="s">Sera</option></select>
+                        <input type="text" id="t-staff" placeholder="Nomi (es: Pavel, Daniel)">
+                        <button class="btn-primary" onclick="saveTurni()">SALVA TURNO</button>
+                    </div>
+
                     <div class="admin-card">
                         <h3 style="color:var(--gold)">AGGIUNGI MEMBRO</h3>
                         <input type="text" id="new-u" placeholder="Nome">
                         <input type="text" id="new-g" placeholder="Grado">
                         <input type="text" id="new-m" placeholder="Matricola">
-                        <button class="btn-primary" onclick="addMember()">AGGIUNGI</button>
+                        <button class="btn-primary" onclick="addMember()">AGGIUNGI STAFF</button>
                     </div>
                 </div>
             </section>
@@ -221,6 +232,12 @@
     <script>
         const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1480996793096605838/avlMEkY5vYoM-fTkLQKovYhQTGh-JXzH9dquQhPMqMYaKvUcQV2feXb4rtvADz42rai-";
         const ADM_LIST = ["Daniel", "Michele", "Mav", "Arduino", "Strepitoso", "Archadian", "Djsamy", "Cobra", "Baj", "Mirko", "Maverick", "Pavel", "Hydro", "Barone", "Diego"];
+
+        let db = JSON.parse(localStorage.getItem('ITDR_V38_DB')) || {};
+        let tr = JSON.parse(localStorage.getItem('ITDR_V38_TR')) || { 
+            "Lunedi":{p:"-",s:"-"}, "Martedi":{p:"-",s:"-"}, "Mercoledi":{p:"-",s:"-"}, 
+            "Giovedi":{p:"-",s:"-"}, "Venerdi":{p:"-",s:"-"}, "Sabato":{p:"-",s:"-"}, "Domenica":{p:"-",s:"-"} 
+        };
 
         const INITIAL_STAFF = [
             ["Daniel","Founder","ITD-01"],["Michele","Founder","ITD-02"],["Mav","Co-Founder","ITD-03"],
@@ -236,8 +253,6 @@
             ["Void","Helper","ITD-31"],["Sangue","Trial Helper","ITD-32"],["Ibra","Trial Helper","ITD-33"],
             ["Noxen","Trial Helper","ITD-34"],["Ash","Trial Helper","ITD-35"],["Pietro","Trial Helper","ITD-36"]
         ];
-
-        let db = JSON.parse(localStorage.getItem('ITDR_V37_DB')) || {};
 
         if(Object.keys(db).length === 0) {
             INITIAL_STAFF.forEach(s => {
@@ -320,7 +335,22 @@
             db[s].grado = document.getElementById('ed-g').value;
             db[s].mat = document.getElementById('ed-m').value;
             db[s].ore = parseInt(document.getElementById('ed-h').value);
-            save(); renderMatricole(); alert("Dati Aggiornati!");
+            save(); renderMatricole(); alert("Dati Staff Aggiornati!");
+        }
+
+        function saveTurni() {
+            let d = document.getElementById('t-day').value;
+            let s = document.getElementById('t-slot').value;
+            let val = document.getElementById('t-staff').value;
+            tr[d][s] = val || "-";
+            localStorage.setItem('ITDR_V38_TR', JSON.stringify(tr));
+            alert("Turni salvati per " + d);
+        }
+
+        function showDay(d) {
+            if(!d) return;
+            document.getElementById('p-list').innerText = tr[d].p;
+            document.getElementById('s-list').innerText = tr[d].s;
         }
 
         function changeWarns(v) {
@@ -350,13 +380,13 @@
 
         function addMember() {
             let u = document.getElementById('new-u').value.trim();
-            if(!u || db[u]) return alert("Errore!");
+            if(!u || db[u]) return alert("Errore: Nome vuoto o già esistente!");
             db[u] = { pass: u + "-01", grado: document.getElementById('new-g').value, mat: document.getElementById('new-m').value, ore: 0, warns: 0 };
-            save(); refreshAdmList(); renderMatricole(); alert("Aggiunto!");
+            save(); refreshAdmList(); renderMatricole(); alert("Staffer " + u + " aggiunto con successo!");
         }
 
         function fmt(s) { return new Date(s * 1000).toISOString().substr(11, 8); }
-        function save() { localStorage.setItem('ITDR_V37_DB', JSON.stringify(db)); }
+        function save() { localStorage.setItem('ITDR_V38_DB', JSON.stringify(db)); }
         function tab(id) {
             ["area", "servizio", "turni", "matricole", "admin"].forEach(t => {
                 const el = document.getElementById(t);
