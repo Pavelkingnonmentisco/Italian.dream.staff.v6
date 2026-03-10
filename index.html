@@ -3,26 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ITDR STAFF PORTAL v33.0 | GOLD EDITION</title>
+    <title>ITDR STAFF PORTAL | 2026</title>
     <style>
-        /* --- NUOVA PALETTE COLORI ORO E FUMO (BASATA SUL LOGO) --- */
         :root {
-            --gold: #FFD700;       /* Giallo Oro acceso del logo */
-            --dark-fume: #1a1a1a;  /* Grigio scuro/Fumo di base */
-            --black: #000000;      /* Nero assoluto */
-            --danger: #dc3545;     /* Rosso errori (mantenuto per contrasto) */
-            --glass-gold: rgba(255, 215, 0, 0.1); /* Vetro dorato */
-            --text-main: #ffffff;  /* Bianco testo */
+            --accent: #FFD700;    /* Giallo Oro del logo */
+            --bg-dark: #0a0a0a;   /* Nero profondo */
+            --card-bg: rgba(25, 25, 25, 0.9); 
+            --text: #ffffff;
+            --danger: #ff4d4d;
         }
 
         body {
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), 
-                        url('https://images.wallpapersden.com/image/download/gta-5-los-santos-art_a2puam2UmZqaraWkpJRmbmdlrWZlbWU.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            color: var(--text-main);
-            font-family: 'Segoe UI', 'Roboto', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            font-family: 'Inter', 'Segoe UI', sans-serif;
             margin: 0;
             display: flex;
             flex-direction: column;
@@ -37,197 +31,186 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.9)), 
-                        url('https://images8.alphacoders.com/469/469288.jpg');
-            background-size: cover;
-            background-position: center;
+            background: radial-gradient(circle at center, #1a1a1a 0%, #000000 100%);
         }
 
         .login-box {
-            background: rgba(0, 0, 0, 0.9);
+            background: var(--card-bg);
             padding: 40px;
-            border-radius: 20px;
-            border: 2px solid var(--gold); /* Bordo Oro */
+            border-radius: 12px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
             text-align: center;
-            width: 360px;
-            box-shadow: 0 0 50px rgba(255, 215, 0, 0.2); /* Bagliore Oro */
-            backdrop-filter: blur(10px);
+            width: 340px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
         }
 
         /* --- NAVBAR --- */
         nav {
-            background: rgba(26, 26, 26, 0.95); /* Fumo scuro */
-            padding: 10px 20px;
+            background: #000;
+            padding: 15px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid var(--gold); /* Linea Oro inferiore */
+            border-bottom: 1px solid rgba(255, 215, 0, 0.2);
             position: sticky;
             top: 0;
             z-index: 100;
         }
 
-        .nav-logo { height: 45px; width: 45px; border-radius: 50%; border: 2px solid var(--gold); box-shadow: 0 0 10px rgba(255,215,0,0.3); }
-        .nav-links { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; flex: 1; }
+        .nav-logo { height: 40px; width: 40px; border-radius: 50%; border: 1px solid var(--accent); }
+        .nav-links { display: flex; gap: 12px; }
 
         nav button {
-            background: var(--glass-gold); /* Tasti vetro dorato */
-            color: var(--text-main);
-            border: 1px solid var(--gold);
-            padding: 10px 18px;
+            background: transparent;
+            color: #aaa;
+            border: 1px solid transparent;
+            padding: 8px 16px;
             cursor: pointer;
-            font-weight: bold;
-            border-radius: 8px;
+            font-weight: 600;
+            border-radius: 6px;
+            font-size: 12px;
+            transition: 0.2s;
             text-transform: uppercase;
-            font-size: 11px;
-            transition: 0.3s;
         }
 
-        nav button:hover { background: var(--gold); color: var(--black); transform: translateY(-2px); }
+        nav button:hover { color: var(--accent); border-color: rgba(255, 215, 0, 0.3); }
 
-        /* --- LAYOUT & CARDS --- */
-        .container { padding: 30px; max-width: 1100px; margin: auto; text-align: center; flex: 1; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-top: 20px; }
+        /* --- CONTAINER --- */
+        .container { padding: 40px 20px; max-width: 1000px; margin: auto; flex: 1; }
+        
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
         
         .card { 
-            background: rgba(26, 26, 26, 0.9); /* Sfondo Fumo scuro */
+            background: var(--card-bg); 
             padding: 25px; 
-            border-radius: 15px; 
-            border: 1px solid rgba(255,215,0,0.2); /* Bordo Oro sottile */
-            backdrop-filter: blur(8px);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+            border-radius: 12px; 
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: 0.3s;
         }
         
-        .card h3 { color: var(--gold); margin: 0; font-size: 12px; text-transform: uppercase; letter-spacing: 2px;} /* Titoli Oro */
-        .card p { font-size: 26px; margin: 10px 0; font-weight: 900; color: var(--text-main); } /* Numeri Bianchi */
+        .card h3 { color: #888; margin: 0; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+        .card p { font-size: 24px; margin: 10px 0; font-weight: 700; color: var(--accent); }
 
-        .img-header { width: 100%; max-width: 580px; border-radius: 15px; margin-bottom: 30px; border: 2px solid var(--gold); box-shadow: 0 0 20px rgba(255,215,0,0.2);}
+        /* --- TABLES --- */
+        .m-table { width: 100%; border-collapse: collapse; background: var(--card-bg); border-radius: 10px; overflow: hidden; }
+        .m-table th { background: #151515; color: var(--accent); padding: 15px; text-align: left; font-size: 12px; border-bottom: 1px solid #333; }
+        .m-table td { padding: 14px 15px; border-bottom: 1px solid #222; font-size: 14px; }
 
-        .m-table { width: 100%; border-collapse: collapse; background: rgba(26, 26, 26, 0.95); border-radius: 15px; overflow: hidden; backdrop-filter: blur(10px);}
-        .m-table th { background: var(--gold); color: var(--black); padding: 18px; text-align: left; font-size: 13px; text-transform: uppercase; letter-spacing: 1px;} /* Testata Oro, Testo Nero */
-        .m-table td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); text-align: left; color: #ccc; }
-
-        /* --- ADMIN PANEL SPECIFICO --- */
-        .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; text-align: left; }
-        .admin-card { background: rgba(20, 20, 20, 0.95); padding: 25px; border-radius: 15px; border: 1px solid var(--gold); }
-
-        input, select, textarea { width: 100%; padding: 12px; margin: 10px 0; background: rgba(0,0,0,0.7); border: 1px solid var(--gold); color: var(--text-main); border-radius: 8px;}
-        input:focus, select:focus { outline: none; box-shadow: 0 0 10px rgba(255,215,0,0.5); }
+        /* --- INPUTS & BUTTONS --- */
+        input, select, textarea { 
+            width: 100%; padding: 12px; margin: 8px 0; 
+            background: #111; border: 1px solid #333; color: #fff; border-radius: 6px; 
+            box-sizing: border-box;
+        }
         
-        .btn-primary { width: 100%; padding: 14px; background: var(--gold); color: var(--black); border: none; font-weight: bold; border-radius: 8px; cursor: pointer; text-transform: uppercase; transition: 0.3s;}
-        .btn-primary:hover { background: var(--text-main); }
-        .btn-danger { background: var(--danger); color: var(--text-main); }
-        .btn-danger:hover { background: #ff4d4d; }
-        .btn-warn { background: #b8860b; color: var(--text-main); } /* Oro scuro per warn */
+        .btn-primary { 
+            width: 100%; padding: 12px; background: var(--accent); color: #000; 
+            border: none; font-weight: 700; border-radius: 6px; cursor: pointer; 
+            text-transform: uppercase; transition: 0.2s;
+        }
+        .btn-primary:hover { opacity: 0.9; transform: scale(0.98); }
 
-        #timer-val { font-size: 85px; font-weight: 900; margin: 20px 0; display: block; color: var(--gold); text-shadow: 0 0 30px rgba(255,215,0,0.5); } /* Timer Oro */
+        #timer-val { font-size: 72px; font-weight: 800; margin: 20px 0; color: #fff; letter-spacing: -2px; }
         
-        footer { background: rgba(10, 10, 10, 0.98); padding: 20px; text-align: center; font-size: 12px; color: rgba(255,215,0,0.6); border-top: 2px solid var(--gold); }
+        footer { padding: 30px; text-align: center; font-size: 11px; color: #444; border-top: 1px solid #111; }
     </style>
 </head>
 <body>
 
     <div id="login-screen">
         <div class="login-box">
-            <img src="https://res.cloudinary.com/dbxwiln0a/image/upload/v1773088043/mahwplqpvvuy34vczm3j.webp" width="100">
-            <h2 style="letter-spacing: 3px; color: var(--gold);">ITDR STAFF PORTAL</h2>
+            <img src="https://res.cloudinary.com/dbxwiln0a/image/upload/v1773088043/mahwplqpvvuy34vczm3j.webp" width="80">
+            <h2 style="margin: 20px 0; font-size: 18px;">STAFF PORTAL</h2>
             <input type="text" id="user-in" placeholder="Username">
             <input type="password" id="pass-in" placeholder="Password">
-            <button class="btn-primary" onclick="login()">ACCEDI AL SISTEMA GOLD</button>
-            <p style="font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 25px;">© 2026 LOS SANTOS DEPT | SVILUPPATO DA PAVEL</p>
+            <button class="btn-primary" onclick="login()">Accedi</button>
         </div>
     </div>
 
     <div id="portal" class="hidden">
         <nav>
-            <img src="https://res.cloudinary.com/dbxwiln0a/image/upload/v1773155102/q616frliniciy9cdxhsk.gif" class="nav-logo">
-            <div class="nav-links">
-                <button onclick="tab('area')">Dashboard</button>
-                <button onclick="tab('servizio')">Servizio Duty</button>
-                <button onclick="tab('turni')">Calendario Turni</button>
-                <button onclick="tab('matricole')">Database Membri</button>
-                <button id="adm-btn" class="hidden" style="border-color: #f39c12; color: #f39c12; background: rgba(243, 156, 18, 0.1);" onclick="tab('admin')">Admin Panel</button>
-                <button onclick="location.reload()" style="color:var(--danger); border-color: var(--danger); background: rgba(220, 53, 69, 0.1);">Disconnetti</button>
+            <div style="display:flex; align-items:center; gap:15px;">
+                <img src="https://res.cloudinary.com/dbxwiln0a/image/upload/v1773155102/q616frliniciy9cdxhsk.gif" class="nav-logo">
+                <span style="font-weight: 800; font-size: 14px; letter-spacing: 1px;">ITDR</span>
             </div>
-            <img src="https://res.cloudinary.com/dbxwiln0a/image/upload/v1773155102/q616frliniciy9cdxhsk.gif" class="nav-logo">
+            <div class="nav-links">
+                <button onclick="tab('area')">Home</button>
+                <button onclick="tab('servizio')">Servizio</button>
+                <button onclick="tab('turni')">Turni</button>
+                <button onclick="tab('matricole')">Membri</button>
+                <button id="adm-btn" class="hidden" style="color:var(--accent)" onclick="tab('admin')">Admin</button>
+                <button onclick="location.reload()" style="color:var(--danger)">Esci</button>
+            </div>
         </nav>
 
         <div class="container">
             <section id="area">
-                <img src="https://res.cloudinary.com/dbxwiln0a/image/upload/v1773154806/xtb9kcfg5ian3x9fiq9w.gif" class="img-header">
                 <div class="grid">
-                    <div class="card"><h3>Grado Operativo</h3><p id="u-grado">-</p></div>
-                    <div class="card"><h3>Codice Matricola</h3><p id="u-mat">-</p></div>
-                    <div class="card"><h3>Ore Settimanali</h3><p id="u-ore">00:00:00</p></div>
-                    <div class="card"><h3>Richiami / Sanzioni</h3><p id="u-warns" style="color:var(--danger)">0</p></div>
+                    <div class="card"><h3>Grado</h3><p id="u-grado">-</p></div>
+                    <div class="card"><h3>Matricola</h3><p id="u-mat">-</p></div>
+                    <div class="card"><h3>Ore Totali</h3><p id="u-ore">00:00:00</p></div>
+                    <div class="card"><h3>Sanzioni</h3><p id="u-warns" style="color:var(--danger)">0</p></div>
                 </div>
             </section>
 
             <section id="servizio" class="hidden">
-                <img src="https://res.cloudinary.com/dbxwiln0a/image/upload/v1773150993/dp66lxgcjwmtonwpc9gc.png" class="img-header">
-                <div class="card" style="max-width: 600px; margin: auto;">
-                    <h3>SISTEMA DI TIMBRATURA GOLD</h3>
+                <div class="card" style="max-width: 500px; margin: auto; text-align: center;">
+                    <h3>Sessione Attiva</h3>
                     <span id="timer-val">00:00:00</span>
-                    <div style="display:flex; gap:15px; justify-content: center;">
-                        <button id="t-btn" class="btn-primary" style="flex:1" onclick="toggleT()">INIZIA SERVIZIO</button>
-                        <button id="p-btn" class="btn-primary hidden" style="flex:1; background: #b8860b; color: white;" onclick="togglePause()">PAUSA</button>
+                    <div style="display:flex; gap:10px;">
+                        <button id="t-btn" class="btn-primary" onclick="toggleT()">Inizia</button>
+                        <button id="p-btn" class="btn-primary hidden" style="background:#333; color:#fff;" onclick="togglePause()">Pausa</button>
                     </div>
                 </div>
             </section>
 
             <section id="turni" class="hidden">
                 <div class="card" style="margin-bottom: 20px;">
-                    <h3>CONSULTAZIONE TURNI SETTIMANALI</h3>
-                    <select id="view-day" onchange="showDay(this.value)" style="max-width: 300px;">
-                        <option value="">Seleziona un giorno...</option>
+                    <select id="view-day" onchange="showDay(this.value)" style="margin:0;">
+                        <option value="">Seleziona Giorno</option>
                         <option value="Lunedi">Lunedì</option><option value="Martedi">Martedì</option><option value="Mercoledi">Mercoledì</option><option value="Giovedi">Giovedì</option><option value="Venerdi">Venerdì</option><option value="Sabato">Sabato</option><option value="Domenica">Domenica</option>
                     </select>
                 </div>
                 <div class="grid">
-                    <div class="card"><h3>Fascia Pomeridiana (15:00 - 19:00)</h3><p id="p-list" style="font-size: 18px; color: var(--gold);">-</p></div>
-                    <div class="card"><h3>Fascia Serale (21:00 - 01:00)</h3><p id="s-list" style="font-size: 18px; color: var(--gold);">-</p></div>
+                    <div class="card"><h3>Pomeriggio</h3><p id="p-list" style="font-size:16px;">-</p></div>
+                    <div class="card"><h3>Sera</h3><p id="s-list" style="font-size:16px;">-</p></div>
                 </div>
             </section>
 
             <section id="matricole" class="hidden">
-                <div class="card" style="padding: 10px; overflow-x: auto;">
-                    <table class="m-table">
-                        <thead><tr><th>MAT.</th><th>OPERATORE</th><th>GRADO</th><th>SANZIONI</th></tr></thead>
-                        <tbody id="m-body"></tbody>
-                    </table>
-                </div>
+                <table class="m-table">
+                    <thead><tr><th>MAT.</th><th>STAFFER</th><th>GRADO</th><th>SANC.</th></tr></thead>
+                    <tbody id="m-body"></tbody>
+                </table>
             </section>
 
             <section id="admin" class="hidden">
-                <div class="admin-grid">
-                    <div class="admin-card">
-                        <h3>MODIFICA STAFF</h3>
-                        <select id="s-sel" onchange="loadStaffData()"><option value="">Seleziona Staffer...</option></select>
-                        <input type="text" id="ed-g" placeholder="Aggiorna Grado">
-                        <input type="text" id="ed-m" placeholder="Aggiorna Matricola">
-                        <input type="number" id="ed-h" placeholder="Secondi Totali Accumulati">
-                        <button class="btn-primary" onclick="saveStaffData()">SALVA MODIFICHE</button>
-                        <div style="display:flex; gap:10px; margin-top:15px;">
-                            <button class="btn-primary btn-warn" onclick="changeWarns(1)">+1 SANZIONE</button>
-                            <button class="btn-primary" style="background: #555; color: white;" onclick="changeWarns(-1)">-1 SANZIONE</button>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Gestione Membri</h3>
+                        <select id="s-sel" onchange="loadStaffData()"><option value="">Seleziona...</option></select>
+                        <input type="text" id="ed-g" placeholder="Grado">
+                        <input type="text" id="ed-m" placeholder="Matricola">
+                        <input type="number" id="ed-h" placeholder="Secondi totali">
+                        <button class="btn-primary" onclick="saveStaffData()">Salva</button>
+                        <div style="display:flex; gap:5px; margin-top:10px;">
+                            <button class="btn-primary" style="background:#444; color:#fff;" onclick="changeWarns(1)">+1 Sanzione</button>
+                            <button class="btn-primary" style="background:#222; color:#fff;" onclick="changeWarns(-1)">-1</button>
                         </div>
                     </div>
-                    <div class="admin-card">
-                        <h3>GESTIONE TURNI</h3>
+                    <div class="card">
+                        <h3>Editor Turni</h3>
                         <select id="e-day">
-                            <option value="Lunedi">Lunedì</option><option value="Martedi">Martedì</option><option value="Mercoledi">Mercoledì</option><option value="Giovedi">Giovedi</option><option value="Venerdi">Venerdì</option><option value="Sabato">Sabato</option><option value="Domenica">Domenica</option>
+                            <option value="Lunedi">Lunedì</option><option value="Martedi">Martedì</option><option value="Mercoledi">Mercoledì</option><option value="Giovedi">Giovedì</option><option value="Venerdi">Venerdì</option><option value="Sabato">Sabato</option><option value="Domenica">Domenica</option>
                         </select>
-                        <textarea id="e-p" rows="3" placeholder="Staff Pomeriggio..."></textarea>
-                        <textarea id="e-s" rows="3" placeholder="Staff Sera..."></textarea>
-                        <button class="btn-primary" onclick="saveT()">PUBBLICA TURNI ORO</button>
+                        <textarea id="e-p" placeholder="Pomeriggio..."></textarea>
+                        <textarea id="e-s" placeholder="Sera..."></textarea>
+                        <button class="btn-primary" onclick="saveT()">Aggiorna Turni</button>
                     </div>
                 </div>
             </section>
         </div>
-        <footer>
-            <b>ITDR STAFF PORTAL v33.0 | GOLD SYSTEM ACTIVE</b><br>
-            Sistema Log Integrato con Discord | Gestione Dati Locale | Designed for ITDR RP
-        </footer>
+        <footer>© 2026 ITDR PORTAL | Powered by Pavel</footer>
     </div>
 
     <script>
@@ -238,7 +221,7 @@
         let tr = JSON.parse(localStorage.getItem('ITDR_V27_TR')) || { "Lunedi":{p:"-",s:"-"}, "Martedi":{p:"-",s:"-"}, "Mercoledi":{p:"-",s:"-"}, "Giovedi":{p:"-",s:"-"}, "Venerdi":{p:"-",s:"-"}, "Sabato":{p:"-",s:"-"}, "Domenica":{p:"-",s:"-"} };
 
         if(Object.keys(db).length === 0) {
-            const RAW = [["Daniel","Founder","ITD-01"],["Michele","Founder","ITD-02"],["Mav","Co-Founder","ITD-03"],["Arduino","Owner","ITD-04"],["Strepitoso","Co Owner","ITD-05"],["Archadian","Co Owner","ITD-06"],["Djsamy","Community Manager","ITD-07"],["Cobra","Community Manager","ITD-08"],["Baj","Server Supervisor","ITD-09"],["Mirko","Staff Manager","ITD-10"],["Maverick","Staff Manager","ITD-11"],["Pavel","Supervisor","ITD-12"]];
+            const RAW = [["Daniel","Founder","ITD-01"],["Pavel","Supervisor","ITD-12"]];
             RAW.forEach(s => { db[s[0]] = { pass: s[0]+"-01", grado: s[1], mat: s[2], ore: 0, warns: 0 }; });
             save();
         }
@@ -250,11 +233,11 @@
             let p = document.getElementById('pass-in').value.trim();
             if(db[u] && db[u].pass === p) {
                 user = u;
-                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('portal').classList.remove('hidden');
                 if(ADM_LIST.includes(u)) { document.getElementById('adm-btn').classList.remove('hidden'); refreshAdmList(); }
                 updateArea(); renderMatricole();
-            } else alert("Credenziali Gold non autorizzate!");
+            } else alert("Dati non validi");
         }
 
         function updateArea() {
@@ -264,66 +247,42 @@
             document.getElementById('u-warns').innerText = db[user].warns || 0;
         }
 
-        async function sendLog(tipo, sessione = 0) {
-            const now = new Date().toLocaleTimeString('it-IT');
-            let embed = {
-                username: "ITDR GOLD LOG",
-                embeds: [{
-                    title: tipo === "INIZIO" ? "🟡 ENTRATA IN SERVIZIO" : "⚫ USCITA DAL SERVIZIO",
-                    color: tipo === "INIZIO" ? 16766720 : 1710618, // Colore Oro (Inizio) : Fumo (Fine)
-                    fields: [
-                        { name: "Nome staffer", value: "`" + user + "`", inline: true },
-                        { name: "Matricola", value: "`" + db[user].mat + "`", inline: true },
-                        { name: tipo === "INIZIO" ? "Orario di inizio" : "Orario Fine", value: now, inline: false }
-                    ],
-                    footer: { text: "ITDR Gold Portal v33 | 2026" },
-                    timestamp: new Date()
-                }]
-            };
-
-            if(tipo === "FINE") {
-                embed.embeds[0].fields.push({ name: "Durata Sessione", value: "`" + fmt(sessione) + "`", inline: true });
-                embed.embeds[0].fields.push({ name: "Totale Ore Portale", value: "`" + fmt(db[user].ore) + "`", inline: true });
-            }
-
-            fetch(DISCORD_WEBHOOK, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(embed) });
-        }
-
         function toggleT() {
             let b = document.getElementById('t-btn');
             let pBtn = document.getElementById('p-btn');
             if(!on) {
-                on = true; isPaused = false;
-                b.innerText = "FINE SERVIZIO"; b.style.background = "#dc3545"; b.style.color = "white";
+                on = true; b.innerText = "Fine"; b.style.background = "#ff4d4d";
                 pBtn.classList.remove('hidden');
                 startTimer();
                 sendLog("INIZIO");
             } else {
-                on = false; b.innerText = "INIZIA SERVIZIO"; b.style.background = "#FFD700"; b.style.color = "black";
+                on = false; b.innerText = "Inizia"; b.style.background = "var(--accent)";
                 pBtn.classList.add('hidden');
                 clearInterval(interval);
-                let sessione = sec;
-                db[user].ore += sessione;
-                sendLog("FINE", sessione);
-                sec = 0;
-                document.getElementById('timer-val').innerText = "00:00:00";
+                db[user].ore += sec;
+                sendLog("FINE", sec);
+                sec = 0; document.getElementById('timer-val').innerText = "00:00:00";
                 save(); updateArea();
             }
         }
 
         function startTimer() { interval = setInterval(() => { sec++; document.getElementById('timer-val').innerText = fmt(sec); }, 1000); }
-        
         function togglePause() {
             let pBtn = document.getElementById('p-btn');
-            if(!isPaused) { isPaused = true; clearInterval(interval); pBtn.innerText = "RIPRENDI"; }
-            else { isPaused = false; startTimer(); pBtn.innerText = "PAUSA"; }
+            if(!isPaused) { isPaused = true; clearInterval(interval); pBtn.innerText = "Riprendi"; }
+            else { isPaused = false; startTimer(); pBtn.innerText = "Pausa"; }
         }
 
-        function changeWarns(val) {
-            let s = document.getElementById('s-sel').value;
-            if(!s) return alert("Seleziona uno staffer!");
-            db[s].warns = Math.max(0, (db[s].warns || 0) + val);
-            save(); renderMatricole(); if(s === user) updateArea();
+        function showDay(d) {
+            if(!d) return;
+            document.getElementById('p-list').innerText = tr[d].p;
+            document.getElementById('s-list').innerText = tr[d].s;
+        }
+
+        function renderMatricole() {
+            let b = document.getElementById('m-body');
+            const sorted = Object.keys(db).sort((x,y) => db[x].mat.localeCompare(db[y].mat, undefined, {numeric: true}));
+            b.innerHTML = sorted.map(k => `<tr><td>${db[k].mat}</td><td>${k}</td><td>${db[k].grado}</td><td style="color:${db[k].warns > 0 ? 'red':'white'}">${db[k].warns || 0}</td></tr>`).join('');
         }
 
         function loadStaffData() {
@@ -340,40 +299,50 @@
             db[s].grado = document.getElementById('ed-g').value;
             db[s].mat = document.getElementById('ed-m').value;
             db[s].ore = parseInt(document.getElementById('ed-h').value);
-            save(); renderMatricole(); if(s === user) updateArea();
-            alert("Dati salvati nel database Gold!");
+            save(); renderMatricole(); alert("Salvato");
+        }
+
+        function changeWarns(val) {
+            let s = document.getElementById('s-sel').value;
+            if(!s) return;
+            db[s].warns = Math.max(0, (db[s].warns || 0) + val);
+            save(); renderMatricole();
         }
 
         function saveT() {
             let d = document.getElementById('e-day').value;
             tr[d] = { p: document.getElementById('e-p').value, s: document.getElementById('e-s').value };
-            save(); alert("Turni Gold aggiornati!");
-        }
-
-        function showDay(d) {
-            if(!d) return;
-            document.getElementById('p-list').innerText = tr[d].p;
-            document.getElementById('s-list').innerText = tr[d].s;
-        }
-
-        function renderMatricole() {
-            let b = document.getElementById('m-body');
-            const sorted = Object.keys(db).sort((x,y) => db[x].mat.localeCompare(db[y].mat, undefined, {numeric: true}));
-            b.innerHTML = sorted.map(k => `<tr><td><b>${db[k].mat}</b></td><td>${k}</td><td>${db[k].grado}</td><td style="color:${db[k].warns > 0 ? '#ff4d4d':'#28a745'}; font-weight:bold;">${db[k].warns || 0}</td></tr>`).join('');
+            save(); alert("Turni aggiornati");
         }
 
         function refreshAdmList() {
             let s = document.getElementById('s-sel');
-            s.innerHTML = '<option value="">Scegli Staffer...</option>';
+            s.innerHTML = '<option value="">Scegli...</option>';
             Object.keys(db).sort().forEach(k => s.innerHTML += `<option value="${k}">${k}</option>`);
         }
 
         function fmt(s) { return new Date(s * 1000).toISOString().substr(11, 8); }
         function save() { localStorage.setItem('ITDR_V27_DB', JSON.stringify(db)); localStorage.setItem('ITDR_V27_TR', JSON.stringify(tr)); }
-        
         function tab(id) {
             ["area", "servizio", "turni", "matricole", "admin"].forEach(t => document.getElementById(t).classList.add('hidden'));
             document.getElementById(id).classList.remove('hidden');
+        }
+
+        async function sendLog(tipo, sessione = 0) {
+            if(!DISCORD_WEBHOOK) return;
+            const embed = {
+                embeds: [{
+                    title: tipo === "INIZIO" ? "ENTRATA SERVIZIO" : "USCITA SERVIZIO",
+                    color: tipo === "INIZIO" ? 0xFFD700 : 0xFF0000,
+                    fields: [
+                        { name: "Staffer", value: user, inline: true },
+                        { name: "Matricola", value: db[user].mat, inline: true }
+                    ],
+                    timestamp: new Date()
+                }]
+            };
+            if(tipo === "FINE") embed.embeds[0].fields.push({ name: "Sessione", value: fmt(sessione) });
+            fetch(DISCORD_WEBHOOK, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(embed) });
         }
     </script>
 </body>
