@@ -3,87 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ITDR STAFF PORTAL v39.0 | 2026</title>
+    <title>ITDR STAFF PORTAL v40.0 | 2026</title>
     <style>
-        :root {
-            --gold: #D4AF37;
-            --dark-bg: #000000;
-            --card-bg: #0a0a0a;
-            --danger: #ff4d4d;
-            --glass: rgba(212, 175, 55, 0.1);
-        }
-
-        body {
-            background: var(--dark-bg);
-            color: #fff;
-            font-family: 'Segoe UI', sans-serif;
-            margin: 0;
-            overflow-x: hidden;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
+        :root { --gold: #D4AF37; --dark-bg: #000; --card-bg: #0a0a0a; --danger: #ff4d4d; }
+        body { background: var(--dark-bg); color: #fff; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; flex-direction: column; min-height: 100vh; }
         .hidden { display: none !important; }
-
-        /* --- NAVBAR --- */
-        nav {
-            background: #050505;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid var(--gold);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .nav-logo { height: 45px; width: 45px; border-radius: 50%; border: 2px solid var(--gold); object-fit: cover; }
-        .nav-links { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; flex: 1; }
-
-        nav button {
-            background: var(--glass);
-            color: var(--gold);
-            border: 1px solid var(--gold);
-            padding: 8px 15px;
-            cursor: pointer;
-            font-weight: bold;
-            border-radius: 5px;
-            text-transform: uppercase;
-            font-size: 10px;
-        }
-
+        
+        /* NAVBAR */
+        nav { background: #050505; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--gold); sticky; top: 0; z-index: 100; }
+        .nav-logo { height: 40px; width: 40px; border-radius: 50%; border: 1px solid var(--gold); }
+        .nav-links { display: flex; gap: 10px; }
+        nav button { background: rgba(212,175,55,0.1); color: var(--gold); border: 1px solid var(--gold); padding: 5px 12px; cursor: pointer; border-radius: 4px; font-size: 11px; font-weight: bold; }
         nav button:hover { background: var(--gold); color: #000; }
 
-        /* --- LAYOUT --- */
-        .container { padding: 30px; max-width: 1200px; margin: auto; text-align: center; flex: 1; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px; }
-        .card { background: var(--card-bg); padding: 25px; border-radius: 15px; border: 1px solid rgba(212, 175, 55, 0.2); }
-        .card h3 { color: var(--gold); margin: 0; font-size: 11px; text-transform: uppercase; }
-        .card p { font-size: 18px; margin: 10px 0; font-weight: bold; color: #eee; }
+        /* CONTAINER */
+        .container { padding: 20px; max-width: 1100px; margin: auto; text-align: center; flex: 1; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 20px; }
+        .card { background: var(--card-bg); padding: 20px; border-radius: 12px; border: 1px solid rgba(212,175,55,0.2); }
+        .card h3 { color: var(--gold); margin: 0 0 10px 0; font-size: 12px; text-transform: uppercase; }
+        .img-header { width: 100%; max-width: 500px; border-radius: 10px; margin-bottom: 20px; border: 1px solid var(--gold); }
 
-        .img-header { width: 100%; max-width: 550px; border-radius: 15px; margin-bottom: 30px; border: 2px solid var(--gold); display: block; margin-left: auto; margin-right: auto; }
-
-        .m-table { width: 100%; border-collapse: collapse; background: var(--card-bg); border-radius: 10px; overflow: hidden; border: 1px solid rgba(212, 175, 55, 0.2); }
-        .m-table th { background: var(--gold); color: black; padding: 15px; text-align: left; font-size: 12px; }
-        .m-table td { padding: 12px 15px; border-bottom: 1px solid rgba(212, 175, 55, 0.1); text-align: left; }
-
-        /* --- ADMIN --- */
-        .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; text-align: left; }
-        .admin-card { background: #080808; padding: 20px; border-radius: 12px; border: 1px solid rgba(212, 175, 55, 0.3); }
-
-        input, select { width: 100%; padding: 12px; margin: 8px 0; background: #000; border: 1px solid #333; color: #fff; border-radius: 6px; }
-        .btn-primary { width: 100%; padding: 12px; background: var(--gold); border: none; color: #000; font-weight: bold; border-radius: 6px; cursor: pointer; text-transform: uppercase; }
+        /* TABELLE E INPUT */
+        .m-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
+        .m-table th { background: var(--gold); color: #000; padding: 10px; }
+        .m-table td { padding: 10px; border-bottom: 1px solid #222; }
+        input, select { width: 100%; padding: 10px; margin: 5px 0; background: #000; border: 1px solid #333; color: #fff; border-radius: 5px; box-sizing: border-box; }
+        .btn-primary { background: var(--gold); color: #000; border: none; padding: 10px; font-weight: bold; cursor: pointer; width: 100%; border-radius: 5px; }
         
-        #timer-val { font-size: 70px; font-weight: 900; margin: 20px 0; display: block; color: var(--gold); }
-        footer { background: #050505; padding: 15px; text-align: center; font-size: 11px; color: var(--gold); }
+        #timer-val { font-size: 50px; color: var(--gold); font-weight: bold; margin: 10px 0; display: block; }
     </style>
 </head>
 <body>
 
-    <div id="login-screen">
-        <div class="login-box" style="margin: 100px auto; background: var(--card-bg); padding: 40px; border-radius: 20px; border: 2px solid var(--gold); width: 320px; text-align: center;">
+    <div id="login-screen" style="height:100vh; display:flex; align-items:center; justify-content:center;">
+        <div class="card" style="width:300px;">
             <h2 style="color:var(--gold)">ITDR LOGIN</h2>
             <input type="text" id="user-in" placeholder="Username">
             <input type="password" id="pass-in" placeholder="Password">
@@ -110,45 +63,60 @@
                 <div class="grid">
                     <div class="card"><h3>Grado</h3><p id="u-grado">-</p></div>
                     <div class="card"><h3>Matricola</h3><p id="u-mat">-</p></div>
-                    <div class="card"><h3>Tempo</h3><p id="u-ore">00:00:00</p></div>
+                    <div class="card"><h3>Totale Ore</h3><p id="u-ore">00:00:00</p></div>
+                    <div class="card"><h3>Sanzioni</h3><p id="u-warns" style="color:var(--danger)">0</p></div>
+                </div>
+            </section>
+
+            <section id="servizio" class="hidden">
+                <div class="card">
+                    <h3>Registrazione Servizio</h3>
+                    <span id="timer-val">00:00:00</span>
+                    <button id="t-btn" class="btn-primary" onclick="toggleT()">INIZIA SERVIZIO</button>
                 </div>
             </section>
 
             <section id="turni" class="hidden">
                 <div class="card">
-                    <h3>Visualizza Turni Settimanali</h3>
+                    <h3>Turni Settimanali</h3>
                     <select id="view-day" onchange="showDay(this.value)">
-                        <option value="">Scegli Giorno...</option>
+                        <option value="">Seleziona Giorno...</option>
                         <option value="Lunedi">Lunedi</option><option value="Martedi">Martedi</option><option value="Mercoledi">Mercoledi</option><option value="Giovedi">Giovedi</option><option value="Venerdi">Venerdi</option><option value="Sabato">Sabato</option><option value="Domenica">Domenica</option>
                     </select>
                 </div>
                 <div class="grid">
-                    <div class="card"><h3>Pomeriggio (15:00 - 19:00)</h3><p id="p-list">-</p></div>
-                    <div class="card"><h3>Sera (21:00 - 01:00)</h3><p id="s-list">-</p></div>
+                    <div class="card"><h3>Pomeriggio (15-19)</h3><p id="p-list">-</p></div>
+                    <div class="card"><h3>Sera (21-01)</h3><p id="s-list">-</p></div>
                 </div>
             </section>
 
             <section id="matricole" class="hidden">
                 <img src="https://res.cloudinary.com/dbxwiln0a/image/upload/v1773168536/vyhu3p1x8nasmlap6z7p.png" class="img-header">
                 <table class="m-table">
-                    <thead><tr><th>Mat.</th><th>Staffer</th><th>Grado</th></tr></thead>
+                    <thead><tr><th>Mat.</th><th>Nome</th><th>Grado</th><th>Warns</th></tr></thead>
                     <tbody id="m-body"></tbody>
                 </table>
             </section>
 
             <section id="admin" class="hidden">
-                <div class="admin-grid">
-                    <div class="admin-card">
-                        <h3 style="color:var(--gold)">GENERATORE TURNI CASUALI</h3>
-                        <p style="font-size: 12px;">Genera 3 staffer a caso per ogni turno della settimana.</p>
-                        <button class="btn-primary" onclick="generateRandomTurni()">GENERA TURNI SETTIMANA</button>
+                <div class="grid">
+                    <div class="card">
+                        <h3>Gestione Turni</h3>
+                        <button class="btn-primary" onclick="generateRandomTurni()">GENERA TURNI CASUALI</button>
                     </div>
-                    <div class="admin-card">
-                        <h3 style="color:var(--gold)">GESTIONE MANUALE</h3>
-                        <select id="t-day"><option value="Lunedi">Lunedi</option><option value="Martedi">Martedi</option><option value="Mercoledi">Mercoledi</option><option value="Giovedi">Giovedi</option><option value="Venerdi">Venerdi</option><option value="Sabato">Sabato</option><option value="Domenica">Domenica</option></select>
-                        <select id="t-slot"><option value="p">Pomeriggio</option><option value="s">Sera</option></select>
-                        <input type="text" id="t-staff" placeholder="Nomi manuali">
-                        <button class="btn-primary" onclick="saveTurni()">SALVA MANUALE</button>
+                    <div class="card">
+                        <h3>Gestione Staff</h3>
+                        <select id="s-sel" onchange="loadStaffData()"><option value="">Scegli Staff...</option></select>
+                        <input type="number" id="ed-h" placeholder="Secondi totali">
+                        <button class="btn-primary" onclick="saveStaffData()" style="margin-bottom:5px;">SALVA ORE</button>
+                        <button class="btn-primary" onclick="changeWarns(1)" style="background:orange;">+1 WARN</button>
+                    </div>
+                    <div class="card">
+                        <h3>Nuovo Membro</h3>
+                        <input type="text" id="new-u" placeholder="Nome">
+                        <input type="text" id="new-g" placeholder="Grado">
+                        <input type="text" id="new-m" placeholder="Matricola">
+                        <button class="btn-primary" onclick="addMember()">AGGIUNGI</button>
                     </div>
                 </div>
             </section>
@@ -156,34 +124,57 @@
     </div>
 
     <script>
+        const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1480996793096605838/avlMEkY5vYoM-fTkLQKovYhQTGh-JXzH9dquQhPMqMYaKvUcQV2feXb4rtvADz42rai-";
         const STAFF_POOL = ["Barone","Hydro","Fabbri","Matz","Nathalino","Viper","Xenoo","Adamo","Nano","Gabriel","Chorno","Joker","Nenne","Mattia","Lollo","Simo","Vortex","Void","Sangue","Ibra","Noxen","Ash","Pietro"];
         const ADM_LIST = ["Daniel", "Michele", "Mav", "Arduino", "Pavel"];
 
-        let db = JSON.parse(localStorage.getItem('ITDR_V39_DB')) || {};
-        let tr = JSON.parse(localStorage.getItem('ITDR_V39_TR')) || { 
-            "Lunedi":{p:"-",s:"-"}, "Martedi":{p:"-",s:"-"}, "Mercoledi":{p:"-",s:"-"}, "Giovedi":{p:"-",s:"-"}, "Venerdi":{p:"-",s:"-"}, "Sabato":{p:"-",s:"-"}, "Domenica":{p:"-",s:"-"} 
-        };
+        let db = JSON.parse(localStorage.getItem('ITDR_DB_V40')) || {};
+        let tr = JSON.parse(localStorage.getItem('ITDR_TR_V40')) || { "Lunedi":{p:"-",s:"-"}, "Martedi":{p:"-",s:"-"}, "Mercoledi":{p:"-",s:"-"}, "Giovedi":{p:"-",s:"-"}, "Venerdi":{p:"-",s:"-"}, "Sabato":{p:"-",s:"-"}, "Domenica":{p:"-",s:"-"} };
+
+        let user = null, sec = 0, interval = null, on = false;
 
         function login() {
             let u = document.getElementById('user-in').value.trim();
-            if(u) {
+            if(u && (db[u] || ADM_LIST.includes(u))) {
                 user = u;
+                if(!db[u]) db[u] = { grado: "Admin", mat: "ADM", ore: 0, warns: 0 };
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('portal').classList.remove('hidden');
                 if(ADM_LIST.includes(u)) document.getElementById('adm-btn').classList.remove('hidden');
-                renderMatricole();
+                updateArea(); renderMatricole(); refreshAdmList();
+            } else alert("Utente non trovato!");
+        }
+
+        async function sendLog(tipo, sessione = 0) {
+            let embed = { embeds: [{ title: tipo === "IN" ? "🚀 SERVIZIO INIZIATO" : "🏁 SERVIZIO FINITO", color: tipo === "IN" ? 5025616 : 16724531, fields: [{name:"Staff", value:user, inline:true},{name:"Sessione", value:fmt(sessione), inline:true}] }] };
+            fetch(DISCORD_WEBHOOK, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(embed)});
+        }
+
+        function toggleT() {
+            let b = document.getElementById('t-btn');
+            if(!on) {
+                on = true; b.innerText = "STOP SERVIZIO"; b.style.background = "red";
+                interval = setInterval(() => { sec++; document.getElementById('timer-val').innerText = fmt(sec); }, 1000);
+                sendLog("IN");
+            } else {
+                on = false; b.innerText = "INIZIA SERVIZIO"; b.style.background = "var(--gold)";
+                clearInterval(interval);
+                db[user].ore += sec;
+                sendLog("OUT", sec);
+                sec = 0; document.getElementById('timer-val').innerText = "00:00:00";
+                save(); updateArea();
             }
         }
 
         function generateRandomTurni() {
             const giorni = ["Lunedi", "Martedi", "Mercoledi", "Giovedi", "Venerdi", "Sabato", "Domenica"];
             giorni.forEach(g => {
-                let rimescolato = [...STAFF_POOL].sort(() => 0.5 - Math.random());
-                tr[g].p = rimescolato.slice(0, 3).join(", ");
-                tr[g].s = rimescolato.slice(3, 6).join(", ");
+                let r = [...STAFF_POOL].sort(() => 0.5 - Math.random());
+                tr[g].p = r.slice(0, 3).join(", ");
+                tr[g].s = r.slice(3, 6).join(", ");
             });
-            localStorage.setItem('ITDR_V39_TR', JSON.stringify(tr));
-            alert("Turni generati con successo!");
+            localStorage.setItem('ITDR_TR_V40', JSON.stringify(tr));
+            alert("Turni Generati!");
         }
 
         function showDay(d) {
@@ -192,24 +183,48 @@
             document.getElementById('s-list').innerText = tr[d].s;
         }
 
-        function saveTurni() {
-            let d = document.getElementById('t-day').value;
-            let s = document.getElementById('t-slot').value;
-            tr[d][s] = document.getElementById('t-staff').value || "-";
-            localStorage.setItem('ITDR_V39_TR', JSON.stringify(tr));
-            alert("Salvato!");
+        function addMember() {
+            let u = document.getElementById('new-u').value.trim();
+            if(!u) return;
+            db[u] = { grado: document.getElementById('new-g').value, mat: document.getElementById('new-m').value, ore:0, warns:0 };
+            save(); renderMatricole(); refreshAdmList(); alert("Aggiunto!");
+        }
+
+        function loadStaffData() {
+            let s = document.getElementById('s-sel').value;
+            if(db[s]) document.getElementById('ed-h').value = db[s].ore;
+        }
+
+        function saveStaffData() {
+            let s = document.getElementById('s-sel').value;
+            db[s].ore = parseInt(document.getElementById('ed-h').value);
+            save(); updateArea(); alert("Ore aggiornate!");
+        }
+
+        function changeWarns(n) {
+            let s = document.getElementById('s-sel').value;
+            if(db[s]) { db[s].warns += n; save(); renderMatricole(); }
+        }
+
+        function updateArea() {
+            document.getElementById('u-grado').innerText = db[user].grado;
+            document.getElementById('u-mat').innerText = db[user].mat;
+            document.getElementById('u-ore').innerText = fmt(db[user].ore);
+            document.getElementById('u-warns').innerText = db[user].warns;
         }
 
         function renderMatricole() {
-            let b = document.getElementById('m-body');
-            b.innerHTML = STAFF_POOL.map((s, i) => `<tr><td>ITD-${i+14}</td><td>${s}</td><td>Staff</td></tr>`).join('');
+            document.getElementById('m-body').innerHTML = Object.keys(db).map(k => `<tr><td>${db[k].mat}</td><td>${k}</td><td>${db[k].grado}</td><td>${db[k].warns}</td></tr>`).join('');
         }
 
-        function tab(id) {
-            ["area", "turni", "matricole", "admin"].forEach(t => {
-                const el = document.getElementById(t);
-                if(el) el.classList.add('hidden');
-            });
+        function refreshAdmList() {
+            document.getElementById('s-sel').innerHTML = '<option value="">Scegli Staff...</option>' + Object.keys(db).map(k => `<option value="${k}">${k}</option>`).join('');
+        }
+
+        function fmt(s) { return new Date(s * 1000).toISOString().substr(11, 8); }
+        function save() { localStorage.setItem('ITDR_DB_V40', JSON.stringify(db)); }
+        function tab(id) { 
+            document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
             document.getElementById(id).classList.remove('hidden');
         }
     </script>
