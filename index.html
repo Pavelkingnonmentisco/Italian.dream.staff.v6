@@ -3,318 +3,281 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LS STAFF PORTAL v41.0</title>
+    <title>LS STAFF PORTAL v42.0</title>
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #050505;
-            --sidebar: #0a0a0a;
+            --bg: #000000;
+            --sidebar: #080808;
             --accent: #ff7b00; /* Arancione LS */
             --teal: #4ecdc4;   /* Verde Acqua LS */
-            --yellow: #f1c40f;
-            --border: #1a1a1a;
-            --text: #e0e0e0;
+            --border: #222;
+            --text: #ff7b00;
         }
 
         body {
             background-color: var(--bg);
             color: var(--text);
             font-family: 'Share Tech Mono', monospace;
-            margin: 0;
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
+            margin: 0; display: flex; height: 100vh; overflow: hidden;
         }
 
         .hidden { display: none !important; }
 
-        /* SIDEBAR STILE FOTO */
+        /* SIDEBAR */
         aside {
-            width: 240px;
-            background: var(--sidebar);
+            width: 240px; background: var(--sidebar);
             border-right: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            padding: 20px 0;
+            display: flex; flex-direction: column; padding: 20px 0;
         }
 
         .logo-area { text-align: center; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
-        .logo-area img { width: 60px; filter: drop-shadow(0 0 5px var(--teal)); }
-        .user-info { padding: 20px; font-size: 12px; color: #888; border-bottom: 1px solid var(--border); }
-        .user-info span { color: var(--accent); display: block; font-size: 14px; margin-top: 5px; }
+        .logo-area img { width: 70px; filter: drop-shadow(0 0 5px var(--accent)); }
 
-        nav { flex: 1; padding: 10px 0; }
+        nav { flex: 1; padding: 20px 0; }
         nav button {
-            width: 100%;
-            background: transparent;
-            border: none;
-            color: #666;
-            padding: 12px 20px;
-            text-align: left;
-            cursor: pointer;
-            font-family: inherit;
-            text-transform: uppercase;
-            font-size: 13px;
-            transition: 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            width: 100%; background: transparent; border: none; color: #888;
+            padding: 15px 20px; text-align: left; cursor: pointer;
+            font-family: inherit; text-transform: uppercase; font-size: 13px;
         }
-        nav button:hover, nav button.active { color: var(--accent); background: rgba(255,123,0,0.05); border-right: 3px solid var(--accent); }
+        nav button:hover, nav button.active { color: var(--teal); border-right: 3px solid var(--teal); background: rgba(78,205,196,0.05); }
 
-        /* MAIN CONTENT */
-        main { flex: 1; padding: 40px; overflow-y: auto; position: relative; }
-        .header-title { border-bottom: 1px solid var(--border); margin-bottom: 30px; padding-bottom: 10px; }
-        .header-title h1 { margin: 0; font-size: 24px; color: var(--yellow); letter-spacing: 2px; }
-        .header-title span { font-size: 10px; color: #444; }
+        /* MAIN */
+        main { flex: 1; padding: 40px; overflow-y: auto; position: relative; background: radial-gradient(circle at center, #0a0a0a 0%, #000 100%); }
+        .header-title { border-bottom: 1px solid var(--accent); margin-bottom: 30px; padding-bottom: 10px; }
+        .header-title h1 { margin: 0; font-size: 28px; color: var(--accent); text-shadow: 0 0 10px rgba(255,123,0,0.3); }
 
-        /* DASHBOARD CARDS (STATO ATTUALE) */
-        .status-box {
-            background: var(--sidebar);
-            border: 1px solid var(--border);
-            padding: 40px;
-            text-align: center;
-            border-radius: 4px;
-            margin-bottom: 30px;
-        }
-        .status-label { font-size: 14px; color: #888; margin-bottom: 10px; }
-        .status-value { font-size: 32px; font-weight: bold; margin-bottom: 20px; letter-spacing: 2px; }
-        .status-off { color: #ff4d4d; }
-        .status-on { color: var(--teal); }
-
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-        .stat-card {
-            background: var(--sidebar);
-            border: 1px solid var(--border);
-            padding: 20px;
-            text-align: center;
-        }
-        .stat-num { font-size: 28px; color: var(--teal); display: block; margin-bottom: 5px; }
-        .stat-desc { font-size: 10px; color: #555; text-transform: uppercase; }
-
-        /* BOTTONI FIRMA */
-        .btn-entry {
-            background: transparent;
-            border: 2px solid var(--teal);
-            color: var(--teal);
-            padding: 15px 40px;
-            font-family: inherit;
-            cursor: pointer;
-            font-size: 16px;
-            transition: 0.3s;
-        }
-        .btn-entry:hover { background: var(--teal); color: black; box-shadow: 0 0 15px rgba(78,205,196,0.4); }
-
-        /* TABELLE MATRICOLE */
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th { text-align: left; color: var(--accent); font-size: 12px; padding: 15px; border-bottom: 1px solid var(--border); }
-        td { padding: 15px; font-size: 13px; border-bottom: 1px solid #111; }
-
-        /* LOGIN */
-        #login-screen {
-            position: fixed; inset: 0; background: var(--bg); z-index: 999;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .login-box { background: var(--sidebar); border: 1px solid var(--accent); padding: 40px; width: 300px; text-align: center; }
-        input { 
-            width: 100%; background: #000; border: 1px solid #333; color: white; 
-            padding: 10px; margin: 10px 0; font-family: inherit; box-sizing: border-box;
+        /* CARDS & PANELS */
+        .panel { background: #0a0a0a; border: 1px solid var(--border); padding: 25px; border-radius: 4px; margin-bottom: 20px; }
+        input, select, textarea { 
+            width: 100%; background: #000; border: 1px solid var(--accent); color: var(--teal); 
+            padding: 12px; margin: 10px 0; font-family: inherit; box-sizing: border-box;
         }
 
-        footer { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); font-size: 10px; color: #333; }
+        .btn-ls {
+            background: transparent; border: 1px solid var(--teal); color: var(--teal);
+            padding: 12px 25px; cursor: pointer; font-family: inherit; text-transform: uppercase;
+            transition: 0.3s; width: 100%;
+        }
+        .btn-ls:hover { background: var(--teal); color: #000; box-shadow: 0 0 15px var(--teal); }
+
+        .btn-warn { border-color: var(--accent); color: var(--accent); }
+        .btn-warn:hover { background: var(--accent); color: #000; box-shadow: 0 0 15px var(--accent); }
+
+        /* BAN/WARN LIST */
+        .log-entry { 
+            border-left: 3px solid var(--accent); background: #0d0d0d; 
+            padding: 15px; margin-bottom: 10px; display: flex; align-items: center; gap: 15px;
+        }
+        .roblox-img { width: 50px; height: 50px; border: 1px solid var(--teal); border-radius: 4px; background: #222; }
+
+        #timer-display { font-size: 40px; color: var(--teal); margin: 20px 0; display: block; text-shadow: 0 0 10px var(--teal); }
+        footer { position: fixed; bottom: 10px; right: 20px; font-size: 10px; color: #444; }
     </style>
 </head>
 <body>
 
-    <div id="login-screen">
-        <div class="login-box">
-            <h2 style="color:var(--accent)">LS STAFF ACCESS</h2>
-            <input type="text" id="user-in" placeholder="USERNAME">
+    <div id="login-screen" style="position:fixed; inset:0; background:#000; z-index:999; display:flex; align-items:center; justify-content:center;">
+        <div class="panel" style="width:300px; text-align:center; border-color:var(--accent);">
+            <img src="https://res.cloudinary.com/dbxwiln0a/image/upload/v1773088043/mahwplqpvvuy34vczm3j.webp" width="60">
+            <h2 style="color:var(--accent)">LS ACCESS</h2>
+            <input type="text" id="user-in" placeholder="NOME UTENTE">
             <input type="password" id="pass-in" placeholder="PASSWORD">
-            <button class="btn-entry" onclick="login()" style="width:100%">LOGIN</button>
+            <button class="btn-ls" onclick="login()">ENTRA</button>
         </div>
     </div>
 
     <aside class="hidden" id="sidebar">
         <div class="logo-area">
             <img src="https://res.cloudinary.com/dbxwiln0a/image/upload/v1773088043/mahwplqpvvuy34vczm3j.webp">
-            <div style="font-size: 18px; color: var(--yellow); margin-top: 10px;">LS STAFF</div>
-        </div>
-        <div class="user-info">
-            CONNESSO COME:
-            <span id="nav-user">-</span>
-            <div id="nav-rank" style="font-size: 10px; color: #555; margin-top: 5px;">RANK: -</div>
+            <div style="color:var(--accent); margin-top:10px;">LS STAFF PANEL</div>
         </div>
         <nav>
             <button onclick="tab('area')" id="btn-area">DASHBOARD</button>
-            <button onclick="tab('matricole')" id="btn-matricole">STAFF</button>
+            <button onclick="tab('servizio')" id="btn-servizio">SERVIZIO</button>
+            <button onclick="tab('banwarn')" id="btn-banwarn">BAN & WARN</button>
             <button onclick="tab('turni')" id="btn-turni">TURNI</button>
-            <button onclick="tab('servizio')" id="btn-servizio">FIRMA SERVIZIO</button>
-            <button id="adm-btn" class="hidden" onclick="tab('admin')">ADMIN PANEL</button>
-            <button onclick="location.reload()" style="margin-top: 20px; color: #ff4d4d;">LOGOUT</button>
+            <button onclick="tab('matricole')" id="btn-matricole">MATRICOLE</button>
+            <button id="adm-btn" class="hidden" onclick="tab('admin')" style="color:var(--accent)">ADMIN</button>
+            <button onclick="location.reload()" style="margin-top:20px; color:#ff4d4d;">DISECONNETTI</button>
         </nav>
     </aside>
 
     <main class="hidden" id="main-content">
         <div id="area">
-            <div class="header-title">
-                <h1>DASHBOARD</h1>
-                <span>[ STATISTICHE GENERALI ]</span>
-            </div>
-            <div class="grid">
-                <div class="stat-card"><span class="stat-num" id="dash-ore">0.0</span><span class="stat-desc">Ore Settimana</span></div>
-                <div class="stat-card"><span class="stat-num" id="dash-warn">0</span><span class="stat-desc">Sanzioni Attive</span></div>
-                <div class="stat-card"><span class="stat-num" id="dash-mat">-</span><span class="stat-desc">Matricola</span></div>
+            <div class="header-title"><h1>SISTEMA OPERATIVO</h1></div>
+            <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:20px;">
+                <div class="panel"><h3>ORE TOTALI</h3><div id="d-ore" style="font-size:24px; color:var(--teal)">0.00</div></div>
+                <div class="panel"><h3>SANZIONI</h3><div id="d-warn" style="font-size:24px; color:var(--accent)">0</div></div>
+                <div class="panel"><h3>MATRICOLA</h3><div id="d-mat" style="font-size:24px;">-</div></div>
             </div>
         </div>
 
         <div id="servizio" class="hidden">
-            <div class="header-title">
-                <h1>FIRMA SERVIZIO</h1>
-                <span>[ REGISTRAZIONE PRESENZE ]</span>
+            <div class="header-title"><h1>FIRMA PRESENZE</h1></div>
+            <div class="panel" style="text-align:center;">
+                <span id="timer-display">00:00:00</span>
+                <button id="t-btn" class="btn-ls" onclick="toggleT()">INIZIA TURNO</button>
             </div>
-            <div class="status-box">
-                <div class="status-label">STATO ATTUALE:</div>
-                <div id="status-txt" class="status-off">FUORI SERVIZIO</div>
-                <div id="timer-display" style="font-size: 20px; margin-bottom: 20px; color: #555;">00:00:00</div>
-                <button id="t-btn" class="btn-entry" onclick="toggleT()">→ FIRMA ENTRATA</button>
+        </div>
+
+        <div id="banwarn" class="hidden">
+            <div class="header-title"><h1>MODERAZIONE ROBLOX</h1></div>
+            <div class="panel">
+                <input type="text" id="rbx-name" placeholder="NOME UTENTE ROBLOX">
+                <select id="mod-type">
+                    <option value="BAN">BAN PERMANENTE</option>
+                    <option value="WARN">AMMONIZIONE (WARN)</option>
+                    <option value="KICK">ESPULSIONE (KICK)</option>
+                </select>
+                <textarea id="mod-reason" placeholder="MOTIVAZIONE DEL PROVVEDIMENTO..."></textarea>
+                <button class="btn-ls btn-warn" onclick="submitMod()">INVIA PROVVEDIMENTO</button>
             </div>
-            <div class="stats-grid">
-                <div class="stat-card"><span class="stat-num" id="s-ore-sett">0.00</span><span class="stat-desc">ORE SETTIMANA</span></div>
-                <div class="stat-card"><span class="stat-num" id="s-sess">0</span><span class="stat-desc">SESSIONI TOTALI</span></div>
-                <div class="stat-card"><span class="stat-num" id="s-ore-tot">0.00</span><span class="stat-desc">ORE TOTALI</span></div>
-            </div>
+            <h3>ULTIMI LOGS</h3>
+            <div id="mod-logs"></div>
         </div>
 
         <div id="turni" class="hidden">
-            <div class="header-title"><h1>TURNI</h1><span>[ CALENDARIO SETTIMANALE ]</span></div>
-            <select id="view-day" onchange="showDay(this.value)" style="max-width: 300px; border: 1px solid var(--accent);">
-                <option value="">SELEZIONA GIORNO...</option>
-                <option value="Lunedi">Lunedì</option><option value="Martedi">Martedì</option><option value="Mercoledi">Mercoledì</option><option value="Giovedi">Giovedì</option><option value="Venerdi">Venerdì</option><option value="Sabato">Sabato</option><option value="Domenica">Domenica</option>
-            </select>
-            <div class="stats-grid" style="margin-top: 20px;">
-                <div class="stat-card"><h3>POMERIGGIO</h3><p id="p-list" style="color:var(--yellow)">-</p></div>
-                <div class="stat-card"><h3>SERA</h3><p id="s-list" style="color:var(--yellow)">-</p></div>
-            </div>
+            <div class="header-title"><h1>TURNI SETTIMANALI</h1></div>
+            <select id="view-day" onchange="showDay(this.value)"><option value="">SCEGLI GIORNO...</option><option value="Lunedi">LUNEDÌ</option><option value="Martedi">MARTEDÌ</option><option value="Mercoledi">MERCOLEDÌ</option><option value="Giovedi">GIOVEDÌ</option><option value="Venerdi">VENERDÌ</option><option value="Sabato">SABATO</option><option value="Domenica">DOMENICA</option></select>
+            <div class="panel"><h3>POMERIGGIO:</h3><p id="p-list">-</p><h3>SERA:</h3><p id="s-list">-</p></div>
         </div>
 
         <div id="matricole" class="hidden">
-            <div class="header-title"><h1>STAFF LIST</h1><span>[ ELENCO OPERATIVO ]</span></div>
-            <table>
-                <thead><tr><th>MATRICOLA</th><th>NOME</th><th>GRADO</th><th>WARNS</th></tr></thead>
-                <tbody id="m-body"></tbody>
-            </table>
+            <div class="header-title"><h1>DATABASE STAFF</h1></div>
+            <table style="width:100%; text-align:left;"><thead><tr><th>MAT.</th><th>NOME</th><th>GRADO</th></tr></thead><tbody id="m-body"></tbody></table>
         </div>
 
         <div id="admin" class="hidden">
-            <div class="header-title"><h1>ADMIN PANEL</h1><span>[ SYSTEM CONTROL ]</span></div>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h3>GESTIONE TURNI</h3>
-                    <button class="btn-entry" onclick="generateRandomTurni()" style="font-size: 12px;">RESET E GENERA CASUALI</button>
-                </div>
-                <div class="stat-card">
-                    <h3>GESTIONE STAFF</h3>
-                    <select id="s-sel" onchange="loadStaffData()"></select>
-                    <button onclick="changeWarns(1)" class="btn-entry" style="border-color:orange; color:orange; font-size:10px; margin-top:5px;">+1 WARN</button>
-                </div>
-            </div>
+            <div class="header-title"><h1>CONTROLLO ADMIN</h1></div>
+            <button class="btn-ls" onclick="generateRandomTurni()">GENERA TURNI CASUALI</button>
         </div>
 
-        <footer>TUTTI I DIRITTI RISERVATI A PAVEL</footer>
+        <footer>© 2026 LS STAFF PORTAL | POWERED BY PAVEL</footer>
     </main>
 
     <script>
-        const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1480996793096605838/avlMEkY5vYoM-fTkLQKovYhQTGh-JXzH9dquQhPMqMYaKvUcQV2feXb4rtvADz42rai-";
-        const STAFF_POOL = ["Barone","Hydro","Fabbri","Matz","Nathalino","Viper","Xenoo","Adamo","Nano","Gabriel","Chorno","Joker","Nenne","Mattia","Lollo","Simo","Vortex","Void","Sangue","Ibra","Noxen","Ash","Pietro"];
-        const ADM_LIST = ["Daniel", "Michele", "Mav", "Arduino", "Pavel"];
-
-        let db = JSON.parse(localStorage.getItem('LS_DB_V41')) || {};
-        let tr = JSON.parse(localStorage.getItem('LS_TR_V41')) || { "Lunedi":{p:"-",s:"-"}, "Martedi":{p:"-",s:"-"}, "Mercoledi":{p:"-",s:"-"}, "Giovedi":{p:"-",s:"-"}, "Venerdi":{p:"-",s:"-"}, "Sabato":{p:"-",s:"-"}, "Domenica":{p:"-",s:"-"} };
-
+        const WH_MOD = "https://discord.com/api/webhooks/1480953347941990512/tO72Y7nUOLn0atj93WQfdwrpvOw1213-opTl7hBTmunCVvht4Ck6lJcvb_7GPm-ZcLmr";
+        const WH_SERVICE = "https://discord.com/api/webhooks/1480996793096605838/avlMEkY5vYoM-fTkLQKovYhQTGh-JXzH9dquQhPMqMYaKvUcQV2feXb4rtvADz42rai-";
+        
+        let db = JSON.parse(localStorage.getItem('LS_DB_V42')) || {};
+        let tr = JSON.parse(localStorage.getItem('LS_TR_V42')) || {};
+        let logs = JSON.parse(localStorage.getItem('LS_LOGS_V42')) || [];
         let user = null, sec = 0, interval = null, on = false;
 
         function login() {
             let u = document.getElementById('user-in').value.trim();
             if(u) {
                 user = u;
-                if(!db[u]) db[u] = { grado: "Staff", mat: "LS-"+Math.floor(Math.random()*99), ore: 0, warns: 0, sessioni: 0 };
+                if(!db[u]) db[u] = { grado: "Staff", mat: "LS-"+Math.floor(Math.random()*900), ore: 0, warns: 0 };
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('sidebar').classList.remove('hidden');
                 document.getElementById('main-content').classList.remove('hidden');
-                document.getElementById('nav-user').innerText = u;
-                document.getElementById('nav-rank').innerText = "RANK: " + db[u].grado;
-                if(ADM_LIST.includes(u)) document.getElementById('adm-btn').classList.remove('hidden');
-                updateUI(); renderMatricole(); refreshAdmList();
-                tab('area');
+                if(["Pavel", "Daniel", "Michele", "Mav"].includes(u)) document.getElementById('adm-btn').classList.remove('hidden');
+                updateUI(); renderLogs(); tab('area');
             }
+        }
+
+        async function getRobloxInfo(name) {
+            try {
+                // Cerchiamo l'ID utente dal nome
+                const res = await fetch(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=1&size=150x150&format=Png&isCircular=false`); // Fallback base
+                // Nota: Le API Roblox dirette via browser spesso hanno problemi di CORS. 
+                // In un ambiente reale servirebbe un proxy, qui usiamo un placeholder se fallisce.
+                return `https://www.roblox.com/headshot-thumbnail/image?width=150&height=150&format=png&userId=1`; 
+            } catch(e) { return ""; }
+        }
+
+        async function submitMod() {
+            const rbxName = document.getElementById('rbx-name').value;
+            const type = document.getElementById('mod-type').value;
+            const reason = document.getElementById('mod-reason').value;
+            if(!rbxName || !reason) return alert("Compila tutti i campi!");
+
+            const imgUrl = `https://www.roblox.com/headshot-thumbnail/image?width=150&height=150&format=png&username=${rbxName}`;
+
+            const newLog = { rbxName, type, reason, staff: user, time: new Date().toLocaleString(), img: imgUrl };
+            logs.unshift(newLog);
+            localStorage.setItem('LS_LOGS_V42', JSON.stringify(logs));
+
+            // Webhook Discord
+            const embed = {
+                embeds: [{
+                    title: `🛠️ NUOVO ${type}`,
+                    color: type === "BAN" ? 16711680 : 16753920,
+                    thumbnail: { url: imgUrl },
+                    fields: [
+                        { name: "Utente Roblox", value: rbxName, inline: true },
+                        { name: "Staffer", value: user, inline: true },
+                        { name: "Motivazione", value: reason }
+                    ],
+                    footer: { text: "LS Staff System" },
+                    timestamp: new Date()
+                }]
+            };
+
+            fetch(WH_MOD, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(embed)});
+            
+            document.getElementById('rbx-name').value = "";
+            document.getElementById('mod-reason').value = "";
+            renderLogs();
+            alert("Provvedimento Inviato!");
+        }
+
+        function renderLogs() {
+            document.getElementById('mod-logs').innerHTML = logs.map(l => `
+                <div class="log-entry">
+                    <img src="${l.img}" class="roblox-img" onerror="this.src='https://tr.rbxcdn.com/38c6ed8c6358765AA17333B05530703B/150/150/AvatarHeadshot/Png'">
+                    <div>
+                        <strong style="color:var(--teal)">${l.type}: ${l.rbxName}</strong><br>
+                        <small>${l.reason}</small><br>
+                        <span style="font-size:10px; color:#555">Eseguito da: ${l.staff} - ${l.time}</span>
+                    </div>
+                </div>
+            `).join('');
         }
 
         function toggleT() {
-            let b = document.getElementById('t-btn'), st = document.getElementById('status-txt');
+            let b = document.getElementById('t-btn');
             if(!on) {
-                on = true; b.innerText = "← FIRMA USCITA"; st.innerText = "IN SERVIZIO"; st.className = "status-on";
+                on = true; b.innerText = "FIRMA USCITA"; b.classList.add('btn-warn');
                 interval = setInterval(() => { sec++; document.getElementById('timer-display').innerText = fmt(sec); }, 1000);
-                fetch(DISCORD_WEBHOOK, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({embeds:[{title:"🟢 ENTRATA", color:3066993, fields:[{name:"Staff",value:user}]}]})});
             } else {
-                on = false; b.innerText = "→ FIRMA ENTRATA"; st.innerText = "FUORI SERVIZIO"; st.className = "status-off";
+                on = false; b.innerText = "INIZIA TURNO"; b.classList.remove('btn-warn');
                 clearInterval(interval);
-                db[user].ore += (sec / 3600); // Converte in ore decimali come in foto
-                db[user].sessioni += 1;
-                fetch(DISCORD_WEBHOOK, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({embeds:[{title:"🔴 USCITA", color:15158332, fields:[{name:"Staff",value:user},{name:"Durata",value:fmt(sec)}]}]})});
-                sec = 0; document.getElementById('timer-display').innerText = "00:00:00";
+                db[user].ore += (sec / 3600);
                 save(); updateUI();
+                sec = 0; document.getElementById('timer-display').innerText = "00:00:00";
             }
         }
 
-        function generateRandomTurni() {
-            const giorni = ["Lunedi", "Martedi", "Mercoledi", "Giovedi", "Venerdi", "Sabato", "Domenica"];
-            giorni.forEach(g => {
-                let r = [...STAFF_POOL].sort(() => 0.5 - Math.random());
-                tr[g].p = r.slice(0, 3).join(", ");
-                tr[g].s = r.slice(3, 6).join(", ");
-            });
-            localStorage.setItem('LS_TR_V41', JSON.stringify(tr));
-            alert("SISTEMA: TURNI GENERATI.");
-        }
-
-        function showDay(d) {
-            if(!d) return;
-            document.getElementById('p-list').innerText = tr[d].p;
-            document.getElementById('s-list').innerText = tr[d].s;
-        }
-
         function updateUI() {
-            document.getElementById('dash-ore').innerText = db[user].ore.toFixed(2);
-            document.getElementById('dash-warn').innerText = db[user].warns;
-            document.getElementById('dash-mat').innerText = db[user].mat;
-            document.getElementById('s-ore-sett').innerText = db[user].ore.toFixed(2);
-            document.getElementById('s-ore-tot').innerText = db[user].ore.toFixed(2);
-            document.getElementById('s-sess').innerText = db[user].sessioni;
-        }
-
-        function renderMatricole() {
-            document.getElementById('m-body').innerHTML = Object.keys(db).map(k => `<tr><td>${db[k].mat}</td><td>${k}</td><td>${db[k].grado}</td><td>${db[k].warns}</td></tr>`).join('');
-        }
-
-        function refreshAdmList() {
-            document.getElementById('s-sel').innerHTML = Object.keys(db).map(k => `<option value="${k}">${k}</option>`).join('');
-        }
-
-        function changeWarns(n) {
-            let s = document.getElementById('s-sel').value;
-            db[s].warns += n; save(); renderMatricole();
+            document.getElementById('d-ore').innerText = (db[user].ore || 0).toFixed(2);
+            document.getElementById('d-warn').innerText = db[user].warns || 0;
+            document.getElementById('d-mat').innerText = db[user].mat || "-";
+            document.getElementById('m-body').innerHTML = Object.keys(db).map(k => `<tr><td>${db[k].mat}</td><td>${k}</td><td>${db[k].grado}</td></tr>`).join('');
         }
 
         function fmt(s) { return new Date(s * 1000).toISOString().substr(11, 8); }
-        function save() { localStorage.setItem('LS_DB_V41', JSON.stringify(db)); }
-        
-        function tab(id) { 
-            document.querySelectorAll('main > div').forEach(s => s.classList.add('hidden'));
+        function save() { localStorage.setItem('LS_DB_V42', JSON.stringify(db)); }
+        function tab(id) {
+            document.querySelectorAll('main > div').forEach(d => d.classList.add('hidden'));
             document.getElementById(id).classList.remove('hidden');
             document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
             document.getElementById('btn-'+id).classList.add('active');
         }
+
+        // Funzione per Admin Turni ricolorata
+        const STAFF_POOL = ["Barone","Hydro","Fabbri","Matz","Nathalino","Viper","Xenoo","Adamo","Nano","Gabriel","Chorno","Joker","Nenne","Mattia","Lollo","Simo","Vortex","Void","Sangue","Ibra","Noxen","Ash","Pietro"];
+        function generateRandomTurni() {
+            ["Lunedi","Martedi","Mercoledi","Giovedi","Venerdi","Sabato","Domenica"].forEach(g => {
+                let r = [...STAFF_POOL].sort(() => 0.5 - Math.random());
+                tr[g] = { p: r.slice(0, 3).join(", "), s: r.slice(3, 6).join(", ") };
+            });
+            localStorage.setItem('LS_TR_V42', JSON.stringify(tr));
+            alert("TURNI AGGIORNATI.");
+        }
+        function showDay(d) { if(tr[d]) { document.getElementById('p-list').innerText = tr[d].p; document.getElementById('s-list').innerText = tr[d].s; } }
     </script>
 </body>
 </html>
