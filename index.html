@@ -1,442 +1,397 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Houston Roleplay | Staff Panel</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --bg-dark: #08080a;
-            --bg-card: #121317;
-            --bg-input: #1c1d22;
-            --accent: #c5a059; /* Oro Houston */
-            --accent-glow: rgba(197, 160, 89, 0.3);
-            --text-main: #ffffff;
-            --text-muted: #88888b;
-            --success: #22c55e;
-            --danger: #ef4444;
-            --glass: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.08);
-        }
+  <meta charset="UTF-8">
+  <title>Staff Panel</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body {
+      background: #0D0D0D;
+      color: #E6E6E6;
+    }
+    .hidden { display: none; }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-        }
+    /* Auth */
+    .auth-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .auth-card {
+      background: #1A1A1A;
+      padding: 2.5rem;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 0 25px rgba(0,0,0,0.6);
+      border: 1px solid #B8860B33;
+    }
+    .logo-wrapper {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+    .logo {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      border: 2px solid #B8860B;
+    }
+    .auth-title {
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+    .auth-subtitle {
+      text-align: center;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      color: #AAAAAA;
+    }
+    .auth-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+    .auth-form label {
+      font-size: 0.9rem;
+    }
+    .auth-form input {
+      padding: 0.6rem 0.8rem;
+      border-radius: 8px;
+      border: 1px solid #333;
+      background: #111;
+      color: #E6E6E6;
+    }
+    .auth-form input:focus {
+      outline: none;
+      border-color: #B8860B;
+      box-shadow: 0 0 0 1px #B8860B55;
+    }
+    .btn-primary {
+      margin-top: 0.5rem;
+      padding: 0.7rem;
+      border-radius: 999px;
+      border: 1px solid #B8860B;
+      background: #B8860B;
+      color: #FFFFFF;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+    .btn-primary:hover {
+      background: #d19b10;
+      box-shadow: 0 0 12px #B8860Baa;
+    }
+    .error {
+      background: #5c1b1b;
+      color: #ffb3b3;
+      padding: 0.6rem 0.8rem;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+      font-size: 0.85rem;
+    }
 
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            overflow: hidden; /* Evita scroll fuori dai div */
-            height: 100vh;
-        }
-
-        /* --- ANIMAZIONI --- */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* --- SCHERMATE (Pagine) --- */
-        .page {
-            display: none;
-            height: 100vh;
-            width: 100vw;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            animation: fadeIn 0.5s ease forwards;
-        }
-
-        .page.active { display: flex; }
-
-        /* --- CARD STYLES --- */
-        .card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 32px;
-            padding: 50px 40px;
-            width: 100%;
-            max-width: 450px;
-            text-align: center;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
-        }
-
-        .logo-main {
-            width: 140px;
-            height: 140px;
-            margin-bottom: 25px;
-            border-radius: 50%;
-            border: 3px solid var(--accent);
-            padding: 5px;
-            box-shadow: 0 0 20px var(--accent-glow);
-        }
-
-        h1, h2 {
-            font-family: 'Syne', sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
-        }
-
-        p.subtitle {
-            color: var(--text-muted);
-            margin-bottom: 30px;
-            font-size: 14px;
-        }
-
-        /* --- INPUTS & BUTTONS --- */
-        .input-group {
-            margin-bottom: 15px;
-            text-align: left;
-        }
-
-        label {
-            display: block;
-            font-size: 12px;
-            color: var(--accent);
-            font-weight: 800;
-            margin-bottom: 8px;
-            margin-left: 15px;
-            text-transform: uppercase;
-        }
-
-        .form-control {
-            width: 100%;
-            background: var(--bg-input);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 16px 20px;
-            color: white;
-            font-size: 15px;
-            transition: all 0.3s ease;
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--accent);
-            background: #25262c;
-            box-shadow: 0 0 15px var(--accent-glow);
-        }
-
-        .btn {
-            width: 100%;
-            padding: 16px;
-            border-radius: 16px;
-            border: none;
-            background: var(--accent);
-            color: #000;
-            font-weight: 800;
-            font-size: 14px;
-            cursor: pointer;
-            transition: 0.3s;
-            text-transform: uppercase;
-            margin-top: 10px;
-        }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px var(--accent-glow);
-            filter: brightness(1.1);
-        }
-
-        /* --- REQUISITI PASSWORD --- */
-        .pw-check {
-            text-align: left;
-            margin: 15px 0;
-            padding: 15px;
-            background: var(--glass);
-            border-radius: 12px;
-        }
-
-        .check-item {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-bottom: 5px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .check-item.valid { color: var(--success); }
-        .check-item.valid::before { content: '✓'; font-weight: bold; }
-
-        /* --- DASHBOARD LAYOUT --- */
-        .dashboard-container {
-            display: grid;
-            grid-template-columns: 280px 1fr 350px;
-            width: 100%;
-            height: 100vh;
-        }
-
-        .sidebar, .right-panel {
-            background: var(--bg-card);
-            border-right: 1px solid var(--border);
-            padding: 30px;
-            overflow-y: auto;
-        }
-
-        .right-panel { border-right: none; border-left: 1px solid var(--border); }
-
-        .main-content {
-            padding: 40px;
-            overflow-y: auto;
-            background: radial-gradient(circle at top right, rgba(197, 160, 89, 0.05), transparent);
-        }
-
-        /* NAVBAR FLUTTUANTE (Vetro) */
-        .floating-nav {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(18, 19, 23, 0.8);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
-            padding: 10px;
-            border-radius: 25px;
-            display: flex;
-            gap: 10px;
-            z-index: 9999;
-        }
-
-        .nav-item {
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 18px;
-            cursor: pointer;
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            color: var(--text-muted);
-            text-decoration: none;
-            overflow: hidden;
-            white-space: nowrap;
-        }
-
-        .nav-item span { display: none; margin-left: 10px; font-weight: 700; font-size: 14px; }
-
-        .nav-item:hover, .nav-item.active {
-            width: 150px;
-            background: var(--accent);
-            color: #000;
-        }
-
-        .nav-item:hover span, .nav-item.active span { display: block; }
-
-        /* BADGES */
-        .status-badge {
-            padding: 5px 12px;
-            border-radius: 8px;
-            font-size: 10px;
-            font-weight: 800;
-            text-transform: uppercase;
-        }
-        .off-duty { background: var(--danger); color: white; }
-        .on-duty { background: var(--success); color: white; }
-
-    </style>
+    /* Layout dashboard */
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 260px;
+      background: #111;
+      border-right: 1px solid #B8860B33;
+      display: flex;
+      flex-direction: column;
+      padding: 1.5rem 1rem;
+    }
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      margin-bottom: 2rem;
+    }
+    .sidebar-logo img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid #B8860B;
+    }
+    .sidebar-logo span {
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      flex: 1;
+    }
+    .sidebar-nav a {
+      padding: 0.6rem 0.8rem;
+      border-radius: 8px;
+      color: #E6E6E6;
+      text-decoration: none;
+      font-size: 0.95rem;
+      transition: 0.2s ease;
+    }
+    .sidebar-nav a:hover {
+      background: #1A1A1A;
+    }
+    .sidebar-nav a.active {
+      background: #1A1A1A;
+      border: 1px solid #B8860B55;
+    }
+    .btn-logout {
+      width: 100%;
+      padding: 0.6rem;
+      border-radius: 999px;
+      border: 1px solid #B8860B55;
+      background: transparent;
+      color: #E6E6E6;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+    .btn-logout:hover {
+      background: #B8860B22;
+    }
+    .main {
+      flex: 1;
+      padding: 1.5rem 2rem;
+    }
+    .main-header {
+      margin-bottom: 1.5rem;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+    .card {
+      background: #1A1A1A;
+      border-radius: 12px;
+      padding: 1.2rem 1.4rem;
+      border: 1px solid #B8860B33;
+      box-shadow: 0 0 18px rgba(0,0,0,0.5);
+    }
+    .card h2 {
+      margin-bottom: 0.5rem;
+    }
+  </style>
 </head>
 <body>
 
-    <div class="page active" id="login-page">
+  <!-- LOGIN -->
+  <div id="login-view" class="auth-container">
+    <div class="auth-card">
+      <div class="logo-wrapper">
+        <img src="https://res.cloudinary.com/dec4vnmzg/image/upload/v1775510756/dezbl6dcpfsvrwzjui1d.webp" alt="Logo" class="logo">
+      </div>
+      <h1 class="auth-title">Staff Login</h1>
+      <div id="login-error" class="error hidden"></div>
+      <form id="login-form" class="auth-form">
+        <label>Username</label>
+        <input type="text" id="login-username" required />
+
+        <label>Password</label>
+        <input type="password" id="login-password" required />
+
+        <button type="submit" class="btn-primary">Accedi</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- CAMBIO PASSWORD OBBLIGATORIO -->
+  <div id="change-password-view" class="auth-container hidden">
+    <div class="auth-card">
+      <div class="logo-wrapper">
+        <img src="https://res.cloudinary.com/dec4vnmzg/image/upload/v1775510756/dezbl6dcpfsvrwzjui1d.webp" alt="Logo" class="logo">
+      </div>
+      <h1 class="auth-title">Imposta nuova password</h1>
+      <p class="auth-subtitle">Devi impostare una password personale prima di accedere.</p>
+      <div id="change-error" class="error hidden"></div>
+      <form id="change-form" class="auth-form">
+        <label>Nuova password</label>
+        <input type="password" id="new-password" required />
+
+        <label>Conferma password</label>
+        <input type="password" id="confirm-password" required />
+
+        <button type="submit" class="btn-primary">Imposta</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboard-view" class="layout hidden">
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <img src="https://res.cloudinary.com/dec4vnmzg/image/upload/v1775510756/dezbl6dcpfsvrwzjui1d.webp" alt="Logo">
+        <span>Staff Panel</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#" class="active">Dashboard</a>
+      </nav>
+      <button id="logout-btn" class="btn-logout">Logout</button>
+    </aside>
+
+    <main class="main">
+      <header class="main-header">
+        <h1>Benvenuto, <span id="username-label"></span></h1>
+      </header>
+
+      <section class="cards">
         <div class="card">
-            <img src="https://i.imgur.com/r6HUpL3.png" class="logo-main" alt="Logo Houston">
-            <h2>Houston Access</h2>
-            <p class="subtitle">Identificati per accedere ai comandi staff</p>
-            
-            <div class="input-group">
-                <label>Username</label>
-                <input type="text" id="user-in" class="form-control" placeholder="es. Mario_Rossi">
-            </div>
-            
-            <div class="input-group">
-                <label>Password Temporanea</label>
-                <input type="password" id="pass-in" class="form-control" placeholder="••••••••">
-            </div>
-            
-            <button class="btn" onclick="checkLogin()">Entra nel Pannello</button>
-            <p id="login-error" style="color:var(--danger); font-size:12px; margin-top:15px; display:none;">Credenziali errate o utente non trovato.</p>
+          <h2>Stato ERLC API</h2>
+          <p><strong>API key configurata:</strong> <span id="api-key-status"></span></p>
+          <p>In produzione la key va usata solo lato server, mai esposta nel client.</p>
         </div>
-    </div>
 
-    <div class="page" id="reset-page">
         <div class="card">
-            <h2 style="color: var(--accent);">Sicurezza Account</h2>
-            <p class="subtitle">È il tuo primo accesso. Crea una password personale obbligatoria.</p>
-            
-            <div class="input-group">
-                <label>Nuova Password</label>
-                <input type="password" id="new-pass" class="form-control" oninput="validatePassword()">
-            </div>
-
-            <div class="pw-check">
-                <div class="check-item" id="c-8">Almeno 8 caratteri</div>
-                <div class="check-item" id="c-up">Una lettera Maiuscola</div>
-                <div class="check-item" id="c-num">Almeno un numero</div>
-            </div>
-
-            <button class="btn" id="confirm-pw-btn" style="opacity:0.5; pointer-events:none;" onclick="saveNewPassword()">Salva e Continua</button>
+          <h2>Info</h2>
+          <p>Qui puoi aggiungere statistiche staff, log recenti, ecc.</p>
         </div>
-    </div>
+      </section>
+    </main>
+  </div>
 
-    <div class="page" id="panel-page" style="padding:0; background: var(--bg-dark);">
-        <div class="dashboard-container">
-            <aside class="sidebar">
-                <img src="https://i.imgur.com/r6HUpL3.png" style="width: 60px; margin-bottom: 20px;">
-                <div style="margin-bottom: 40px;">
-                    <h3 id="display-user" style="font-size: 18px;">Staffer Name</h3>
-                    <span id="display-role" class="subtitle" style="text-transform: uppercase; font-size: 11px;">Moderatore</span>
-                </div>
+  <script>
+    // DEMO: utente di default
+    const DEFAULT_USERNAME = 'admin';
+    const DEFAULT_PASSWORD = 'admin123'; // solo demo
 
-                <div id="shift-box" style="padding: 20px; background: var(--bg-input); border-radius: 20px; border: 1px solid var(--border);">
-                    <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">Stato Servizio</p>
-                    <div id="status-tag" class="status-badge off-duty" style="display:inline-block; margin-bottom: 15px;">Fuori Servizio</div>
-                    <button class="btn" id="btn-shift" onclick="toggleShift()" style="font-size: 11px;">Inizia Turno</button>
-                </div>
-            </aside>
+    // ATTENZIONE: in produzione la API key NON va mai messa qui.
+    // Va tenuta lato server (es. variabile d'ambiente) e usata solo da backend.
+    const ERLC_API_KEY = ''; // lascia vuoto qui, usala lato server nella realtà
 
-            <main class="main-content">
-                <h1 style="font-size: 40px; margin-bottom: 10px;">Dashboard</h1>
-                <p class="subtitle">Benvenuto nel sistema di gestione Houston Roleplay.</p>
-                
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px;">
-                    <div style="background: var(--bg-card); padding: 30px; border-radius: 24px; border: 1px solid var(--border);">
-                        <h3>Punizioni Recenti</h3>
-                        <p class="subtitle">Visualizza le ultime azioni intraprese</p>
-                    </div>
-                    <div style="background: var(--bg-card); padding: 30px; border-radius: 24px; border: 1px solid var(--border);">
-                        <h3>Ticket Attivi</h3>
-                        <p class="subtitle">Ci sono 3 ticket in attesa</p>
-                    </div>
-                </div>
-            </main>
+    const loginView = document.getElementById('login-view');
+    const changeView = document.getElementById('change-password-view');
+    const dashboardView = document.getElementById('dashboard-view');
 
-            <aside class="right-panel">
-                <h3>Log Personali</h3>
-                <div style="margin-top: 20px; color: var(--text-muted); font-size: 13px;">
-                    Nessuna attività registrata oggi.
-                </div>
-            </aside>
-        </div>
+    const loginForm = document.getElementById('login-form');
+    const loginError = document.getElementById('login-error');
+    const loginUsername = document.getElementById('login-username');
+    const loginPassword = document.getElementById('login-password');
 
-        <nav class="floating-nav">
-            <div class="nav-item active">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-                <span>Dashboard</span>
-            </div>
-            <div class="nav-item">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                <span>Logs</span>
-            </div>
-            <div class="nav-item" onclick="location.reload()" style="color: var(--danger);">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-                <span>Esci</span>
-            </div>
-        </nav>
-    </div>
+    const changeForm = document.getElementById('change-form');
+    const changeError = document.getElementById('change-error');
+    const newPasswordInput = document.getElementById('new-password');
+    const confirmPasswordInput = document.getElementById('confirm-password');
 
-    <script>
-        // Database Simulato (Salva nel browser)
-        if(!localStorage.getItem('houston_staff')) {
-            const initialStaff = [
-                { user: 'Admin', pass: 'Houston2026!', role: 'Manager', isFirst: true },
-                { user: 'Staffer', pass: 'prova123', role: 'Moderatore', isFirst: true }
-            ];
-            localStorage.setItem('houston_staff', JSON.stringify(initialStaff));
+    const usernameLabel = document.getElementById('username-label');
+    const apiKeyStatus = document.getElementById('api-key-status');
+    const logoutBtn = document.getElementById('logout-btn');
+
+    function showView(view) {
+      loginView.classList.add('hidden');
+      changeView.classList.add('hidden');
+      dashboardView.classList.add('hidden');
+      view.classList.remove('hidden');
+    }
+
+    function isPasswordChanged() {
+      return localStorage.getItem('passwordChanged') === 'true';
+    }
+
+    function getStoredPassword() {
+      return localStorage.getItem('userPassword') || DEFAULT_PASSWORD;
+    }
+
+    function setNewPassword(pwd) {
+      localStorage.setItem('userPassword', pwd);
+      localStorage.setItem('passwordChanged', 'true');
+    }
+
+    function setLoggedIn(username) {
+      sessionStorage.setItem('loggedInUser', username);
+    }
+
+    function getLoggedInUser() {
+      return sessionStorage.getItem('loggedInUser');
+    }
+
+    function logout() {
+      sessionStorage.removeItem('loggedInUser');
+      showView(loginView);
+    }
+
+    // Inizializzazione
+    window.addEventListener('load', () => {
+      const user = getLoggedInUser();
+      if (user) {
+        usernameLabel.textContent = user;
+        apiKeyStatus.textContent = ERLC_API_KEY ? 'Sì' : 'No';
+        if (!isPasswordChanged()) {
+          showView(changeView);
+        } else {
+          showView(dashboardView);
         }
+      } else {
+        showView(loginView);
+      }
+    });
 
-        let currentUser = null;
+    // Login
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      loginError.classList.add('hidden');
+      const user = loginUsername.value.trim();
+      const pass = loginPassword.value;
 
-        function checkLogin() {
-            const u = document.getElementById('user-in').value;
-            const p = document.getElementById('pass-in').value;
-            const db = JSON.parse(localStorage.getItem('houston_staff'));
+      if (user !== DEFAULT_USERNAME || pass !== getStoredPassword()) {
+        loginError.textContent = 'Credenziali non valide';
+        loginError.classList.remove('hidden');
+        return;
+      }
 
-            const found = db.find(s => s.user === u && s.pass === p);
+      setLoggedIn(user);
 
-            if(found) {
-                currentUser = found;
-                if(found.isFirst) {
-                    navigate('reset-page');
-                } else {
-                    startDashboard();
-                }
-            } else {
-                document.getElementById('login-error').style.display = 'block';
-            }
-        }
+      if (!isPasswordChanged()) {
+        showView(changeView);
+      } else {
+        usernameLabel.textContent = user;
+        apiKeyStatus.textContent = ERLC_API_KEY ? 'Sì' : 'No';
+        showView(dashboardView);
+      }
+    });
 
-        function validatePassword() {
-            const p = document.getElementById('new-pass').value;
-            const checks = {
-                len: p.length >= 8,
-                up: /[A-Z]/.test(p),
-                num: /[0-9]/.test(p)
-            };
+    // Cambio password obbligatorio
+    changeForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      changeError.classList.add('hidden');
 
-            document.getElementById('c-8').className = 'check-item ' + (checks.len ? 'valid' : '');
-            document.getElementById('c-up').className = 'check-item ' + (checks.up ? 'valid' : '');
-            document.getElementById('c-num').className = 'check-item ' + (checks.num ? 'valid' : '');
+      const newPwd = newPasswordInput.value;
+      const confirmPwd = confirmPasswordInput.value;
 
-            const btn = document.getElementById('confirm-pw-btn');
-            if(checks.len && checks.up && checks.num) {
-                btn.style.opacity = '1';
-                btn.style.pointerEvents = 'all';
-            } else {
-                btn.style.opacity = '0.5';
-                btn.style.pointerEvents = 'none';
-            }
-        }
+      if (newPwd.length < 10) {
+        changeError.textContent = 'La password deve avere almeno 10 caratteri';
+        changeError.classList.remove('hidden');
+        return;
+      }
+      if (newPwd !== confirmPwd) {
+        changeError.textContent = 'Le password non coincidono';
+        changeError.classList.remove('hidden');
+        return;
+      }
 
-        function saveNewPassword() {
-            const newP = document.getElementById('new-pass').value;
-            let db = JSON.parse(localStorage.getItem('houston_staff'));
-            
-            let idx = db.findIndex(s => s.user === currentUser.user);
-            db[idx].pass = newP;
-            db[idx].isFirst = false;
-            
-            localStorage.setItem('houston_staff', JSON.stringify(db));
-            currentUser = db[idx];
-            
-            alert("Password aggiornata con successo!");
-            startDashboard();
-        }
+      setNewPassword(newPwd);
 
-        function startDashboard() {
-            document.getElementById('display-user').innerText = currentUser.user;
-            document.getElementById('display-role').innerText = currentUser.role;
-            navigate('panel-page');
-        }
+      const user = getLoggedInUser() || DEFAULT_USERNAME;
+      usernameLabel.textContent = user;
+      apiKeyStatus.textContent = ERLC_API_KEY ? 'Sì' : 'No';
+      showView(dashboardView);
+    });
 
-        function navigate(pageId) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
-        }
-
-        function toggleShift() {
-            const btn = document.getElementById('btn-shift');
-            const tag = document.getElementById('status-tag');
-            
-            if(btn.innerText === "Inizia Turno") {
-                btn.innerText = "Termina Turno";
-                btn.style.background = "var(--danger)";
-                tag.innerText = "In Servizio";
-                tag.className = "status-badge on-duty";
-            } else {
-                btn.innerText = "Inizia Turno";
-                btn.style.background = "var(--accent)";
-                tag.innerText = "Fuori Servizio";
-                tag.className = "status-badge off-duty";
-            }
-        }
-    </script>
+    // Logout
+    logoutBtn.addEventListener('click', () => {
+      logout();
+    });
+  </script>
 </body>
 </html>
