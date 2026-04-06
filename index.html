@@ -1,155 +1,143 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Login Staff</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            margin: 0;
-            padding: 20px;
-        }
-        .hidden {
-            display: none;
-        }
-        #loginView, #appView {
-            max-width: 400px;
-            margin: auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        #loginError {
-            color: red;
-            margin-bottom: 10px;
-            display: none;
-        }
-        input[type="text"], input[type="password"] {
-            width: 100%;
-            padding: 8px;
-            margin: 8px 0;
-            box-sizing: border-box;
-        }
-        button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        /* Stile extra per l'app, se necessario */
-    </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Houston Roleplay - Dashboard</title>
+<style>
+  /* Colori ispirati al logo */
+  :root {
+    --primary-color: #8B4513; /* marrone caldo */
+    --accent-color: #FFD700; /* oro */
+    --background-color: #222; /* sfondo scuro */
+    --text-color: #fff;
+  }
+
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+  }
+
+  /* Navbar */
+  .navbar {
+    display: flex;
+    align-items: center;
+    background-color: var(--primary-color);
+    padding: 10px 20px;
+  }
+  .navbar h1 {
+    margin: 0;
+    font-size: 24px;
+    flex: 1;
+  }
+  .navbar button {
+    padding: 8px 16px;
+    background-color: var(--accent-color);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  /* Main content */
+  .content {
+    padding: 20px;
+  }
+
+  /* Sezione staff */
+  .staff-area {
+    margin-top: 20px;
+    background-color: #333;
+    padding: 15px;
+    border-radius: 8px;
+  }
+
+  /* Pulsanti shift/pausa */
+  .shift-buttons {
+    margin-top: 20px;
+  }
+  .shift-buttons button {
+    padding: 10px 20px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .shift-active {
+    background-color: #28a745;
+    color: white;
+  }
+  .shift-inactive {
+    background-color: #dc3545;
+    color: white;
+  }
+</style>
 </head>
 <body>
 
-<div id="loginView">
-    <h2>Login Staff</h2>
-    <div id="loginError"></div>
-    <input type="text" id="loginUsername" placeholder="Username" />
-    <input type="password" id="loginPassword" placeholder="Password" />
-    <button id="loginBtn">Accedi</button>
+<!-- Navbar -->
+<div class="navbar" id="navbar">
+  <h1>Houston Roleplay Dashboard</h1>
+  <button onclick="logout()">Logout</button>
 </div>
 
-<div id="appView" class="hidden">
-    <h2>Benvenuto</h2>
-    <p>Sei loggato come <span id="userDisplay"></span></p>
-    <!-- Puoi aggiungere qui le funzionalità dell'app -->
-    <button id="logoutBtn">Logout</button>
+<!-- Contenuto principale -->
+<div class="content" id="mainContent">
+  <!-- Area staff -->
+  <div class="staff-area" id="staffArea">
+    <h2>Area Personale Staff</h2>
+    <p>Nome: <span id="staffName">Mario Rossi</span></p>
+    <p>Matricola: <span id="staffMatricola">12345</span></p>
+    <p>Grado: <span id="staffGrade">Sergente</span></p>
+    <p>Ore di servizio: <span id="serviceHours">120</span></p>
+    <h3>Richiami</h3>
+    <ul id="callsList">
+      <li>Richiamo 1</li>
+      <li>Richiamo 2</li>
+    </ul>
+  </div>
+
+  <!-- Pulsanti shift e pausa -->
+  <div class="shift-buttons" id="shiftButtons">
+    <button class="shift-inactive" id="shiftBtn" onclick="toggleShift()">Attiva Shift</button>
+    <button class="shift-inactive" id="pauseBtn" onclick="togglePause()">Pausa</button>
+  </div>
 </div>
 
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-
+<!-- Script -->
 <script>
-    // Configurazione Firebase (sostituisci con i tuoi dati)
-    const firebaseConfig = {
-        apiKey: "API_KEY",
-        authDomain: "YOUR_AUTH_DOMAIN",
-        databaseURL: "YOUR_DATABASE_URL",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_STORAGE_BUCKET",
-        messagingSenderId: "YOUR_SENDER_ID",
-        appId: "YOUR_APP_ID"
-    };
+  let shiftActive = false;
+  let onPause = false;
 
-    // Inizializza Firebase
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+  function logout() {
+    alert("Logout...");
+    // Qui puoi aggiungere la logica di logout
+  }
 
-    // Elementi DOM
-    const loginView = document.getElementById("loginView");
-    const appView = document.getElementById("appView");
-    const loginBtn = document.getElementById("loginBtn");
-    const loginUsername = document.getElementById("loginUsername");
-    const loginPassword = document.getElementById("loginPassword");
-    const loginError = document.getElementById("loginError");
-    const userDisplay = document.getElementById("userDisplay");
-    const logoutBtn = document.getElementById("logoutBtn");
-
-    let currentUser = null;
-
-    // Gestione login
-    loginBtn.addEventListener("click", async () => {
-        const user = loginUsername.value.trim();
-        const pass = loginPassword.value;
-
-        if (!user || !pass) {
-            showLoginError("Inserisci username e password.");
-            return;
-        }
-
-        const ref = db.ref("staff/" + user);
-        const snap = await ref.get();
-
-        if (!snap.exists()) {
-            showLoginError("Utente non trovato.");
-            return;
-        }
-
-        const data = snap.val();
-
-        if (data.password !== pass) {
-            showLoginError("Password errata.");
-            return;
-        }
-
-        // Login riuscito
-        loginError.style.display = "none";
-        currentUser = user;
-        userDisplay.innerText = user;
-
-        // Aggiorna lastLogin e stato duty
-        ref.update({
-            lastLogin: Date.now(),
-            dutyStatus: "offline"
-        });
-
-        // Mostra app
-        loginView.classList.add("hidden");
-        appView.classList.remove("hidden");
-    });
-
-    // Logout
-    logoutBtn.addEventListener("click", () => {
-        currentUser = null;
-        loginUsername.value = "";
-        loginPassword.value = "";
-        loginView.classList.remove("hidden");
-        appView.classList.add("hidden");
-    });
-
-    function showLoginError(message) {
-        loginError.innerText = message;
-        loginError.style.display = "block";
+  function toggleShift() {
+    shiftActive = !shiftActive;
+    const shiftBtn = document.getElementById('shiftBtn');
+    if (shiftActive) {
+      shiftBtn.innerText = "Disattiva Shift";
+      shiftBtn.className = "shift-active";
+    } else {
+      shiftBtn.innerText = "Attiva Shift";
+      shiftBtn.className = "shift-inactive";
     }
+  }
+
+  function togglePause() {
+    onPause = !onPause;
+    const pauseBtn = document.getElementById('pauseBtn');
+    if (onPause) {
+      pauseBtn.innerText = "Riprendi";
+      pauseBtn.className = "shift-active";
+    } else {
+      pauseBtn.innerText = "Pausa";
+      pauseBtn.className = "shift-inactive";
+    }
+  }
 </script>
 
 </body>
