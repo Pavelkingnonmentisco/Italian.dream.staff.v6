@@ -1,1324 +1,442 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>StaffPanel — ERLC</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
-<style>
-:root{
-  --bg:#111214;--bg2:#18191c;--bg3:#1e2023;--bg4:#26282c;
-  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
-  --text:#e8eaed;--muted:#6b7280;--muted2:#9ca3af;
-  --green:#22c55e;--green-dim:rgba(34,197,94,0.15);
-  --blue:#3b82f6;--blue-dim:rgba(59,130,246,0.15);
-  --orange:#f97316;--orange-dim:rgba(249,115,22,0.15);
-  --red:#ef4444;--red-dim:rgba(239,68,68,0.15);
-  --cyan:#06b6d4;
-  --f:'Inter',sans-serif;--fh:'Syne',sans-serif;
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f);font-size:14px;overflow:hidden;}
-::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:2px;}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Houston Roleplay | Staff Panel</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #08080a;
+            --bg-card: #121317;
+            --bg-input: #1c1d22;
+            --accent: #c5a059; /* Oro Houston */
+            --accent-glow: rgba(197, 160, 89, 0.3);
+            --text-main: #ffffff;
+            --text-muted: #88888b;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.08);
+        }
 
-/* ── PAGES ── */
-.page{display:none;height:100vh;width:100vw;}
-.page.active{display:flex;}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
 
-/* ══════════════════════════════
-   LOGIN PAGE
-══════════════════════════════ */
-#page-login{
-  align-items:center;justify-content:center;
-  background:radial-gradient(ellipse at 60% 40%,rgba(34,197,94,0.06) 0%,transparent 60%),var(--bg);
-}
-.login-card{
-  background:var(--bg2);border:1px solid var(--border2);
-  border-radius:18px;padding:40px 40px 36px;width:380px;
-}
-.login-logo{
-  width:44px;height:44px;background:var(--green);border-radius:12px;
-  display:flex;align-items:center;justify-content:center;
-  font-family:var(--fh);font-weight:800;font-size:18px;color:#000;
-  margin:0 auto 20px;
-}
-.login-title{font-family:var(--fh);font-size:22px;font-weight:800;text-align:center;margin-bottom:6px;}
-.login-sub{font-size:13px;color:var(--muted2);text-align:center;margin-bottom:28px;}
-.form-lbl{font-size:12px;color:var(--muted2);margin-bottom:6px;display:block;font-weight:500;}
-.form-inp{
-  width:100%;padding:11px 13px;background:var(--bg3);
-  border:1px solid var(--border2);border-radius:9px;
-  color:var(--text);font-family:var(--f);font-size:14px;
-  outline:none;transition:border-color .15s;margin-bottom:14px;
-}
-.form-inp:focus{border-color:var(--green);}
-.form-inp::placeholder{color:var(--muted);}
-.btn-login{
-  width:100%;padding:12px;border-radius:9px;border:none;
-  background:var(--green);color:#000;font-family:var(--f);
-  font-size:14px;font-weight:700;cursor:pointer;transition:opacity .15s;margin-top:4px;
-}
-.btn-login:hover{opacity:.88;}
-.login-err{background:var(--red-dim);border:1px solid rgba(239,68,68,.3);border-radius:8px;padding:9px 12px;font-size:13px;color:#fca5a5;margin-bottom:12px;display:none;}
-.login-manager{margin-top:20px;text-align:center;font-size:12px;color:var(--muted);}
-.login-manager a{color:var(--cyan);text-decoration:none;cursor:pointer;}
-.login-manager a:hover{text-decoration:underline;}
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow: hidden; /* Evita scroll fuori dai div */
+            height: 100vh;
+        }
 
-/* ══════════════════════════════
-   CREATE PASSWORD PAGE
-══════════════════════════════ */
-#page-createpw{
-  align-items:center;justify-content:center;
-  background:radial-gradient(ellipse at 40% 60%,rgba(6,182,212,0.08) 0%,transparent 60%),
-             radial-gradient(ellipse at 70% 30%,rgba(59,130,246,0.06) 0%,transparent 50%),
-             #0f1117;
-}
-.cpw-card{
-  background:rgba(255,255,255,0.04);
-  border:1px solid rgba(6,182,212,0.25);
-  border-radius:22px;padding:40px;width:420px;
-  backdrop-filter:blur(12px);
-}
-.cpw-title{font-family:var(--fh);font-size:26px;font-weight:800;text-align:center;margin-bottom:6px;}
-.cpw-sub{font-size:13px;color:var(--muted2);text-align:center;margin-bottom:28px;}
-.pw-field{
-  display:flex;align-items:center;gap:10px;
-  background:rgba(0,0,0,0.4);border:2px solid var(--cyan);
-  border-radius:14px;padding:14px 16px;margin-bottom:16px;
-}
-.pw-icon{font-size:20px;flex-shrink:0;}
-.pw-inp{
-  flex:1;background:transparent;border:none;outline:none;
-  color:var(--text);font-family:var(--f);font-size:16px;font-weight:500;
-}
-.pw-inp::placeholder{color:var(--muted);font-size:14px;}
-.pw-toggle{cursor:pointer;color:var(--muted2);font-size:18px;flex-shrink:0;transition:color .15s;}
-.pw-toggle:hover{color:var(--cyan);}
-/* strength bar */
-.strength-bars{display:flex;gap:6px;margin-bottom:16px;}
-.sbar{height:4px;flex:1;border-radius:2px;background:var(--bg4);transition:background .3s;}
-.sbar.active{background:var(--cyan);}
-/* rules */
-.pw-rules{margin-bottom:20px;}
-.pw-rule{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted2);margin-bottom:7px;transition:color .2s;}
-.pw-rule.ok{color:var(--cyan);}
-.rule-icon{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--muted);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;transition:all .2s;}
-.pw-rule.ok .rule-icon{border-color:var(--cyan);background:rgba(6,182,212,0.15);color:var(--cyan);}
-.btn-cpw{
-  width:100%;padding:13px;border-radius:99px;border:none;
-  background:var(--cyan);color:#000;font-family:var(--f);
-  font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;
-  opacity:.4;pointer-events:none;
-}
-.btn-cpw.ready{opacity:1;pointer-events:all;}
-.btn-cpw.ready:hover{opacity:.88;}
+        /* --- ANIMAZIONI --- */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-/* ══════════════════════════════
-   STAFF PANEL (main)
-══════════════════════════════ */
-#page-panel{flex-direction:column;}
+        /* --- SCHERMATE (Pagine) --- */
+        .page {
+            display: none;
+            height: 100vh;
+            width: 100vw;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            animation: fadeIn 0.5s ease forwards;
+        }
 
-/* NAV BAR (floating pill style) */
-.navbar-wrap{
-  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
-  z-index:100;
-}
-.navbar{
-  background:rgba(30,32,35,0.92);backdrop-filter:blur(20px);
-  border:1px solid rgba(255,255,255,0.1);border-radius:24px;
-  display:flex;align-items:center;padding:6px;gap:3px;
-}
-.nav-link{
-  display:flex;align-items:center;justify-content:center;gap:7px;
-  width:48px;height:48px;border-radius:18px;
-  color:var(--muted2);cursor:pointer;transition:all 0.35s cubic-bezier(0.175,0.885,0.32,1.275);
-  font-size:12px;font-weight:600;overflow:hidden;white-space:nowrap;
-  position:relative;
-}
-.nav-link:hover{width:130px;background:var(--bg4);color:var(--text);}
-.nav-link.active{background:#0f172a;color:#fff;width:130px;}
-.nav-link svg{width:18px;height:18px;flex-shrink:0;}
-.nav-link span{opacity:0;transition:opacity .2s .05s;pointer-events:none;}
-.nav-link:hover span,.nav-link.active span{opacity:1;}
-.nav-sep{width:1px;height:32px;background:rgba(255,255,255,0.1);margin:0 2px;}
-.nav-logout{
-  display:flex;align-items:center;justify-content:center;
-  width:48px;height:48px;border-radius:18px;
-  color:var(--muted2);cursor:pointer;
-  transition:all .2s;
-}
-.nav-logout:hover{color:var(--red);background:var(--red-dim);}
+        .page.active { display: flex; }
 
-/* PANEL CONTENT */
-.panel-content{
-  display:grid;grid-template-columns:320px 1fr 340px;
-  height:100vh;overflow:hidden;
-}
-.panel-col{height:100vh;overflow-y:auto;border-right:1px solid var(--border);}
-.panel-col:last-child{border-right:none;}
+        /* --- CARD STYLES --- */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 32px;
+            padding: 50px 40px;
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+        }
 
-/* LEFT COL */
-.left-col{padding:24px 20px;}
-.user-card{
-  display:flex;align-items:center;gap:12px;margin-bottom:6px;
-}
-.user-avatar{
-  width:44px;height:44px;border-radius:50%;
-  background:linear-gradient(135deg,var(--green),var(--cyan));
-  display:flex;align-items:center;justify-content:center;
-  font-family:var(--fh);font-weight:800;font-size:16px;color:#000;
-  flex-shrink:0;
-}
-.user-name{font-family:var(--fh);font-size:16px;font-weight:700;}
-.user-role{font-size:11px;color:var(--muted2);margin-top:1px;}
-.user-dots{margin-left:auto;cursor:pointer;color:var(--muted);padding:4px;}
-.status-pill{
-  display:inline-flex;align-items:center;gap:6px;
-  padding:4px 12px;border-radius:99px;
-  font-size:11px;font-weight:600;margin-bottom:20px;cursor:pointer;
-}
-.status-pill.online{background:var(--green-dim);color:var(--green);}
-.status-pill.offline{background:var(--red-dim);color:var(--red);}
-.status-dot{width:7px;height:7px;border-radius:50%;background:currentColor;}
-.shift-btn{
-  width:100%;padding:13px;border-radius:11px;border:none;
-  font-family:var(--f);font-size:14px;font-weight:700;cursor:pointer;
-  transition:all .2s;margin-bottom:24px;
-}
-.shift-btn.start{background:var(--green);color:#000;}
-.shift-btn.end{background:var(--red);color:#fff;}
-.shift-btn:hover{opacity:.88;}
+        .logo-main {
+            width: 140px;
+            height: 140px;
+            margin-bottom: 25px;
+            border-radius: 50%;
+            border: 3px solid var(--accent);
+            padding: 5px;
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
 
-.toolbox-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
-.toolbox-title{font-size:15px;font-weight:700;}
-.toolbox-gear{cursor:pointer;color:var(--muted);transition:color .15s;}
-.toolbox-gear:hover{color:var(--text);}
-.tool-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.tool-btn{
-  padding:11px 8px;border-radius:10px;border:none;
-  font-family:var(--f);font-size:13px;font-weight:600;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;gap:7px;
-  transition:opacity .15s;
-}
-.tool-btn:hover{opacity:.85;}
-.tool-btn.green{background:var(--green);color:#000;}
-.tool-btn.blue{background:var(--blue);color:#fff;}
-.tool-btn.orange{background:var(--orange);color:#fff;grid-column:1/-1;}
+        h1, h2 {
+            font-family: 'Syne', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
 
-/* CENTER COL */
-.center-col{padding:24px;}
-.col-title{font-family:var(--fh);font-size:18px;font-weight:800;margin-bottom:20px;}
-.field-lbl{font-size:12px;color:var(--muted2);font-weight:500;margin-bottom:7px;display:flex;align-items:center;gap:4px;}
-.req{color:var(--red);font-size:14px;}
-.big-inp{
-  width:100%;padding:12px 14px;background:var(--bg3);
-  border:1px solid var(--border2);border-radius:10px;
-  color:var(--text);font-family:var(--f);font-size:14px;outline:none;
-  transition:border-color .15s;margin-bottom:16px;
-}
-.big-inp:focus{border-color:var(--green);}
-.big-inp::placeholder{color:var(--muted);}
-.action-select{
-  display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;
-}
-.action-opt{
-  padding:10px 8px;border-radius:9px;border:1.5px solid var(--border2);
-  text-align:center;cursor:pointer;font-size:13px;font-weight:600;
-  transition:all .15s;color:var(--muted2);
-}
-.action-opt:hover{border-color:var(--border2);background:var(--bg3);color:var(--text);}
-.action-opt.sel-warn{border-color:var(--orange);background:var(--orange-dim);color:var(--orange);}
-.action-opt.sel-kick{border-color:var(--blue);background:var(--blue-dim);color:var(--blue);}
-.action-opt.sel-ban{border-color:var(--red);background:var(--red-dim);color:var(--red);}
-.reason-sel{
-  width:100%;padding:11px 13px;background:var(--bg3);
-  border:1px solid var(--border2);border-radius:10px;
-  color:var(--text);font-family:var(--f);font-size:14px;outline:none;
-  margin-bottom:14px;cursor:pointer;
-}
-.submit-btn{
-  width:100%;padding:13px;border-radius:10px;border:none;
-  font-family:var(--f);font-size:14px;font-weight:700;cursor:pointer;
-  transition:all .15s;
-}
-.submit-btn.warn{background:var(--orange);color:#fff;}
-.submit-btn.kick{background:var(--blue);color:#fff;}
-.submit-btn.ban{background:var(--red);color:#fff;}
-.submit-btn.default{background:var(--bg4);color:var(--muted2);cursor:not-allowed;}
-.submit-btn:not(.default):hover{opacity:.87;}
-.dur-row{display:none;margin-bottom:14px;}
-.dur-row.show{display:block;}
+        p.subtitle {
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
 
-/* ROBLOX USER SEARCH */
-.rblx-search-wrap{position:relative;margin-bottom:10px;}
-.rblx-search-wrap svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;}
-.rblx-inp{
-  width:100%;padding:11px 12px 11px 34px;
-  background:var(--bg3);border:1px solid var(--border2);border-radius:10px;
-  color:var(--text);font-family:var(--f);font-size:14px;outline:none;
-  transition:border-color .15s;
-}
-.rblx-inp:focus{border-color:var(--green);}
-.rblx-inp::placeholder{color:var(--muted);}
-.rblx-results{
-  background:var(--bg3);border:1px solid var(--border2);border-radius:10px;
-  margin-bottom:14px;overflow:hidden;display:none;
-}
-.rblx-results.show{display:block;}
-.rblx-result-item{
-  display:flex;align-items:center;gap:12px;
-  padding:10px 13px;cursor:pointer;transition:background .12s;
-  border-bottom:1px solid var(--border);
-}
-.rblx-result-item:last-child{border-bottom:none;}
-.rblx-result-item:hover{background:var(--bg4);}
-.rblx-result-item.selected{background:var(--green-dim);border-left:3px solid var(--green);}
-.rblx-avatar{
-  width:40px;height:40px;border-radius:10px;
-  background:var(--bg4);flex-shrink:0;overflow:hidden;
-  display:flex;align-items:center;justify-content:center;
-}
-.rblx-avatar img{width:100%;height:100%;object-fit:cover;border-radius:10px;}
-.rblx-avatar-placeholder{
-  width:40px;height:40px;border-radius:10px;
-  background:var(--bg4);display:flex;align-items:center;justify-content:center;
-  font-family:var(--fh);font-weight:700;font-size:14px;color:var(--muted2);flex-shrink:0;
-}
-.rblx-info{flex:1;}
-.rblx-name{font-weight:600;font-size:13px;color:var(--text);}
-.rblx-dispname{font-size:11px;color:var(--muted2);margin-top:1px;}
-.rblx-id{font-size:10px;color:var(--muted);margin-top:1px;}
-.rblx-tick{color:var(--green);font-size:16px;}
-.rblx-loading{padding:14px;text-align:center;color:var(--muted);font-size:13px;}
-.rblx-selected-card{
-  display:none;align-items:center;gap:12px;
-  background:var(--green-dim);border:1px solid rgba(34,197,94,0.3);
-  border-radius:10px;padding:12px 14px;margin-bottom:14px;
-}
-.rblx-selected-card.show{display:flex;}
-.rblx-sel-info{flex:1;}
-.rblx-sel-name{font-weight:700;font-size:14px;}
-.rblx-sel-id{font-size:11px;color:var(--muted2);margin-top:2px;}
-.rblx-clear{cursor:pointer;color:var(--muted2);font-size:18px;padding:2px 6px;border-radius:5px;transition:all .14s;}
-.rblx-clear:hover{color:var(--red);background:var(--red-dim);}
+        /* --- INPUTS & BUTTONS --- */
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
 
-/* TOOLBOX MODALS */
-.tbox-overlay{
-  position:fixed;inset:0;background:rgba(0,0,0,.7);
-  backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;z-index:150;
-}
-.tbox-overlay.open{display:flex;}
-.tbox-modal{
-  background:var(--bg2);border:1px solid var(--border2);border-radius:16px;
-  padding:28px;width:480px;max-width:95vw;max-height:85vh;overflow-y:auto;
-  animation:up .2s ease;
-}
-.tbox-modal h2{font-family:var(--fh);font-size:18px;font-weight:800;margin-bottom:4px;}
-.tbox-modal p{font-size:13px;color:var(--muted2);margin-bottom:20px;}
-.tbox-section{margin-bottom:18px;}
-.tbox-lbl{font-size:11px;color:var(--muted2);font-weight:500;margin-bottom:6px;display:block;text-transform:uppercase;letter-spacing:.04em;}
-.tbox-inp{
-  width:100%;padding:10px 12px;background:var(--bg3);
-  border:1px solid var(--border2);border-radius:9px;
-  color:var(--text);font-family:var(--f);font-size:13px;outline:none;margin-bottom:10px;
-}
-.tbox-inp:focus{border-color:var(--green);}
-.tbox-sel{
-  width:100%;padding:10px 12px;background:var(--bg3);
-  border:1px solid var(--border2);border-radius:9px;
-  color:var(--text);font-family:var(--f);font-size:13px;outline:none;margin-bottom:10px;cursor:pointer;
-}
-.tbox-btn-row{display:flex;gap:9px;margin-top:4px;}
-.tbox-btn-cancel{
-  flex:1;padding:10px;border-radius:8px;border:1px solid var(--border2);
-  background:transparent;color:var(--muted2);font-family:var(--f);font-size:13px;cursor:pointer;
-}
-.tbox-btn-cancel:hover{background:var(--bg3);}
-.tbox-btn-submit{
-  flex:1;padding:10px;border-radius:8px;border:none;
-  font-family:var(--f);font-size:13px;font-weight:700;cursor:pointer;
-}
-.tbox-btn-submit:hover{opacity:.88;}
-/* LOA list */
-.loa-list{margin-top:16px;}
-.loa-item{
-  display:flex;align-items:center;gap:10px;
-  padding:10px 12px;background:var(--bg3);border:1px solid var(--border);
-  border-radius:8px;margin-bottom:6px;font-size:13px;
-}
-.loa-item .loa-name{flex:1;font-weight:600;}
-.loa-item .loa-dates{font-size:11px;color:var(--muted2);}
-.loa-item .loa-status{font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;background:rgba(245,158,11,.15);color:#f59e0b;}
-/* Session list */
-.sess-card{
-  padding:12px 14px;background:var(--bg3);border:1px solid var(--border);
-  border-radius:8px;margin-bottom:8px;
-}
-.sess-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;}
-.sess-name{font-weight:600;font-size:13px;}
-.sess-status{font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;}
-.ss-open{background:var(--green-dim);color:var(--green);}
-.ss-closed{background:var(--red-dim);color:var(--red);}
-.sess-info{font-size:12px;color:var(--muted2);}
-/* Actions grid */
-.actions-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
-.action-tile{
-  padding:14px 10px;border-radius:10px;border:1px solid var(--border2);
-  text-align:center;cursor:pointer;transition:all .15s;
-}
-.action-tile:hover{border-color:var(--border2);background:var(--bg3);}
-.action-tile .tile-icon{font-size:22px;margin-bottom:6px;}
-.action-tile .tile-lbl{font-size:12px;font-weight:600;color:var(--text);}
-.action-tile .tile-sub{font-size:10px;color:var(--muted);margin-top:2px;}
+        label {
+            display: block;
+            font-size: 12px;
+            color: var(--accent);
+            font-weight: 800;
+            margin-bottom: 8px;
+            margin-left: 15px;
+            text-transform: uppercase;
+        }
 
-/* RIGHT COL */
-.right-col{padding:24px;}
-.log-search-wrap{position:relative;margin-bottom:16px;display:flex;gap:8px;}
-.log-search{
-  flex:1;padding:9px 13px 9px 34px;background:var(--bg3);
-  border:1px solid var(--border);border-radius:9px;
-  color:var(--text);font-family:var(--f);font-size:13px;outline:none;
-  transition:border-color .15s;
-}
-.log-search:focus{border-color:var(--green);}
-.log-search::placeholder{color:var(--muted);}
-.log-search-ico{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted);}
-.log-filter-btn{
-  width:36px;height:36px;border-radius:9px;border:1px solid var(--border);
-  background:var(--bg3);color:var(--muted2);cursor:pointer;
-  display:flex;align-items:center;justify-content:center;transition:all .15s;
-}
-.log-filter-btn:hover{background:var(--bg4);color:var(--text);}
-.log-item{
-  padding:12px 14px;background:var(--bg2);border:1px solid var(--border);
-  border-radius:10px;margin-bottom:8px;transition:border-color .15s;
-}
-.log-item:hover{border-color:var(--border2);}
-.log-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;}
-.log-player{font-weight:600;font-size:13px;}
-.log-time{font-size:11px;color:var(--muted);}
-.log-action{font-size:11px;font-weight:700;padding:2px 8px;border-radius:5px;}
-.la-warn{background:var(--orange-dim);color:var(--orange);}
-.la-kick{background:var(--blue-dim);color:var(--blue);}
-.la-ban{background:var(--red-dim);color:var(--red);}
-.log-reason{font-size:12px;color:var(--muted2);margin-top:2px;}
-.log-by{font-size:11px;color:var(--muted);margin-top:3px;}
-.empty-logs{padding:40px 20px;text-align:center;color:var(--muted);font-size:13px;}
+        .form-control {
+            width: 100%;
+            background: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 16px 20px;
+            color: white;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
 
-/* ══════════════════════════════
-   MANAGER PAGE
-══════════════════════════════ */
-#page-manager{
-  align-items:center;justify-content:center;
-  background:var(--bg);
-  flex-direction:column;gap:0;
-}
-.mgr-wrap{display:flex;height:100vh;width:100vw;}
-.mgr-sidebar{
-  width:220px;flex-shrink:0;
-  background:var(--bg2);border-right:1px solid var(--border);
-  padding:24px 16px;display:flex;flex-direction:column;gap:4px;
-}
-.mgr-logo{
-  display:flex;align-items:center;gap:10px;
-  padding:0 6px 20px;border-bottom:1px solid var(--border);margin-bottom:14px;
-}
-.mgr-logo-ico{
-  width:32px;height:32px;background:var(--red);border-radius:8px;
-  display:flex;align-items:center;justify-content:center;
-  font-family:var(--fh);font-weight:800;font-size:13px;color:#fff;
-}
-.mgr-logo-txt{font-family:var(--fh);font-size:14px;font-weight:700;}
-.mgr-ni{
-  display:flex;align-items:center;gap:8px;
-  padding:8px 10px;border-radius:8px;color:var(--muted2);
-  cursor:pointer;font-size:13px;transition:all .14s;
-}
-.mgr-ni:hover{background:var(--bg3);color:var(--text);}
-.mgr-ni.active{background:var(--red-dim);color:var(--red);}
-.mgr-content{flex:1;overflow-y:auto;padding:28px;}
-.mgr-title{font-family:var(--fh);font-size:20px;font-weight:800;margin-bottom:20px;}
-/* staff table */
-.staff-table{width:100%;border-collapse:collapse;}
-.staff-table th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding:8px 12px;border-bottom:1px solid var(--border);}
-.staff-table td{padding:12px 12px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:middle;}
-.staff-table tr:hover td{background:var(--bg3);}
-.role-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:5px;}
-.rb-admin{background:var(--red-dim);color:var(--red);}
-.rb-mod{background:var(--blue-dim);color:var(--blue);}
-.rb-staff{background:var(--orange-dim);color:var(--orange);}
-.status-tag{font-size:10px;font-weight:600;padding:3px 8px;border-radius:5px;}
-.st-active{background:var(--green-dim);color:var(--green);}
-.st-pending{background:rgba(245,158,11,.15);color:#f59e0b;}
-.tbl-btn{
-  padding:5px 10px;border-radius:6px;border:1px solid;
-  font-size:11px;font-weight:600;cursor:pointer;font-family:var(--f);
-  transition:all .14s;background:transparent;
-}
-.tbl-btn-del{border-color:rgba(239,68,68,.3);color:var(--red);}
-.tbl-btn-del:hover{background:var(--red-dim);}
-.tbl-btn-edit{border-color:var(--border2);color:var(--muted2);margin-right:5px;}
-.tbl-btn-edit:hover{background:var(--bg4);color:var(--text);}
-/* add staff */
-.add-staff-card{
-  background:var(--bg2);border:1px solid var(--border);border-radius:12px;
-  padding:22px;margin-bottom:20px;
-}
-.add-title{font-size:15px;font-weight:700;margin-bottom:14px;}
-.add-grid{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:end;}
-.add-label{font-size:11px;color:var(--muted2);margin-bottom:5px;display:block;}
-.add-inp,.add-sel{
-  width:100%;padding:9px 11px;background:var(--bg3);
-  border:1px solid var(--border2);border-radius:8px;
-  color:var(--text);font-family:var(--f);font-size:13px;outline:none;
-}
-.add-inp:focus,.add-sel:focus{border-color:var(--green);}
-.btn-add{
-  padding:9px 18px;border-radius:8px;border:none;
-  background:var(--green);color:#000;font-family:var(--f);
-  font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;
-}
-.btn-add:hover{opacity:.88;}
-/* config card */
-.config-card2{
-  background:var(--bg2);border:1px solid var(--border);border-radius:12px;
-  padding:22px;margin-bottom:16px;max-width:540px;
-}
-.config-title2{font-size:15px;font-weight:700;margin-bottom:14px;}
-.btn-save2{
-  padding:9px 18px;border-radius:8px;border:none;
-  background:var(--green);color:#000;font-family:var(--f);
-  font-size:13px;font-weight:700;cursor:pointer;margin-top:8px;
-}
-.btn-save2:hover{opacity:.88;}
-.warn-note{background:var(--red-dim);border:1px solid rgba(239,68,68,.25);border-radius:8px;padding:10px 13px;font-size:12px;color:#fca5a5;line-height:1.6;margin-bottom:16px;max-width:540px;}
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: #25262c;
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
 
-/* TOAST */
-.tstack{position:fixed;bottom:80px;right:20px;display:flex;flex-direction:column;gap:7px;z-index:999;}
-.toast{
-  background:var(--bg3);border:1px solid var(--border2);border-radius:10px;
-  padding:11px 15px;font-size:13px;display:flex;align-items:center;gap:9px;
-  min-width:220px;animation:tin .25s ease;
-}
-@keyframes tin{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:translateX(0)}}
-.tdot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
-.toast.s .tdot{background:var(--green)}.toast.e .tdot{background:var(--red)}.toast.i .tdot{background:var(--cyan)}
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 16px;
+            border: none;
+            background: var(--accent);
+            color: #000;
+            font-weight: 800;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            margin-top: 10px;
+        }
 
-/* MODAL OVERLAY */
-.m-overlay{
-  position:fixed;inset:0;background:rgba(0,0,0,.65);
-  backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:200;
-}
-.m-overlay.open{display:flex;}
-.m-box{
-  background:var(--bg2);border:1px solid var(--border2);border-radius:14px;
-  padding:26px;width:400px;max-width:95vw;animation:up .2s ease;
-}
-@keyframes up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.m-title{font-family:var(--fh);font-size:18px;font-weight:800;margin-bottom:6px;}
-.m-sub{font-size:13px;color:var(--muted2);margin-bottom:20px;}
-.m-acts{display:flex;gap:9px;margin-top:16px;}
-.btn-m-cancel{flex:1;padding:10px;border-radius:8px;border:1px solid var(--border2);background:transparent;color:var(--muted2);font-family:var(--f);font-size:13px;cursor:pointer;}
-.btn-m-cancel:hover{background:var(--bg3);color:var(--text);}
-.btn-m-ok{flex:1;padding:10px;border-radius:8px;border:none;font-family:var(--f);font-size:13px;font-weight:700;cursor:pointer;}
-</style>
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px var(--accent-glow);
+            filter: brightness(1.1);
+        }
+
+        /* --- REQUISITI PASSWORD --- */
+        .pw-check {
+            text-align: left;
+            margin: 15px 0;
+            padding: 15px;
+            background: var(--glass);
+            border-radius: 12px;
+        }
+
+        .check-item {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .check-item.valid { color: var(--success); }
+        .check-item.valid::before { content: '✓'; font-weight: bold; }
+
+        /* --- DASHBOARD LAYOUT --- */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 280px 1fr 350px;
+            width: 100%;
+            height: 100vh;
+        }
+
+        .sidebar, .right-panel {
+            background: var(--bg-card);
+            border-right: 1px solid var(--border);
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .right-panel { border-right: none; border-left: 1px solid var(--border); }
+
+        .main-content {
+            padding: 40px;
+            overflow-y: auto;
+            background: radial-gradient(circle at top right, rgba(197, 160, 89, 0.05), transparent);
+        }
+
+        /* NAVBAR FLUTTUANTE (Vetro) */
+        .floating-nav {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(18, 19, 23, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            padding: 10px;
+            border-radius: 25px;
+            display: flex;
+            gap: 10px;
+            z-index: 9999;
+        }
+
+        .nav-item {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 18px;
+            cursor: pointer;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            color: var(--text-muted);
+            text-decoration: none;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .nav-item span { display: none; margin-left: 10px; font-weight: 700; font-size: 14px; }
+
+        .nav-item:hover, .nav-item.active {
+            width: 150px;
+            background: var(--accent);
+            color: #000;
+        }
+
+        .nav-item:hover span, .nav-item.active span { display: block; }
+
+        /* BADGES */
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+        .off-duty { background: var(--danger); color: white; }
+        .on-duty { background: var(--success); color: white; }
+
+    </style>
 </head>
 <body>
 
-<!-- ═══════════════ LOGIN ═══════════════ -->
-<div class="page active" id="page-login">
-  <div class="login-card">
-    <div class="login-logo">SP</div>
-    <div class="login-title">Staff Panel</div>
-    <div class="login-sub">Accedi con le credenziali fornite dal Manager</div>
-    <div class="login-err" id="login-err">Username o password non corretti.</div>
-    <label class="form-lbl">Username</label>
-    <input class="form-inp" type="text" id="l-user" placeholder="Il tuo username…" autocomplete="off"/>
-    <label class="form-lbl">Password</label>
-    <input class="form-inp" type="password" id="l-pass" placeholder="Password…"/>
-    <button class="btn-login" onclick="doLogin()">Accedi</button>
-    <div class="login-manager">
-      Sei il manager? <a onclick="showManagerLogin()">Accedi al pannello manager →</a>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════ CREATE PASSWORD ═══════════════ -->
-<div class="page" id="page-createpw">
-  <div class="cpw-card">
-    <div class="cpw-title">Crea Password 🔐</div>
-    <div class="cpw-sub">Primo accesso — imposta la tua password personale</div>
-    <div class="pw-field">
-      <span class="pw-icon">🔒</span>
-      <input class="pw-inp" type="password" id="cpw-inp" placeholder="Inserisci la tua nuova password…" oninput="checkPw()"/>
-      <span class="pw-toggle" id="cpw-eye" onclick="toggleEye()">👁</span>
-    </div>
-    <div class="strength-bars" id="sbars">
-      <div class="sbar" id="sb0"></div>
-      <div class="sbar" id="sb1"></div>
-      <div class="sbar" id="sb2"></div>
-      <div class="sbar" id="sb3"></div>
-    </div>
-    <div class="pw-rules" id="pw-rules">
-      <div class="pw-rule" id="r-len"><span class="rule-icon">✓</span>Almeno 8 caratteri</div>
-      <div class="pw-rule" id="r-upper"><span class="rule-icon">✓</span>Una lettera maiuscola</div>
-      <div class="pw-rule" id="r-num"><span class="rule-icon">✓</span>Un numero</div>
-      <div class="pw-rule" id="r-spec"><span class="rule-icon">✓</span>Un carattere speciale</div>
-    </div>
-    <button class="btn-cpw" id="btn-cpw" onclick="savePw()">Imposta password</button>
-  </div>
-</div>
-
-<!-- ═══════════════ MAIN PANEL ═══════════════ -->
-<div class="page" id="page-panel">
-  <div class="panel-content">
-
-    <!-- LEFT: user + toolbox -->
-    <div class="panel-col left-col">
-      <div class="user-card">
-        <div class="user-avatar" id="p-avatar">?</div>
-        <div>
-          <div class="user-name" id="p-name">—</div>
-          <div class="user-role" id="p-role">—</div>
-        </div>
-        <div class="user-dots">⋮</div>
-      </div>
-      <div style="margin-bottom:16px;">
-        <span class="status-pill offline" id="shift-status" onclick="toggleShift()">
-          <span class="status-dot"></span>
-          <span id="shift-label">OFFLINE</span>
-        </span>
-      </div>
-      <button class="shift-btn start" id="shift-btn" onclick="toggleShift()">Inizia Turno</button>
-
-      <div class="toolbox-header">
-        <span class="toolbox-title">Toolbox</span>
-        <span class="toolbox-gear">⚙</span>
-      </div>
-      <div class="tool-grid">
-        <button class="tool-btn green" onclick="openTbox('loa')">
-          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8" cy="6" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
-          Manage LOA
-        </button>
-        <button class="tool-btn blue" onclick="openTbox('actions')">
-          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8h10M8 3l5 5-5 5"/></svg>
-          Actions
-        </button>
-        <button class="tool-btn orange" onclick="openTbox('session')">
-          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="12" height="10" rx="2"/><path d="M5 7h6M5 10h4"/></svg>
-          Manage Session
-        </button>
-      </div>
-    </div>
-
-    <!-- CENTER: create log -->
-    <div class="panel-col center-col">
-      <div class="col-title">Crea Nuovo Log</div>
-
-      <label class="field-lbl">Utente Roblox <span class="req">*</span></label>
-      <div class="rblx-search-wrap">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg>
-        <input class="rblx-inp" type="text" id="rblx-inp" placeholder="Cerca username Roblox… (⌘I / Ctrl+I)" oninput="searchRoblox(this.value)" autocomplete="off"/>
-      </div>
-      <div class="rblx-results" id="rblx-results"></div>
-      <div class="rblx-selected-card" id="rblx-selected">
-        <div class="rblx-avatar" id="rblx-sel-av"></div>
-        <div class="rblx-sel-info">
-          <div class="rblx-sel-name" id="rblx-sel-name">—</div>
-          <div class="rblx-sel-id" id="rblx-sel-id"></div>
-        </div>
-        <span class="rblx-clear" onclick="clearRobloxSel()" title="Rimuovi selezione">✕</span>
-      </div>
-
-      <label class="field-lbl">Azione <span class="req">*</span></label>
-      <div class="action-select">
-        <div class="action-opt" id="opt-warn" onclick="selAction('warn')">⚠ Avvisa</div>
-        <div class="action-opt" id="opt-kick" onclick="selAction('kick')">👢 Espelli</div>
-        <div class="action-opt" id="opt-ban"  onclick="selAction('ban')">🔨 Banna</div>
-      </div>
-
-      <div class="dur-row" id="dur-row">
-        <label class="field-lbl">Durata ban</label>
-        <select class="reason-sel" id="log-dur">
-          <option value="1">1 giorno</option>
-          <option value="3">3 giorni</option>
-          <option value="7">7 giorni</option>
-          <option value="30">30 giorni</option>
-          <option value="0">Permanente</option>
-        </select>
-      </div>
-
-      <label class="field-lbl">Motivo <span class="req">*</span></label>
-      <select class="reason-sel" id="log-reason">
-        <option value="">Seleziona motivo…</option>
-        <option>Linguaggio inappropriato</option>
-        <option>Spam nella chat</option>
-        <option>Comportamento scorretto</option>
-        <option>Cheating / Exploit</option>
-        <option>Molestia ad altri giocatori</option>
-        <option>VDM (Vehicle Deathmatch)</option>
-        <option>RDM (Random Deathmatch)</option>
-        <option>FailRP</option>
-        <option>Metagaming</option>
-        <option>Altro</option>
-      </select>
-
-      <label class="field-lbl" style="margin-top:2px;">Note aggiuntive</label>
-      <input class="big-inp" type="text" id="log-note" placeholder="Dettagli opzionali…"/>
-
-      <button class="submit-btn default" id="submit-btn" onclick="submitLog()">Invia Log</button>
-    </div>
-
-    <!-- RIGHT: punishment logs -->
-    <div class="panel-col right-col">
-      <div class="col-title">Punishment Logs</div>
-      <div class="log-search-wrap">
-        <svg class="log-search-ico" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg>
-        <input class="log-search" type="text" placeholder="Cerca per username (⌘F/Ctrl+F)" oninput="filterLogs(this.value)"/>
-        <button class="log-filter-btn">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4h12M4 8h8M6 12h4"/></svg>
-        </button>
-      </div>
-      <div id="logs-container">
-        <div class="empty-logs">Nessun log ancora.<br><span style="font-size:11px;color:var(--muted)">Crea il primo log dal pannello centrale.</span></div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- NAVBAR floating pill -->
-  <div class="navbar-wrap">
-    <div class="navbar">
-      <div class="nav-link active" id="nl-home" onclick="navGo('home')">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="5" height="5" rx="1.5"/><rect x="9" y="2" width="5" height="5" rx="1.5"/><rect x="2" y="9" width="5" height="5" rx="1.5"/><rect x="9" y="9" width="5" height="5" rx="1.5"/></svg>
-        <span>Home</span>
-      </div>
-      <div class="nav-link" id="nl-logs" onclick="navGo('logs')">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M5 6h6M5 9h4"/></svg>
-        <span>I miei Log</span>
-      </div>
-      <div class="nav-link" id="nl-create" onclick="navGo('create')">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="6"/><path d="M8 5v6M5 8h6"/></svg>
-        <span>Crea Log</span>
-      </div>
-      <div class="nav-link" id="nl-settings" onclick="navGo('settings')">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="2.5"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3 3l1.4 1.4M11.6 11.6L13 13M3 13l1.4-1.4M11.6 4.4L13 3"/></svg>
-        <span>Impostazioni</span>
-      </div>
-      <div class="nav-sep"></div>
-      <div class="nav-logout" title="Logout" onclick="doLogout()">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 8H2M5 5l-3 3 3 3"/><path d="M12 3v10"/></svg>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════ MANAGER PAGE ═══════════════ -->
-<div class="page" id="page-manager">
-  <div class="mgr-wrap">
-    <div class="mgr-sidebar">
-      <div class="mgr-logo">
-        <div class="mgr-logo-ico">M</div>
-        <div class="mgr-logo-txt">Manager Panel</div>
-      </div>
-      <div class="mgr-ni active" onclick="mgrGo('staff')">
-        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="5" r="2.5"/><path d="M1 13c0-2.8 2.2-5 5-5h2c2.8 0 5 2.2 5 5"/><circle cx="11.5" cy="4.5" r="2"/></svg>
-        Staff
-      </div>
-      <div class="mgr-ni" onclick="mgrGo('config')">
-        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="2.5"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2"/></svg>
-        Configurazione
-      </div>
-      <div style="flex:1"></div>
-      <div class="mgr-ni" onclick="mgrLogout()" style="color:var(--red)">
-        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 8H2M5 5l-3 3 3 3M12 3v10"/></svg>
-        Esci
-      </div>
-    </div>
-
-    <div class="mgr-content">
-      <!-- STAFF SECTION -->
-      <div id="mgr-staff">
-        <div class="mgr-title">Gestione Staff</div>
-        <div class="add-staff-card">
-          <div class="add-title">Aggiungi Membro Staff</div>
-          <div class="add-grid">
-            <div>
-              <label class="add-label">Username Roblox</label>
-              <input class="add-inp" type="text" id="add-user" placeholder="Username…"/>
+    <div class="page active" id="login-page">
+        <div class="card">
+            <img src="https://i.imgur.com/r6HUpL3.png" class="logo-main" alt="Logo Houston">
+            <h2>Houston Access</h2>
+            <p class="subtitle">Identificati per accedere ai comandi staff</p>
+            
+            <div class="input-group">
+                <label>Username</label>
+                <input type="text" id="user-in" class="form-control" placeholder="es. Mario_Rossi">
             </div>
-            <div>
-              <label class="add-label">Password temporanea</label>
-              <input class="add-inp" type="text" id="add-pass" placeholder="Pass temporanea…"/>
+            
+            <div class="input-group">
+                <label>Password Temporanea</label>
+                <input type="password" id="pass-in" class="form-control" placeholder="••••••••">
             </div>
-            <div>
-              <label class="add-label">Ruolo</label>
-              <select class="add-sel" id="add-role">
-                <option>Staff</option>
-                <option>Moderatore</option>
-                <option>Admin</option>
-              </select>
+            
+            <button class="btn" onclick="checkLogin()">Entra nel Pannello</button>
+            <p id="login-error" style="color:var(--danger); font-size:12px; margin-top:15px; display:none;">Credenziali errate o utente non trovato.</p>
+        </div>
+    </div>
+
+    <div class="page" id="reset-page">
+        <div class="card">
+            <h2 style="color: var(--accent);">Sicurezza Account</h2>
+            <p class="subtitle">È il tuo primo accesso. Crea una password personale obbligatoria.</p>
+            
+            <div class="input-group">
+                <label>Nuova Password</label>
+                <input type="password" id="new-pass" class="form-control" oninput="validatePassword()">
             </div>
-            <button class="btn-add" onclick="addStaff()">Aggiungi</button>
-          </div>
-        </div>
-        <div class="tbl-wrap">
-          <table class="staff-table" id="staff-table">
-            <thead>
-              <tr>
-                <th>Username</th>
-                <th>Ruolo</th>
-                <th>Stato</th>
-                <th>Log</th>
-                <th>Azioni</th>
-              </tr>
-            </thead>
-            <tbody id="staff-tbody"></tbody>
-          </table>
-        </div>
-      </div>
 
-      <!-- CONFIG SECTION -->
-      <div id="mgr-config" style="display:none">
-        <div class="mgr-title">Configurazione</div>
-        <div class="warn-note">⚠ Non condividere mai queste credenziali. Conserva il file solo in locale.</div>
-        <div class="config-card2">
-          <div class="config-title2">🔑 API Key ERLC</div>
-          <label class="add-label">Chiave API</label>
-          <input class="add-inp" type="password" id="cfg-erlc" placeholder="La tua API key ERLC…" style="margin-bottom:8px;"/>
-          <br>
-          <label class="add-label" style="margin-top:8px;">Proxy CORS</label>
-          <input class="add-inp" type="text" id="cfg-proxy" placeholder="https://corsproxy.io/?" style="margin-bottom:4px;"/>
-          <button class="btn-save2" onclick="saveCfg()">Salva</button>
+            <div class="pw-check">
+                <div class="check-item" id="c-8">Almeno 8 caratteri</div>
+                <div class="check-item" id="c-up">Una lettera Maiuscola</div>
+                <div class="check-item" id="c-num">Almeno un numero</div>
+            </div>
+
+            <button class="btn" id="confirm-pw-btn" style="opacity:0.5; pointer-events:none;" onclick="saveNewPassword()">Salva e Continua</button>
         </div>
-        <div class="config-card2">
-          <div class="config-title2">🔔 Webhook Discord</div>
-          <label class="add-label">URL Webhook</label>
-          <input class="add-inp" type="password" id="cfg-discord" placeholder="https://discord.com/api/webhooks/…" style="margin-bottom:4px;"/>
-          <button class="btn-save2" onclick="saveCfg()">Salva</button>
-        </div>
-      </div>
     </div>
-  </div>
-</div>
 
-<!-- ═══════════════ TOOLBOX MODALS ═══════════════ -->
+    <div class="page" id="panel-page" style="padding:0; background: var(--bg-dark);">
+        <div class="dashboard-container">
+            <aside class="sidebar">
+                <img src="https://i.imgur.com/r6HUpL3.png" style="width: 60px; margin-bottom: 20px;">
+                <div style="margin-bottom: 40px;">
+                    <h3 id="display-user" style="font-size: 18px;">Staffer Name</h3>
+                    <span id="display-role" class="subtitle" style="text-transform: uppercase; font-size: 11px;">Moderatore</span>
+                </div>
 
-<!-- LOA Modal -->
-<div class="tbox-overlay" id="tbox-loa">
-  <div class="tbox-modal">
-    <h2>🏖 Manage LOA</h2>
-    <p>Gestisci le richieste di Leave of Absence del tuo team</p>
-    <div class="tbox-section">
-      <span class="tbox-lbl">Nuova richiesta LOA</span>
-      <input class="tbox-inp" type="text" id="loa-username" placeholder="Username staff…"/>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-        <div>
-          <span class="tbox-lbl">Dal</span>
-          <input class="tbox-inp" type="date" id="loa-from"/>
+                <div id="shift-box" style="padding: 20px; background: var(--bg-input); border-radius: 20px; border: 1px solid var(--border);">
+                    <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">Stato Servizio</p>
+                    <div id="status-tag" class="status-badge off-duty" style="display:inline-block; margin-bottom: 15px;">Fuori Servizio</div>
+                    <button class="btn" id="btn-shift" onclick="toggleShift()" style="font-size: 11px;">Inizia Turno</button>
+                </div>
+            </aside>
+
+            <main class="main-content">
+                <h1 style="font-size: 40px; margin-bottom: 10px;">Dashboard</h1>
+                <p class="subtitle">Benvenuto nel sistema di gestione Houston Roleplay.</p>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px;">
+                    <div style="background: var(--bg-card); padding: 30px; border-radius: 24px; border: 1px solid var(--border);">
+                        <h3>Punizioni Recenti</h3>
+                        <p class="subtitle">Visualizza le ultime azioni intraprese</p>
+                    </div>
+                    <div style="background: var(--bg-card); padding: 30px; border-radius: 24px; border: 1px solid var(--border);">
+                        <h3>Ticket Attivi</h3>
+                        <p class="subtitle">Ci sono 3 ticket in attesa</p>
+                    </div>
+                </div>
+            </main>
+
+            <aside class="right-panel">
+                <h3>Log Personali</h3>
+                <div style="margin-top: 20px; color: var(--text-muted); font-size: 13px;">
+                    Nessuna attività registrata oggi.
+                </div>
+            </aside>
         </div>
-        <div>
-          <span class="tbox-lbl">Al</span>
-          <input class="tbox-inp" type="date" id="loa-to"/>
-        </div>
-      </div>
-      <span class="tbox-lbl">Motivo</span>
-      <input class="tbox-inp" type="text" id="loa-reason" placeholder="Motivo dell'assenza…"/>
-      <div class="tbox-btn-row">
-        <button class="tbox-btn-cancel" onclick="closeTbox('loa')">Chiudi</button>
-        <button class="tbox-btn-submit" style="background:var(--green);color:#000;" onclick="submitLOA()">Invia Richiesta</button>
-      </div>
+
+        <nav class="floating-nav">
+            <div class="nav-item active">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                <span>Dashboard</span>
+            </div>
+            <div class="nav-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                <span>Logs</span>
+            </div>
+            <div class="nav-item" onclick="location.reload()" style="color: var(--danger);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                <span>Esci</span>
+            </div>
+        </nav>
     </div>
-    <div class="loa-list" id="loa-list"></div>
-  </div>
-</div>
 
-<!-- ACTIONS Modal -->
-<div class="tbox-overlay" id="tbox-actions">
-  <div class="tbox-modal">
-    <h2>⚡ Actions</h2>
-    <p>Azioni rapide da inviare via comando ERLC al server</p>
-    <div class="actions-grid" id="actions-grid">
-      <div class="action-tile" onclick="runAction('announce')"><div class="tile-icon">📢</div><div class="tile-lbl">Annuncio</div><div class="tile-sub">Messaggio a tutti</div></div>
-      <div class="action-tile" onclick="runAction('lockdown')"><div class="tile-icon">🔒</div><div class="tile-lbl">Lockdown</div><div class="tile-sub">Blocca il server</div></div>
-      <div class="action-tile" onclick="runAction('unlockdown')"><div class="tile-icon">🔓</div><div class="tile-lbl">Unlockdown</div><div class="tile-sub">Sblocca il server</div></div>
-      <div class="action-tile" onclick="runAction('restart')"><div class="tile-icon">🔄</div><div class="tile-lbl">Restart server</div><div class="tile-sub">Riavvia il server</div></div>
-      <div class="action-tile" onclick="runAction('weather')"><div class="tile-icon">🌤</div><div class="tile-lbl">Meteo</div><div class="tile-sub">Cambia meteo</div></div>
-      <div class="action-tile" onclick="runAction('time')"><div class="tile-icon">🕐</div><div class="tile-lbl">Orario</div><div class="tile-sub">Imposta ora</div></div>
-    </div>
-    <!-- sub-form per azione selezionata -->
-    <div id="action-subform" style="display:none;">
-      <span class="tbox-lbl" id="action-subform-lbl">Parametro</span>
-      <input class="tbox-inp" type="text" id="action-param" placeholder=""/>
-      <div class="tbox-btn-row">
-        <button class="tbox-btn-cancel" onclick="document.getElementById('action-subform').style.display='none';document.getElementById('actions-grid').style.display='grid'">Indietro</button>
-        <button class="tbox-btn-submit" style="background:var(--blue);color:#fff;" onclick="sendAction()">Esegui</button>
-      </div>
-    </div>
-    <div style="margin-top:14px;">
-      <button class="tbox-btn-cancel" style="width:100%;" onclick="closeTbox('actions')">Chiudi</button>
-    </div>
-  </div>
-</div>
+    <script>
+        // Database Simulato (Salva nel browser)
+        if(!localStorage.getItem('houston_staff')) {
+            const initialStaff = [
+                { user: 'Admin', pass: 'Houston2026!', role: 'Manager', isFirst: true },
+                { user: 'Staffer', pass: 'prova123', role: 'Moderatore', isFirst: true }
+            ];
+            localStorage.setItem('houston_staff', JSON.stringify(initialStaff));
+        }
 
-<!-- SESSION Modal -->
-<div class="tbox-overlay" id="tbox-session">
-  <div class="tbox-modal">
-    <h2>🖥 Manage Session</h2>
-    <p>Gestisci le sessioni di pattugliamento del server</p>
-    <div class="tbox-section">
-      <span class="tbox-lbl">Apri nuova sessione</span>
-      <input class="tbox-inp" type="text" id="sess-name" placeholder="Nome sessione (es. Pattuglia Serale)…"/>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-        <div>
-          <span class="tbox-lbl">Tipo</span>
-          <select class="tbox-sel" id="sess-type">
-            <option>Patrol</option>
-            <option>Training</option>
-            <option>Event</option>
-            <option>Ride-Along</option>
-          </select>
-        </div>
-        <div>
-          <span class="tbox-lbl">Min. staff</span>
-          <input class="tbox-inp" type="number" id="sess-min" value="3" min="1" max="20"/>
-        </div>
-      </div>
-      <div class="tbox-btn-row">
-        <button class="tbox-btn-cancel" onclick="closeTbox('session')">Chiudi</button>
-        <button class="tbox-btn-submit" style="background:var(--orange);color:#fff;" onclick="openSession()">Apri Sessione</button>
-      </div>
-    </div>
-    <div id="sess-list" style="margin-top:16px;"></div>
-  </div>
-</div>
+        let currentUser = null;
 
-<!-- MODAL manager login -->
-<div class="m-overlay" id="mgr-login-overlay">
-  <div class="m-box">
-    <div class="m-title">Accesso Manager 🔐</div>
-    <div class="m-sub">Inserisci la password del Manager Panel</div>
-    <input class="big-inp" type="password" id="mgr-pw-inp" placeholder="Password manager…"/>
-    <div id="mgr-login-err" style="display:none;font-size:12px;color:var(--red);margin-top:-8px;margin-bottom:8px;">Password errata.</div>
-    <div class="m-acts">
-      <button class="btn-m-cancel" onclick="closeMgrLogin()">Annulla</button>
-      <button class="btn-m-ok" style="background:var(--red);color:#fff" onclick="doMgrLogin()">Entra</button>
-    </div>
-  </div>
-</div>
+        function checkLogin() {
+            const u = document.getElementById('user-in').value;
+            const p = document.getElementById('pass-in').value;
+            const db = JSON.parse(localStorage.getItem('houston_staff'));
 
-<div class="tstack" id="tstack"></div>
+            const found = db.find(s => s.user === u && s.pass === p);
 
-<script>
-/* ══════════════════════════════
-   STORAGE HELPERS
-══════════════════════════════ */
-function ls(k,v){if(v===undefined)return JSON.parse(localStorage.getItem(k)||'null');localStorage.setItem(k,JSON.stringify(v));}
+            if(found) {
+                currentUser = found;
+                if(found.isFirst) {
+                    navigate('reset-page');
+                } else {
+                    startDashboard();
+                }
+            } else {
+                document.getElementById('login-error').style.display = 'block';
+            }
+        }
 
-/* ══════════════════════════════
-   DEFAULT DATA INIT
-══════════════════════════════ */
-function initData(){
-  if(!ls('staff_list')) ls('staff_list',[
-    {username:'Admin',password:'admin123',role:'Admin',status:'active',firstLogin:false,logs:0},
-  ]);
-  if(!ls('mgr_password')) ls('mgr_password','manager2024');
-  if(!ls('logs_list')) ls('logs_list',[]);
-  if(ls('erlc_key')===null) ls('erlc_key','');
-  if(ls('discord_hook')===null) ls('discord_hook','');
-  if(ls('erlc_proxy')===null) ls('erlc_proxy','https://corsproxy.io/?');
-}
+        function validatePassword() {
+            const p = document.getElementById('new-pass').value;
+            const checks = {
+                len: p.length >= 8,
+                up: /[A-Z]/.test(p),
+                num: /[0-9]/.test(p)
+            };
 
-/* ══════════════════════════════
-   LOGIN
-══════════════════════════════ */
-let currentUser = null;
+            document.getElementById('c-8').className = 'check-item ' + (checks.len ? 'valid' : '');
+            document.getElementById('c-up').className = 'check-item ' + (checks.up ? 'valid' : '');
+            document.getElementById('c-num').className = 'check-item ' + (checks.num ? 'valid' : '');
 
-function doLogin(){
-  const u = document.getElementById('l-user').value.trim();
-  const p = document.getElementById('l-pass').value.trim();
-  const staff = ls('staff_list') || [];
-  const member = staff.find(s=>s.username.toLowerCase()===u.toLowerCase() && s.password===p);
-  document.getElementById('login-err').style.display = 'none';
-  if(!member){document.getElementById('login-err').style.display='block';return;}
-  currentUser = member;
-  if(member.firstLogin===true){
-    showPage('createpw');
-  } else {
-    enterPanel();
-  }
-}
+            const btn = document.getElementById('confirm-pw-btn');
+            if(checks.len && checks.up && checks.num) {
+                btn.style.opacity = '1';
+                btn.style.pointerEvents = 'all';
+            } else {
+                btn.style.opacity = '0.5';
+                btn.style.pointerEvents = 'none';
+            }
+        }
 
-document.getElementById('l-pass').addEventListener('keydown',e=>{if(e.key==='Enter') doLogin();});
+        function saveNewPassword() {
+            const newP = document.getElementById('new-pass').value;
+            let db = JSON.parse(localStorage.getItem('houston_staff'));
+            
+            let idx = db.findIndex(s => s.user === currentUser.user);
+            db[idx].pass = newP;
+            db[idx].isFirst = false;
+            
+            localStorage.setItem('houston_staff', JSON.stringify(db));
+            currentUser = db[idx];
+            
+            alert("Password aggiornata con successo!");
+            startDashboard();
+        }
 
-/* ══════════════════════════════
-   CREATE PASSWORD
-══════════════════════════════ */
-const rules = [
-  {id:'r-len',   fn:p=>p.length>=8},
-  {id:'r-upper', fn:p=>/[A-Z]/.test(p)},
-  {id:'r-num',   fn:p=>/\d/.test(p)},
-  {id:'r-spec',  fn:p=>/[^A-Za-z0-9]/.test(p)},
-];
+        function startDashboard() {
+            document.getElementById('display-user').innerText = currentUser.user;
+            document.getElementById('display-role').innerText = currentUser.role;
+            navigate('panel-page');
+        }
 
-function checkPw(){
-  const p = document.getElementById('cpw-inp').value;
-  let ok = 0;
-  rules.forEach(r=>{
-    const pass=r.fn(p);
-    document.getElementById(r.id).classList.toggle('ok',pass);
-    if(pass) ok++;
-  });
-  for(let i=0;i<4;i++) document.getElementById('sb'+i).classList.toggle('active',i<ok);
-  const btn=document.getElementById('btn-cpw');
-  btn.classList.toggle('ready',ok===4);
-  btn.textContent=ok===4?'Password sicura — Continua ✓':'Imposta password';
-}
+        function navigate(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+        }
 
-function toggleEye(){
-  const inp=document.getElementById('cpw-inp');
-  inp.type=inp.type==='password'?'text':'password';
-}
-
-function savePw(){
-  const pw=document.getElementById('cpw-inp').value;
-  if(!pw||rules.some(r=>!r.fn(pw))) return;
-  const staff=ls('staff_list');
-  const idx=staff.findIndex(s=>s.username===currentUser.username);
-  if(idx!==-1){staff[idx].password=pw;staff[idx].firstLogin=false;ls('staff_list',staff);currentUser=staff[idx];}
-  toast('Password impostata con successo!','s');
-  setTimeout(enterPanel,600);
-}
-
-/* ══════════════════════════════
-   PANEL
-══════════════════════════════ */
-let shiftOn = false;
-let currentAction = null;
-
-function enterPanel(){
-  document.getElementById('p-avatar').textContent=currentUser.username.slice(0,2).toUpperCase();
-  document.getElementById('p-name').textContent='Hey, '+currentUser.username+'!';
-  document.getElementById('p-role').textContent=currentUser.role;
-  showPage('panel');
-  renderLogs();
-}
-
-function toggleShift(){
-  shiftOn=!shiftOn;
-  const pill=document.getElementById('shift-status');
-  const lbl=document.getElementById('shift-label');
-  const btn=document.getElementById('shift-btn');
-  if(shiftOn){
-    pill.className='status-pill online';lbl.textContent='ONLINE';
-    btn.className='shift-btn end';btn.textContent='Termina Turno';
-    toast(currentUser.username+' — Turno iniziato','s');
-  } else {
-    pill.className='status-pill offline';lbl.textContent='OFFLINE';
-    btn.className='shift-btn start';btn.textContent='Inizia Turno';
-    toast('Turno terminato','i');
-  }
-}
-
-function selAction(a){
-  ['warn','kick','ban'].forEach(x=>{
-    const el=document.getElementById('opt-'+x);
-    el.className='action-opt';
-    if(x===a) el.className='action-opt sel-'+x;
-  });
-  currentAction=a;
-  document.getElementById('dur-row').classList.toggle('show',a==='ban');
-  const btn=document.getElementById('submit-btn');
-  btn.className='submit-btn '+a;
-  btn.textContent={warn:'Avvisa Giocatore',kick:'Espelli Giocatore',ban:'Banna Giocatore'}[a];
-}
-
-async function submitLog(){
-  const user=document.getElementById('log-user').value.trim();
-  const reason=document.getElementById('log-reason').value;
-  if(!user||!currentAction||!reason){toast('Compila tutti i campi obbligatori','e');return;}
-  const note=document.getElementById('log-note').value.trim();
-  const dur=document.getElementById('log-dur').value;
-  const now=new Date();
-  const time=now.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});
-  const logEntry={
-    id:Date.now(),player:user,action:currentAction,reason,note,dur,
-    time,date:now.toLocaleDateString('it-IT'),by:currentUser.username
-  };
-  // Save log
-  const logs=ls('logs_list')||[];
-  logs.unshift(logEntry);
-  ls('logs_list',logs);
-  // Update staff log count
-  const staff=ls('staff_list');
-  const idx=staff.findIndex(s=>s.username===currentUser.username);
-  if(idx!==-1){staff[idx].logs=(staff[idx].logs||0)+1;ls('staff_list',staff);}
-  // ERLC command
-  try{await erlcCmd(currentAction,user,reason,dur);}catch(e){toast('ERLC: '+e.message,'e');}
-  // Discord
-  try{await sendDiscord(currentAction,user,reason,note,dur);}catch(e){toast('Discord: '+e.message,'e');}
-  // Reset form
-  document.getElementById('log-user').value='';
-  document.getElementById('log-note').value='';
-  document.getElementById('log-reason').value='';
-  ['warn','kick','ban'].forEach(x=>document.getElementById('opt-'+x).className='action-opt');
-  document.getElementById('dur-row').classList.remove('show');
-  const btn=document.getElementById('submit-btn');
-  btn.className='submit-btn default';btn.textContent='Invia Log';
-  currentAction=null;
-  renderLogs();
-  toast({warn:'Avviso inviato',kick:'Giocatore espulso',ban:'Giocatore bannato'}[currentAction||logEntry.action]+': '+user,'s');
-}
-
-/* ══════════════════════════════
-   ROBLOX USER SEARCH
-══════════════════════════════ */
-let rblxSelected = null;
-let rblxTimer = null;
-
-async function searchRoblox(q){
-  const res = document.getElementById('rblx-results');
-  if(!q || q.length < 2){res.classList.remove('show');res.innerHTML='';return;}
-  clearTimeout(rblxTimer);
-  rblxTimer = setTimeout(async ()=>{
-    res.classList.add('show');
-    res.innerHTML='<div class="rblx-loading">🔍 Ricerca in corso…</div>';
-    try{
-      // Roblox Users API v1 search
-      const r = await fetch(`https://corsproxy.io/?${encodeURIComponent('https://users.roblox.com/v1/users/search?keyword='+encodeURIComponent(q)+'&limit=6')}`);
-      if(!r.ok) throw new Error('HTTP '+r.status);
-      const data = await r.json();
-      const users = data.data || [];
-      if(!users.length){res.innerHTML='<div class="rblx-loading">Nessun utente trovato</div>';return;}
-      // Fetch thumbnails in parallel
-      const ids = users.map(u=>u.id).join(',');
-      let thumbMap = {};
-      try{
-        const tr = await fetch(`https://corsproxy.io/?${encodeURIComponent('https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds='+ids+'&size=48x48&format=Png')}`);
-        const td = await tr.json();
-        (td.data||[]).forEach(t=>thumbMap[t.targetId]=t.imageUrl);
-      }catch(e){}
-      res.innerHTML = users.map(u=>`
-        <div class="rblx-result-item" onclick="selectRobloxUser(${u.id},'${u.name.replace(/'/g,"\\'")}','${(u.displayName||u.name).replace(/'/g,"\\'")}','${thumbMap[u.id]||''}')">
-          ${thumbMap[u.id]
-            ? `<div class="rblx-avatar"><img src="${thumbMap[u.id]}" alt="${u.name}"/></div>`
-            : `<div class="rblx-avatar-placeholder">${u.name.slice(0,2).toUpperCase()}</div>`}
-          <div class="rblx-info">
-            <div class="rblx-name">${u.name}</div>
-            ${u.displayName&&u.displayName!==u.name?`<div class="rblx-dispname">${u.displayName}</div>`:''}
-            <div class="rblx-id">ID: ${u.id}</div>
-          </div>
-          <span class="rblx-tick" style="opacity:0">✓</span>
-        </div>`).join('');
-    }catch(e){
-      // Fallback: try without proxy for older API
-      res.innerHTML=`<div class="rblx-loading" style="color:var(--red)">Errore API Roblox. Configura il proxy CORS.<br><small>${e.message}</small></div>`;
-    }
-  }, 400);
-}
-
-function selectRobloxUser(id, name, displayName, thumb){
-  rblxSelected = {id, name, displayName, thumb};
-  // hide results
-  document.getElementById('rblx-results').classList.remove('show');
-  document.getElementById('rblx-inp').value = name;
-  // show selected card
-  const card = document.getElementById('rblx-selected');
-  card.classList.add('show');
-  document.getElementById('rblx-sel-name').textContent = name + (displayName!==name ? ' ('+displayName+')' : '');
-  document.getElementById('rblx-sel-id').textContent = 'User ID: '+id;
-  const av = document.getElementById('rblx-sel-av');
-  av.innerHTML = thumb
-    ? `<img src="${thumb}" alt="${name}" style="width:40px;height:40px;border-radius:10px;object-fit:cover;"/>`
-    : `<div style="width:40px;height:40px;border-radius:10px;background:var(--bg4);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--muted2)">${name.slice(0,2).toUpperCase()}</div>`;
-}
-
-function clearRobloxSel(){
-  rblxSelected = null;
-  document.getElementById('rblx-selected').classList.remove('show');
-  document.getElementById('rblx-inp').value = '';
-  document.getElementById('rblx-results').classList.remove('show');
-  document.getElementById('rblx-inp').focus();
-}
-
-function showManagerLogin(){
-  document.getElementById('mgr-pw-inp').value='';
-  document.getElementById('mgr-login-err').style.display='none';
-  document.getElementById('mgr-login-overlay').classList.add('open');
-}
-function closeMgrLogin(){document.getElementById('mgr-login-overlay').classList.remove('open');}
-function doMgrLogin(){
-  const pw=document.getElementById('mgr-pw-inp').value;
-  if(pw===ls('mgr_password')){
-    document.getElementById('mgr-login-overlay').classList.remove('open');
-    showPage('manager');
-    renderStaffTable();
-    loadCfgUI();
-  } else {
-    document.getElementById('mgr-login-err').style.display='block';
-  }
-}
-document.getElementById('mgr-pw-inp').addEventListener('keydown',e=>{if(e.key==='Enter')doMgrLogin();});
-
-function mgrLogout(){showPage('login');}
-
-function mgrGo(s){
-  document.querySelectorAll('.mgr-ni').forEach(el=>el.classList.remove('active'));
-  document.getElementById('mgr-staff').style.display=s==='staff'?'block':'none';
-  document.getElementById('mgr-config').style.display=s==='config'?'block':'none';
-}
-
-function renderStaffTable(){
-  const staff=ls('staff_list')||[];
-  const tbody=document.getElementById('staff-tbody');
-  const roleMap={Admin:'rb-admin',Moderatore:'rb-mod',Staff:'rb-staff'};
-  tbody.innerHTML=staff.map((s,i)=>`
-    <tr>
-      <td><strong>${s.username}</strong></td>
-      <td><span class="role-badge ${roleMap[s.role]||'rb-staff'}">${s.role}</span></td>
-      <td><span class="status-tag ${s.firstLogin?'st-pending':'st-active'}">${s.firstLogin?'Primo accesso':'Attivo'}</span></td>
-      <td>${s.logs||0}</td>
-      <td>
-        <button class="tbl-btn tbl-btn-edit" onclick="resetPw(${i})">Reset PW</button>
-        <button class="tbl-btn tbl-btn-del" onclick="removeStaff(${i})">Rimuovi</button>
-      </td>
-    </tr>`).join('');
-}
-
-function addStaff(){
-  const u=document.getElementById('add-user').value.trim();
-  const p=document.getElementById('add-pass').value.trim();
-  const r=document.getElementById('add-role').value;
-  if(!u||!p){toast('Inserisci username e password','e');return;}
-  const staff=ls('staff_list')||[];
-  if(staff.find(s=>s.username.toLowerCase()===u.toLowerCase())){toast('Username già esistente','e');return;}
-  staff.push({username:u,password:p,role:r,status:'active',firstLogin:true,logs:0});
-  ls('staff_list',staff);
-  document.getElementById('add-user').value='';
-  document.getElementById('add-pass').value='';
-  renderStaffTable();
-  toast('Staff aggiunto: '+u,'s');
-}
-
-function removeStaff(i){
-  const staff=ls('staff_list')||[];
-  const name=staff[i].username;
-  staff.splice(i,1);
-  ls('staff_list',staff);
-  renderStaffTable();
-  toast('Rimosso: '+name,'i');
-}
-
-function resetPw(i){
-  const staff=ls('staff_list')||[];
-  const tmp='temp'+Math.random().toString(36).slice(2,7);
-  staff[i].password=tmp;
-  staff[i].firstLogin=true;
-  ls('staff_list',staff);
-  renderStaffTable();
-  toast('Password resettata → '+tmp,'i');
-}
-
-function loadCfgUI(){
-  document.getElementById('cfg-erlc').value=ls('erlc_key')||'';
-  document.getElementById('cfg-discord').value=ls('discord_hook')||'';
-  document.getElementById('cfg-proxy').value=ls('erlc_proxy')||'https://corsproxy.io/?';
-}
-function saveCfg(){
-  const ek=document.getElementById('cfg-erlc').value.trim();
-  const dh=document.getElementById('cfg-discord').value.trim();
-  const px=document.getElementById('cfg-proxy').value.trim();
-  if(ek) ls('erlc_key',ek);
-  if(dh) ls('discord_hook',dh);
-  if(px) ls('erlc_proxy',px);
-  toast('Configurazione salvata!','s');
-}
-
-/* ══════════════════════════════
-   ERLC + DISCORD
-══════════════════════════════ */
-async function erlcCmd(action,player,reason,dur){
-  const key=ls('erlc_key');
-  if(!key) return;
-  const proxy=ls('erlc_proxy')||'';
-  const base='https://api.policeroleplay.community/v1/server';
-  const url=proxy? proxy+encodeURIComponent(base+'/command') : base+'/command';
-  const cmds={
-    warn:`:pm ${player} [AVVISO STAFF] ${reason}`,
-    kick:`:kick ${player} ${reason}`,
-    ban: dur&&dur!=='0'?`:ban ${player} ${dur}d ${reason}`:`:ban ${player} ${reason}`,
-  };
-  const r=await fetch(url,{method:'POST',headers:{'Server-Key':key,'Content-Type':'application/json'},body:JSON.stringify({command:cmds[action]})});
-  if(!r.ok) throw new Error('HTTP '+r.status);
-}
-
-async function sendDiscord(action,player,reason,note,dur){
-  const hook=ls('discord_hook');
-  if(!hook||hook.length<30) return;
-  const DC={warn:0xf97316,kick:0x3b82f6,ban:0xef4444};
-  const DE={warn:'⚠️',kick:'👢',ban:'🔨'};
-  const DL={warn:'Avviso',kick:'Espulsione',ban:'Ban'};
-  const fields=[
-    {name:'👤 Giocatore',value:'`'+player+'`',inline:true},
-    {name:'⚡ Azione',value:DL[action],inline:true},
-    {name:'📋 Motivo',value:reason,inline:false},
-    {name:'👮 Staff',value:currentUser.username,inline:true},
-  ];
-  if(note) fields.push({name:'📝 Note',value:note,inline:false});
-  if(action==='ban') fields.push({name:'⏱ Durata',value:dur==='0'?'Permanente':dur+' giorni',inline:true});
-  await fetch(hook,{
-    method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({username:'StaffPanel ERLC',embeds:[{
-      title:DE[action]+' '+DL[action],color:DC[action],fields,
-      footer:{text:'StaffPanel · '+new Date().toLocaleString('it-IT')}
-    }]})
-  });
-}
-
-async function erlcCmd2(cmd){
-  const key=ls('erlc_key');
-  if(!key) return;
-  const proxy=ls('erlc_proxy')||'';
-  const base='https://api.policeroleplay.community/v1/server';
-  const url=proxy? proxy+encodeURIComponent(base+'/command') : base+'/command';
-  const r=await fetch(url,{method:'POST',headers:{'Server-Key':key,'Content-Type':'application/json'},body:JSON.stringify({command:cmd})});
-  if(!r.ok) throw new Error('HTTP '+r.status);
-}
-
-/* ══════════════════════════════
-   TOAST + PAGE UTILS
-══════════════════════════════ */
-function showPage(p){
-  document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
-  document.getElementById('page-'+p).classList.add('active');
-}
-function toast(msg,type='i'){
-  const el=document.createElement('div');
-  el.className='toast '+type;
-  el.innerHTML=`<span class="tdot"></span>${msg}`;
-  document.getElementById('tstack').appendChild(el);
-  setTimeout(()=>el.remove(),3400);
-}
-
-/* ══════════════════════════════
-   INIT
-══════════════════════════════ */
-initData();
-if(!ls('loa_list')) ls('loa_list',[]);
-if(!ls('sessions_list')) ls('sessions_list',[]);
-// Keyboard shortcut Ctrl+I / Cmd+I → focus roblox search
-document.addEventListener('keydown',e=>{
-  if((e.ctrlKey||e.metaKey)&&e.key==='i'){
-    e.preventDefault();
-    const inp=document.getElementById('rblx-inp');
-    if(inp) inp.focus();
-  }
-  if((e.ctrlKey||e.metaKey)&&e.key==='f'){
-    e.preventDefault();
-    const inp=document.querySelector('.log-search');
-    if(inp) inp.focus();
-  }
-});
-</script>
+        function toggleShift() {
+            const btn = document.getElementById('btn-shift');
+            const tag = document.getElementById('status-tag');
+            
+            if(btn.innerText === "Inizia Turno") {
+                btn.innerText = "Termina Turno";
+                btn.style.background = "var(--danger)";
+                tag.innerText = "In Servizio";
+                tag.className = "status-badge on-duty";
+            } else {
+                btn.innerText = "Inizia Turno";
+                btn.style.background = "var(--accent)";
+                tag.innerText = "Fuori Servizio";
+                tag.className = "status-badge off-duty";
+            }
+        }
+    </script>
 </body>
 </html>
