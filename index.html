@@ -2,78 +2,137 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Staff Panel</title>
+  <title>Staff Panel RP</title>
   <style>
+    /* ===========================
+       RESET & BASE
+       =========================== */
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     }
+
+    html, body {
+      height: 100%;
+    }
+
     body {
       background: #0D0D0D;
       color: #E6E6E6;
+      font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-font-smoothing: antialiased;
     }
-    .hidden { display: none; }
 
-    /* Auth */
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font-family: inherit;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* ===========================
+       AUTH VIEWS
+       =========================== */
+
     .auth-container {
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 1rem;
     }
+
     .auth-card {
       background: #1A1A1A;
       padding: 2.5rem;
-      border-radius: 12px;
+      border-radius: 16px;
       width: 100%;
-      max-width: 420px;
-      box-shadow: 0 0 25px rgba(0,0,0,0.6);
+      max-width: 460px;
+      box-shadow: 0 0 35px rgba(0,0,0,0.7);
       border: 1px solid #B8860B33;
+      position: relative;
+      overflow: hidden;
     }
+
+    .auth-card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: radial-gradient(circle at top left, #B8860B22, transparent 60%);
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    .auth-inner {
+      position: relative;
+      z-index: 1;
+    }
+
     .logo-wrapper {
       display: flex;
       justify-content: center;
       margin-bottom: 1rem;
     }
+
     .logo {
       width: 90px;
       height: 90px;
       border-radius: 50%;
       border: 2px solid #B8860B;
+      box-shadow: 0 0 18px #B8860B55;
+      object-fit: cover;
     }
+
     .auth-title {
       text-align: center;
       margin-bottom: 0.5rem;
+      font-size: 1.6rem;
+      font-weight: 600;
     }
+
     .auth-subtitle {
       text-align: center;
-      margin-bottom: 1rem;
+      margin-bottom: 1.2rem;
       font-size: 0.9rem;
       color: #AAAAAA;
     }
+
     .auth-form {
       display: flex;
       flex-direction: column;
       gap: 0.75rem;
       margin-top: 1rem;
     }
+
     .auth-form label {
       font-size: 0.9rem;
+      color: #CCCCCC;
     }
+
     .auth-form input {
       padding: 0.6rem 0.8rem;
       border-radius: 8px;
       border: 1px solid #333;
       background: #111;
       color: #E6E6E6;
+      font-size: 0.95rem;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
     }
+
     .auth-form input:focus {
       outline: none;
       border-color: #B8860B;
       box-shadow: 0 0 0 1px #B8860B55;
+      background: #151515;
     }
+
     .btn-primary {
       margin-top: 0.5rem;
       padding: 0.7rem;
@@ -84,11 +143,33 @@
       font-weight: 600;
       cursor: pointer;
       transition: 0.2s ease;
+      font-size: 0.95rem;
+      letter-spacing: 0.02em;
     }
+
     .btn-primary:hover {
       background: #d19b10;
       box-shadow: 0 0 12px #B8860Baa;
+      transform: translateY(-1px);
     }
+
+    .btn-secondary {
+      margin-top: 0.5rem;
+      padding: 0.7rem;
+      border-radius: 999px;
+      border: 1px solid #444;
+      background: transparent;
+      color: #E6E6E6;
+      font-weight: 500;
+      cursor: pointer;
+      transition: 0.2s ease;
+      font-size: 0.9rem;
+    }
+
+    .btn-secondary:hover {
+      background: #222;
+    }
+
     .error {
       background: #5c1b1b;
       color: #ffb3b3;
@@ -96,13 +177,35 @@
       border-radius: 8px;
       margin-bottom: 0.5rem;
       font-size: 0.85rem;
+      border: 1px solid #ff6b6b55;
     }
 
-    /* Layout dashboard */
+    .info {
+      background: #12324a;
+      color: #b3e0ff;
+      padding: 0.6rem 0.8rem;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+      font-size: 0.85rem;
+      border: 1px solid #4aa3ff55;
+    }
+
+    .auth-footer {
+      margin-top: 1.2rem;
+      font-size: 0.8rem;
+      text-align: center;
+      color: #777;
+    }
+
+    /* ===========================
+       MAIN LAYOUT
+       =========================== */
+
     .layout {
       display: flex;
       min-height: 100vh;
     }
+
     .sidebar {
       width: 260px;
       background: #111;
@@ -110,44 +213,106 @@
       display: flex;
       flex-direction: column;
       padding: 1.5rem 1rem;
+      position: relative;
+      overflow: hidden;
     }
+
+    .sidebar::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: radial-gradient(circle at top, #B8860B22, transparent 60%);
+      opacity: 0.3;
+      pointer-events: none;
+    }
+
+    .sidebar-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
     .sidebar-logo {
       display: flex;
       align-items: center;
       gap: 0.7rem;
       margin-bottom: 2rem;
     }
+
     .sidebar-logo img {
       width: 40px;
       height: 40px;
       border-radius: 50%;
       border: 2px solid #B8860B;
+      box-shadow: 0 0 12px #B8860B55;
+      object-fit: cover;
     }
+
     .sidebar-logo span {
       font-weight: 600;
       font-size: 1.1rem;
     }
+
+    .sidebar-section-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #777;
+      margin-bottom: 0.4rem;
+      margin-top: 0.6rem;
+    }
+
     .sidebar-nav {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 0.25rem;
       flex: 1;
+      overflow-y: auto;
+      padding-right: 0.2rem;
     }
+
     .sidebar-nav a {
-      padding: 0.6rem 0.8rem;
+      padding: 0.55rem 0.8rem;
       border-radius: 8px;
       color: #E6E6E6;
       text-decoration: none;
-      font-size: 0.95rem;
-      transition: 0.2s ease;
+      font-size: 0.9rem;
+      transition: 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
+
+    .sidebar-nav a span.label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .sidebar-nav a span.badge {
+      font-size: 0.7rem;
+      padding: 0.1rem 0.4rem;
+      border-radius: 999px;
+      background: #222;
+      border: 1px solid #444;
+    }
+
     .sidebar-nav a:hover {
       background: #1A1A1A;
     }
+
     .sidebar-nav a.active {
       background: #1A1A1A;
       border: 1px solid #B8860B55;
+      box-shadow: 0 0 10px #000;
     }
+
+    .sidebar-footer {
+      margin-top: 1rem;
+    }
+
     .btn-logout {
       width: 100%;
       padding: 0.6rem;
@@ -157,241 +322,1372 @@
       color: #E6E6E6;
       cursor: pointer;
       transition: 0.2s ease;
+      font-size: 0.9rem;
     }
+
     .btn-logout:hover {
       background: #B8860B22;
     }
+
     .main {
       flex: 1;
       padding: 1.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
     }
+
     .main-header {
-      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
     }
+
+    .main-header-left h1 {
+      font-size: 1.6rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .main-header-left p {
+      font-size: 0.9rem;
+      color: #AAAAAA;
+    }
+
+    .main-header-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      padding: 0.35rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid #444;
+      font-size: 0.8rem;
+      color: #CCCCCC;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #B8860B, #444);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .avatar span {
+      transform: translateY(1px);
+    }
+
     .cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 1rem;
     }
+
     .card {
       background: #1A1A1A;
       border-radius: 12px;
       padding: 1.2rem 1.4rem;
       border: 1px solid #B8860B33;
       box-shadow: 0 0 18px rgba(0,0,0,0.5);
+      position: relative;
+      overflow: hidden;
     }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: radial-gradient(circle at top right, #B8860B22, transparent 60%);
+      opacity: 0.25;
+      pointer-events: none;
+    }
+
+    .card-inner {
+      position: relative;
+      z-index: 1;
+    }
+
     .card h2 {
       margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+    }
+
+    .card p {
+      font-size: 0.9rem;
+      color: #CCCCCC;
+    }
+
+    .card-metric {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin: 0.2rem 0 0.4rem;
+    }
+
+    .card-label {
+      font-size: 0.8rem;
+      color: #999;
+    }
+
+    .card-footer {
+      margin-top: 0.8rem;
+      font-size: 0.8rem;
+      color: #888;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 0.3rem;
+    }
+
+    .status-ok {
+      background: #2ecc71;
+    }
+
+    .status-bad {
+      background: #e74c3c;
+    }
+
+    .status-warn {
+      background: #f1c40f;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid #444;
+      font-size: 0.75rem;
+      color: #ccc;
+      gap: 0.25rem;
+    }
+
+    .tag-gold {
+      border-color: #B8860B;
+      color: #f0d28a;
+    }
+
+    /* ===========================
+       TABLES & SECTIONS
+       =========================== */
+
+    .section {
+      background: #111;
+      border-radius: 12px;
+      border: 1px solid #333;
+      padding: 1.2rem 1.4rem;
+      box-shadow: 0 0 18px rgba(0,0,0,0.5);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .section-header h2 {
+      font-size: 1.1rem;
+    }
+
+    .section-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .section-description {
+      font-size: 0.85rem;
+      color: #AAAAAA;
+      margin-bottom: 0.8rem;
+    }
+
+    .table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      border-radius: 8px;
+      border: 1px solid #222;
+      background: #151515;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    thead {
+      background: #181818;
+    }
+
+    th, td {
+      padding: 0.55rem 0.7rem;
+      text-align: left;
+      border-bottom: 1px solid #222;
+      white-space: nowrap;
+    }
+
+    th {
+      font-weight: 500;
+      color: #CCCCCC;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    tbody tr:hover {
+      background: #1f1f1f;
+    }
+
+    .badge-status {
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      border: 1px solid #444;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .badge-open {
+      border-color: #f1c40f;
+      color: #f1c40f;
+    }
+
+    .badge-closed {
+      border-color: #2ecc71;
+      color: #2ecc71;
+    }
+
+    .badge-pending {
+      border-color: #e67e22;
+      color: #e67e22;
+    }
+
+    .badge-role-admin {
+      border-color: #e74c3c;
+      color: #e74c3c;
+    }
+
+    .badge-role-mod {
+      border-color: #3498db;
+      color: #3498db;
+    }
+
+    .badge-role-helper {
+      border-color: #9b59b6;
+      color: #9b59b6;
+    }
+
+    .btn-small {
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid #444;
+      background: transparent;
+      color: #E6E6E6;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: 0.15s ease;
+    }
+
+    .btn-small:hover {
+      background: #222;
+    }
+
+    .btn-small-gold {
+      border-color: #B8860B;
+      color: #f0d28a;
+    }
+
+    .btn-small-gold:hover {
+      background: #B8860B33;
+    }
+
+    .filter-input {
+      padding: 0.35rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid #333;
+      background: #151515;
+      color: #E6E6E6;
+      font-size: 0.8rem;
+      min-width: 160px;
+    }
+
+    .filter-input:focus {
+      outline: none;
+      border-color: #B8860B;
+      box-shadow: 0 0 0 1px #B8860B55;
+    }
+
+    .select-input {
+      padding: 0.35rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid #333;
+      background: #151515;
+      color: #E6E6E6;
+      font-size: 0.8rem;
+      min-width: 140px;
+    }
+
+    .select-input:focus {
+      outline: none;
+      border-color: #B8860B;
+      box-shadow: 0 0 0 1px #B8860B55;
+    }
+
+    /* ===========================
+       SETTINGS & FORMS
+       =========================== */
+
+    .settings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+
+    .settings-item {
+      background: #151515;
+      border-radius: 10px;
+      border: 1px solid #333;
+      padding: 0.9rem 1rem;
+      font-size: 0.85rem;
+    }
+
+    .settings-item h3 {
+      font-size: 0.95rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .settings-item p {
+      font-size: 0.8rem;
+      color: #AAAAAA;
+      margin-bottom: 0.5rem;
+    }
+
+    .settings-item .btn-small {
+      margin-top: 0.2rem;
+    }
+
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .form-row label {
+      font-size: 0.8rem;
+      color: #CCCCCC;
+      min-width: 120px;
+    }
+
+    .form-row input {
+      flex: 1;
+      min-width: 160px;
+      padding: 0.35rem 0.6rem;
+      border-radius: 6px;
+      border: 1px solid #333;
+      background: #151515;
+      color: #E6E6E6;
+      font-size: 0.8rem;
+    }
+
+    .form-row input:focus {
+      outline: none;
+      border-color: #B8860B;
+      box-shadow: 0 0 0 1px #B8860B55;
+    }
+
+    .form-help {
+      font-size: 0.75rem;
+      color: #888;
+      margin-top: 0.2rem;
+    }
+
+    /* ===========================
+       RESPONSIVE
+       =========================== */
+
+    @media (max-width: 900px) {
+      .layout {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #B8860B33;
+      }
+      .main {
+        padding: 1rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .auth-card {
+        padding: 1.8rem;
+      }
+      .sidebar {
+        padding: 1rem;
+      }
+      .main-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- LOGIN -->
-  <div id="login-view" class="auth-container">
-    <div class="auth-card">
+<!-- ===========================
+     LOGIN VIEW
+     =========================== -->
+<div id="login-view" class="auth-container">
+  <div class="auth-card">
+    <div class="auth-inner">
       <div class="logo-wrapper">
         <img src="https://res.cloudinary.com/dec4vnmzg/image/upload/v1775510756/dezbl6dcpfsvrwzjui1d.webp" alt="Logo" class="logo">
       </div>
       <h1 class="auth-title">Staff Login</h1>
+      <p class="auth-subtitle">Pannello staff RP — accesso riservato.</p>
+
       <div id="login-error" class="error hidden"></div>
+
       <form id="login-form" class="auth-form">
         <label>Username</label>
-        <input type="text" id="login-username" required />
+        <input type="text" id="login-username" autocomplete="off" required>
 
         <label>Password</label>
-        <input type="password" id="login-password" required />
+        <input type="password" id="login-password" autocomplete="off" required>
 
         <button type="submit" class="btn-primary">Accedi</button>
       </form>
+
+      <div class="auth-footer">
+        Demo credenziali iniziali: <strong>admin / admin123</strong> (poi obbligo cambio password).
+      </div>
     </div>
   </div>
+</div>
 
-  <!-- CAMBIO PASSWORD OBBLIGATORIO -->
-  <div id="change-password-view" class="auth-container hidden">
-    <div class="auth-card">
+<!-- ===========================
+     CHANGE PASSWORD VIEW
+     =========================== -->
+<div id="change-password-view" class="auth-container hidden">
+  <div class="auth-card">
+    <div class="auth-inner">
       <div class="logo-wrapper">
         <img src="https://res.cloudinary.com/dec4vnmzg/image/upload/v1775510756/dezbl6dcpfsvrwzjui1d.webp" alt="Logo" class="logo">
       </div>
       <h1 class="auth-title">Imposta nuova password</h1>
-      <p class="auth-subtitle">Devi impostare una password personale prima di accedere.</p>
+      <p class="auth-subtitle">Al primo accesso devi impostare una password personale.</p>
+
+      <div id="change-info" class="info">
+        La password deve avere almeno 10 caratteri. In produzione va gestita lato server con hash.
+      </div>
       <div id="change-error" class="error hidden"></div>
+
       <form id="change-form" class="auth-form">
         <label>Nuova password</label>
-        <input type="password" id="new-password" required />
+        <input type="password" id="new-password" required>
 
         <label>Conferma password</label>
-        <input type="password" id="confirm-password" required />
+        <input type="password" id="confirm-password" required>
 
         <button type="submit" class="btn-primary">Imposta</button>
+        <button type="button" id="change-back-login" class="btn-secondary">Torna al login</button>
       </form>
     </div>
   </div>
+</div>
 
-  <!-- DASHBOARD -->
-  <div id="dashboard-view" class="layout hidden">
-    <aside class="sidebar">
+<!-- ===========================
+     DASHBOARD VIEW
+     =========================== -->
+<div id="dashboard-view" class="layout hidden">
+  <aside class="sidebar">
+    <div class="sidebar-inner">
       <div class="sidebar-logo">
         <img src="https://res.cloudinary.com/dec4vnmzg/image/upload/v1775510756/dezbl6dcpfsvrwzjui1d.webp" alt="Logo">
         <span>Staff Panel</span>
       </div>
+
+      <div class="sidebar-section-title">Navigazione</div>
       <nav class="sidebar-nav">
-        <a href="#" class="active">Dashboard</a>
+        <a href="#" data-section="section-dashboard" class="nav-link active">
+          <span class="label">Dashboard</span>
+        </a>
+        <a href="#" data-section="section-staff" class="nav-link">
+          <span class="label">Staff</span>
+          <span class="badge" id="badge-staff-count">0</span>
+        </a>
+        <a href="#" data-section="section-logs" class="nav-link">
+          <span class="label">Logs</span>
+          <span class="badge" id="badge-logs-count">0</span>
+        </a>
+        <a href="#" data-section="section-tickets" class="nav-link">
+          <span class="label">Tickets</span>
+          <span class="badge" id="badge-tickets-count">0</span>
+        </a>
+        <a href="#" data-section="section-erlc" class="nav-link">
+          <span class="label">ERLC API</span>
+        </a>
+        <a href="#" data-section="section-settings" class="nav-link">
+          <span class="label">Impostazioni</span>
+        </a>
       </nav>
-      <button id="logout-btn" class="btn-logout">Logout</button>
-    </aside>
 
-    <main class="main">
-      <header class="main-header">
+      <div class="sidebar-footer">
+        <button id="logout-btn" class="btn-logout">Logout</button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="main-header">
+      <div class="main-header-left">
         <h1>Benvenuto, <span id="username-label"></span></h1>
-      </header>
+        <p>Pannello di controllo staff — gestione server RP, logs, tickets e integrazione ERLC.</p>
+      </div>
+      <div class="main-header-right">
+        <div class="pill">
+          <span class="status-dot status-ok"></span>
+          <span>Staff Panel Online</span>
+        </div>
+        <div class="pill">
+          <span>Ruolo:</span>
+          <span id="user-role-pill">Admin</span>
+        </div>
+        <div class="avatar">
+          <span id="avatar-initials">A</span>
+        </div>
+      </div>
+    </header>
 
-      <section class="cards">
+    <!-- ===========================
+         SECTION: DASHBOARD
+         =========================== -->
+    <section id="section-dashboard" class="section">
+      <div class="section-header">
+        <h2>Dashboard</h2>
+        <div class="section-header-actions">
+          <span class="tag tag-gold">
+            <span class="status-dot status-ok"></span>
+            Live
+          </span>
+        </div>
+      </div>
+      <p class="section-description">
+        Panoramica rapida dello stato del server, attività staff, tickets e integrazione ERLC.
+      </p>
+
+      <div class="cards">
         <div class="card">
-          <h2>Stato ERLC API</h2>
-          <p><strong>API key configurata:</strong> <span id="api-key-status"></span></p>
-          <p>In produzione la key va usata solo lato server, mai esposta nel client.</p>
+          <div class="card-inner">
+            <h2>Staff online</h2>
+            <div class="card-metric" id="metric-staff-online">0</div>
+            <div class="card-label">Utenti staff attualmente attivi</div>
+            <div class="card-footer">
+              <span><span class="status-dot status-ok"></span>Operativo</span>
+              <span class="tag">Aggiornato ora</span>
+            </div>
+          </div>
         </div>
 
         <div class="card">
-          <h2>Info</h2>
-          <p>Qui puoi aggiungere statistiche staff, log recenti, ecc.</p>
+          <div class="card-inner">
+            <h2>Tickets aperti</h2>
+            <div class="card-metric" id="metric-tickets-open">0</div>
+            <div class="card-label">Richieste in attesa di gestione</div>
+            <div class="card-footer">
+              <span><span class="status-dot status-warn"></span>Monitorare</span>
+              <span class="tag">Sezione Tickets</span>
+            </div>
+          </div>
         </div>
-      </section>
-    </main>
-  </div>
 
-  <script>
-    // DEMO: utente di default
-    const DEFAULT_USERNAME = 'admin';
-    const DEFAULT_PASSWORD = 'admin123'; // solo demo
+        <div class="card">
+          <div class="card-inner">
+            <h2>Logs oggi</h2>
+            <div class="card-metric" id="metric-logs-today">0</div>
+            <div class="card-label">Azioni registrate nelle ultime 24 ore</div>
+            <div class="card-footer">
+              <span><span class="status-dot status-ok"></span>Tracking attivo</span>
+              <span class="tag">Sezione Logs</span>
+            </div>
+          </div>
+        </div>
 
-    // ATTENZIONE: in produzione la API key NON va mai messa qui.
-    // Va tenuta lato server (es. variabile d'ambiente) e usata solo da backend.
-    const ERLC_API_KEY = ''; // lascia vuoto qui, usala lato server nella realtà
+        <div class="card">
+          <div class="card-inner">
+            <h2>Stato ERLC API</h2>
+            <div class="card-metric" id="metric-erlc-status">Sconosciuto</div>
+            <div class="card-label">Key gestita lato server in produzione</div>
+            <div class="card-footer">
+              <span id="erlc-status-pill">
+                <span class="status-dot status-warn"></span>Configurazione richiesta
+              </span>
+              <span class="tag">Sezione ERLC API</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    const loginView = document.getElementById('login-view');
-    const changeView = document.getElementById('change-password-view');
-    const dashboardView = document.getElementById('dashboard-view');
+    <!-- ===========================
+         SECTION: STAFF
+         =========================== -->
+    <section id="section-staff" class="section hidden">
+      <div class="section-header">
+        <h2>Staff</h2>
+        <div class="section-header-actions">
+          <input type="text" id="staff-filter" class="filter-input" placeholder="Filtra per nome o ruolo">
+          <button type="button" id="staff-refresh" class="btn-small">Aggiorna</button>
+        </div>
+      </div>
+      <p class="section-description">
+        Elenco dello staff con ruolo, ultimo accesso e stato. In un backend reale questi dati arrivano dal database.
+      </p>
 
-    const loginForm = document.getElementById('login-form');
-    const loginError = document.getElementById('login-error');
-    const loginUsername = document.getElementById('login-username');
-    const loginPassword = document.getElementById('login-password');
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Ruolo</th>
+              <th>Ultimo accesso</th>
+              <th>Stato</th>
+              <th>Azioni</th>
+            </tr>
+          </thead>
+          <tbody id="staff-table-body">
+            <!-- Popolato via JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
 
-    const changeForm = document.getElementById('change-form');
-    const changeError = document.getElementById('change-error');
-    const newPasswordInput = document.getElementById('new-password');
-    const confirmPasswordInput = document.getElementById('confirm-password');
+    <!-- ===========================
+         SECTION: LOGS
+         =========================== -->
+    <section id="section-logs" class="section hidden">
+      <div class="section-header">
+        <h2>Logs</h2>
+        <div class="section-header-actions">
+          <select id="logs-filter-type" class="select-input">
+            <option value="">Tutti i tipi</option>
+            <option value="ban">Ban</option>
+            <option value="kick">Kick</option>
+            <option value="warn">Warn</option>
+            <option value="note">Nota</option>
+          </select>
+          <button type="button" id="logs-refresh" class="btn-small">Aggiorna</button>
+        </div>
+      </div>
+      <p class="section-description">
+        Storico azioni staff. In un sistema reale verrebbe alimentato da eventi del server e salvato in database.
+      </p>
 
-    const usernameLabel = document.getElementById('username-label');
-    const apiKeyStatus = document.getElementById('api-key-status');
-    const logoutBtn = document.getElementById('logout-btn');
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Data</th>
+              <th>Staff</th>
+              <th>Tipo</th>
+              <th>Dettaglio</th>
+              <th>Target</th>
+            </tr>
+          </thead>
+          <tbody id="logs-table-body">
+            <!-- Popolato via JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
 
-    function showView(view) {
-      loginView.classList.add('hidden');
-      changeView.classList.add('hidden');
-      dashboardView.classList.add('hidden');
-      view.classList.remove('hidden');
+    <!-- ===========================
+         SECTION: TICKETS
+         =========================== -->
+    <section id="section-tickets" class="section hidden">
+      <div class="section-header">
+        <h2>Tickets</h2>
+        <div class="section-header-actions">
+          <select id="tickets-filter-status" class="select-input">
+            <option value="">Tutti</option>
+            <option value="open">Aperti</option>
+            <option value="pending">In attesa</option>
+            <option value="closed">Chiusi</option>
+          </select>
+          <button type="button" id="tickets-refresh" class="btn-small">Aggiorna</button>
+        </div>
+      </div>
+      <p class="section-description">
+        Gestione richieste utenti. In un backend reale ogni ticket avrebbe commenti, cronologia e assegnazione staff.
+      </p>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Stato</th>
+              <th>Utente</th>
+              <th>Assegnato a</th>
+              <th>Ultimo aggiornamento</th>
+              <th>Azioni</th>
+            </tr>
+          </thead>
+          <tbody id="tickets-table-body">
+            <!-- Popolato via JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ===========================
+         SECTION: ERLC API
+         =========================== -->
+    <section id="section-erlc" class="section hidden">
+      <div class="section-header">
+        <h2>ERLC API</h2>
+        <div class="section-header-actions">
+          <button type="button" id="erlc-test-btn" class="btn-small btn-small-gold">Test chiamata (mock)</button>
+        </div>
+      </div>
+      <p class="section-description">
+        Interfaccia per l’integrazione con ERLC. <strong>Importante:</strong> la API key deve essere gestita
+        <strong>solo lato server</strong> (es. variabile d’ambiente) e mai esposta nel client.
+      </p>
+
+      <div class="settings-grid">
+        <div class="settings-item">
+          <h3>Stato configurazione</h3>
+          <p>
+            La key ERLC in questo file è solo un placeholder. In produzione va letta dal backend.
+          </p>
+          <div class="form-row">
+            <label>API Key (client)</label>
+            <input type="password" id="erlc-api-key-input" disabled value="">
+          </div>
+          <div class="form-help">
+            In un’app reale questo campo non esiste lato client. Qui è solo dimostrativo.
+          </div>
+        </div>
+
+        <div class="settings-item">
+          <h3>Ultimo test</h3>
+          <p id="erlc-test-result">
+            Nessun test eseguito.
+          </p>
+          <button type="button" id="erlc-clear-btn" class="btn-small">Pulisci log test</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===========================
+         SECTION: SETTINGS
+         =========================== -->
+    <section id="section-settings" class="section hidden">
+      <div class="section-header">
+        <h2>Impostazioni account</h2>
+        <div class="section-header-actions">
+          <button type="button" id="settings-refresh" class="btn-small">Aggiorna</button>
+        </div>
+      </div>
+      <p class="section-description">
+        Gestione base dell’account staff. In un sistema reale queste azioni sarebbero collegate al backend.
+      </p>
+
+      <div class="settings-grid">
+        <div class="settings-item">
+          <h3>Cambia password</h3>
+          <p>Puoi forzare un nuovo cambio password al prossimo login.</p>
+          <button type="button" id="settings-force-change" class="btn-small btn-small-gold">
+            Forza cambio password
+          </button>
+          <div class="form-help">
+            Questo resetta il flag locale e ti riporta alla schermata di cambio password al prossimo login.
+          </div>
+        </div>
+
+        <div class="settings-item">
+          <h3>2FA (mock)</h3>
+          <p>Placeholder per una futura integrazione 2FA (Google Authenticator, ecc.).</p>
+          <button type="button" class="btn-small">Configura 2FA (non attivo)</button>
+        </div>
+
+        <div class="settings-item">
+          <h3>Preferenze UI</h3>
+          <p>In un sistema reale potresti salvare tema, lingua, layout preferito.</p>
+          <button type="button" class="btn-small">Salva preferenze (mock)</button>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+  // ==========================
+  // CONFIG & DEMO DATA
+  // ==========================
+
+  // Demo credenziali iniziali
+  const DEFAULT_USERNAME = 'admin';
+  const DEFAULT_PASSWORD = 'admin123'; // solo demo, in produzione hash lato server
+
+  // ERLC API KEY:
+  // ATTENZIONE: in produzione NON va mai messa qui.
+  // Va tenuta lato server (es. process.env.ERLC_API_KEY) e usata solo dal backend.
+  const ERLC_API_KEY = ''; // placeholder, lasciato vuoto apposta
+
+  // Demo staff
+  const STAFF_DATA = [
+    { name: 'Pavel', role: 'Admin', lastLogin: '2026-04-06 22:31', status: 'Online' },
+    { name: 'Luca', role: 'Moderator', lastLogin: '2026-04-06 21:10', status: 'Online' },
+    { name: 'Marco', role: 'Helper', lastLogin: '2026-04-05 18:45', status: 'Offline' },
+    { name: 'Giulia', role: 'Moderator', lastLogin: '2026-04-04 16:20', status: 'Offline' },
+    { name: 'Sara', role: 'Admin', lastLogin: '2026-04-03 14:05', status: 'Online' }
+  ];
+
+  // Demo logs
+  const LOGS_DATA = [
+    { date: '2026-04-06 22:10', staff: 'Pavel', type: 'ban', detail: 'Ban 3 giorni per RDM', target: 'ID: 123' },
+    { date: '2026-04-06 21:50', staff: 'Luca', type: 'kick', detail: 'Kick per AFK in scena', target: 'ID: 456' },
+    { date: '2026-04-06 20:15', staff: 'Marco', type: 'warn', detail: 'Warn per failRP', target: 'ID: 789' },
+    { date: '2026-04-05 19:00', staff: 'Giulia', type: 'note', detail: 'Nota interna su comportamento borderline', target: 'ID: 321' },
+    { date: '2026-04-05 18:30', staff: 'Sara', type: 'ban', detail: 'Ban permanente per cheat', target: 'ID: 654' }
+  ];
+
+  // Demo tickets
+  const TICKETS_DATA = [
+    { id: '#001', status: 'open', user: 'ID: 123', assigned: 'Pavel', updated: '2026-04-06 22:20' },
+    { id: '#002', status: 'pending', user: 'ID: 456', assigned: 'Luca', updated: '2026-04-06 21:40' },
+    { id: '#003', status: 'closed', user: 'ID: 789', assigned: 'Marco', updated: '2026-04-05 19:10' },
+    { id: '#004', status: 'open', user: 'ID: 321', assigned: 'Giulia', updated: '2026-04-05 18:50' },
+    { id: '#005', status: 'closed', user: 'ID: 654', assigned: 'Sara', updated: '2026-04-05 18:35' }
+  ];
+
+  // ==========================
+  // DOM ELEMENTS
+  // ==========================
+
+  const loginView = document.getElementById('login-view');
+  const changeView = document.getElementById('change-password-view');
+  const dashboardView = document.getElementById('dashboard-view');
+
+  const loginForm = document.getElementById('login-form');
+  const loginError = document.getElementById('login-error');
+  const loginUsername = document.getElementById('login-username');
+  const loginPassword = document.getElementById('login-password');
+
+  const changeForm = document.getElementById('change-form');
+  const changeError = document.getElementById('change-error');
+  const changeBackLogin = document.getElementById('change-back-login');
+  const newPasswordInput = document.getElementById('new-password');
+  const confirmPasswordInput = document.getElementById('confirm-password');
+
+  const usernameLabel = document.getElementById('username-label');
+  const userRolePill = document.getElementById('user-role-pill');
+  const avatarInitials = document.getElementById('avatar-initials');
+
+  const logoutBtn = document.getElementById('logout-btn');
+
+  const metricStaffOnline = document.getElementById('metric-staff-online');
+  const metricTicketsOpen = document.getElementById('metric-tickets-open');
+  const metricLogsToday = document.getElementById('metric-logs-today');
+  const metricErlcStatus = document.getElementById('metric-erlc-status');
+  const erlcStatusPill = document.getElementById('erlc-status-pill');
+
+  const badgeStaffCount = document.getElementById('badge-staff-count');
+  const badgeLogsCount = document.getElementById('badge-logs-count');
+  const badgeTicketsCount = document.getElementById('badge-tickets-count');
+
+  const staffTableBody = document.getElementById('staff-table-body');
+  const staffFilterInput = document.getElementById('staff-filter');
+  const staffRefreshBtn = document.getElementById('staff-refresh');
+
+  const logsTableBody = document.getElementById('logs-table-body');
+  const logsFilterType = document.getElementById('logs-filter-type');
+  const logsRefreshBtn = document.getElementById('logs-refresh');
+
+  const ticketsTableBody = document.getElementById('tickets-table-body');
+  const ticketsFilterStatus = document.getElementById('tickets-filter-status');
+  const ticketsRefreshBtn = document.getElementById('tickets-refresh');
+
+  const erlcApiKeyInput = document.getElementById('erlc-api-key-input');
+  const erlcTestBtn = document.getElementById('erlc-test-btn');
+  const erlcTestResult = document.getElementById('erlc-test-result');
+  const erlcClearBtn = document.getElementById('erlc-clear-btn');
+
+  const settingsRefreshBtn = document.getElementById('settings-refresh');
+  const settingsForceChangeBtn = document.getElementById('settings-force-change');
+
+  const navLinks = document.querySelectorAll('.nav-link');
+  const sections = {
+    'section-dashboard': document.getElementById('section-dashboard'),
+    'section-staff': document.getElementById('section-staff'),
+    'section-logs': document.getElementById('section-logs'),
+    'section-tickets': document.getElementById('section-tickets'),
+    'section-erlc': document.getElementById('section-erlc'),
+    'section-settings': document.getElementById('section-settings')
+  };
+
+  // ==========================
+  // STATE & HELPERS
+  // ==========================
+
+  function showView(view) {
+    loginView.classList.add('hidden');
+    changeView.classList.add('hidden');
+    dashboardView.classList.add('hidden');
+    view.classList.remove('hidden');
+  }
+
+  function isPasswordChanged() {
+    return localStorage.getItem('passwordChanged') === 'true';
+  }
+
+  function getStoredPassword() {
+    return localStorage.getItem('userPassword') || DEFAULT_PASSWORD;
+  }
+
+  function setNewPassword(pwd) {
+    localStorage.setItem('userPassword', pwd);
+    localStorage.setItem('passwordChanged', 'true');
+  }
+
+  function setLoggedIn(username) {
+    sessionStorage.setItem('loggedInUser', username);
+  }
+
+  function getLoggedInUser() {
+    return sessionStorage.getItem('loggedInUser');
+  }
+
+  function logout() {
+    sessionStorage.removeItem('loggedInUser');
+    showView(loginView);
+  }
+
+  function setAvatarFromName(name) {
+    if (!name) {
+      avatarInitials.textContent = '?';
+      return;
     }
-
-    function isPasswordChanged() {
-      return localStorage.getItem('passwordChanged') === 'true';
+    const parts = name.trim().split(' ');
+    if (parts.length === 1) {
+      avatarInitials.textContent = parts[0].charAt(0).toUpperCase();
+    } else {
+      avatarInitials.textContent =
+        (parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
     }
+  }
 
-    function getStoredPassword() {
-      return localStorage.getItem('userPassword') || DEFAULT_PASSWORD;
+  function getRoleForUser(name) {
+    if (!name) return 'Admin';
+    const lower = name.toLowerCase();
+    if (lower === 'pavel') return 'Admin';
+    if (lower === 'luca' || lower === 'giulia') return 'Moderator';
+    if (lower === 'marco') return 'Helper';
+    return 'Admin';
+  }
+
+  function updateDashboardMetrics() {
+    const onlineCount = STAFF_DATA.filter(s => s.status === 'Online').length;
+    const openTickets = TICKETS_DATA.filter(t => t.status === 'open').length;
+    const logsToday = LOGS_DATA.length; // demo
+
+    metricStaffOnline.textContent = onlineCount;
+    metricTicketsOpen.textContent = openTickets;
+    metricLogsToday.textContent = logsToday;
+
+    badgeStaffCount.textContent = STAFF_DATA.length;
+    badgeLogsCount.textContent = LOGS_DATA.length;
+    badgeTicketsCount.textContent = TICKETS_DATA.length;
+
+    if (ERLC_API_KEY) {
+      metricErlcStatus.textContent = 'Online';
+      erlcStatusPill.innerHTML = '<span class="status-dot status-ok"></span>Key lato server';
+    } else {
+      metricErlcStatus.textContent = 'Configura';
+      erlcStatusPill.innerHTML = '<span class="status-dot status-warn"></span>Configurazione richiesta';
     }
+  }
 
-    function setNewPassword(pwd) {
-      localStorage.setItem('userPassword', pwd);
-      localStorage.setItem('passwordChanged', 'true');
-    }
+  function renderStaffTable(filterText) {
+    staffTableBody.innerHTML = '';
+    const filter = (filterText || '').toLowerCase();
 
-    function setLoggedIn(username) {
-      sessionStorage.setItem('loggedInUser', username);
-    }
+    STAFF_DATA.forEach(staff => {
+      const match =
+        !filter ||
+        staff.name.toLowerCase().includes(filter) ||
+        staff.role.toLowerCase().includes(filter);
 
-    function getLoggedInUser() {
-      return sessionStorage.getItem('loggedInUser');
-    }
+      if (!match) return;
 
-    function logout() {
-      sessionStorage.removeItem('loggedInUser');
+      const tr = document.createElement('tr');
+
+      const tdName = document.createElement('td');
+      tdName.textContent = staff.name;
+
+      const tdRole = document.createElement('td');
+      const roleBadge = document.createElement('span');
+      roleBadge.classList.add('badge-status');
+      if (staff.role === 'Admin') roleBadge.classList.add('badge-role-admin');
+      else if (staff.role === 'Moderator') roleBadge.classList.add('badge-role-mod');
+      else roleBadge.classList.add('badge-role-helper');
+      roleBadge.textContent = staff.role;
+      tdRole.appendChild(roleBadge);
+
+      const tdLast = document.createElement('td');
+      tdLast.textContent = staff.lastLogin;
+
+      const tdStatus = document.createElement('td');
+      const statusSpan = document.createElement('span');
+      statusSpan.classList.add('tag');
+      if (staff.status === 'Online') {
+        statusSpan.innerHTML = '<span class="status-dot status-ok"></span>Online';
+      } else {
+        statusSpan.innerHTML = '<span class="status-dot status-bad"></span>Offline';
+      }
+      tdStatus.appendChild(statusSpan);
+
+      const tdActions = document.createElement('td');
+      const btnView = document.createElement('button');
+      btnView.classList.add('btn-small');
+      btnView.textContent = 'Dettagli';
+      tdActions.appendChild(btnView);
+
+      tr.appendChild(tdName);
+      tr.appendChild(tdRole);
+      tr.appendChild(tdLast);
+      tr.appendChild(tdStatus);
+      tr.appendChild(tdActions);
+
+      staffTableBody.appendChild(tr);
+    });
+  }
+
+  function renderLogsTable(filterType) {
+    logsTableBody.innerHTML = '';
+    const type = (filterType || '').toLowerCase();
+
+    LOGS_DATA.forEach(log => {
+      if (type && log.type !== type) return;
+
+      const tr = document.createElement('tr');
+
+      const tdDate = document.createElement('td');
+      tdDate.textContent = log.date;
+
+      const tdStaff = document.createElement('td');
+      tdStaff.textContent = log.staff;
+
+      const tdType = document.createElement('td');
+      const typeTag = document.createElement('span');
+      typeTag.classList.add('tag');
+      if (log.type === 'ban') {
+        typeTag.classList.add('tag-gold');
+        typeTag.textContent = 'Ban';
+      } else if (log.type === 'kick') {
+        typeTag.textContent = 'Kick';
+      } else if (log.type === 'warn') {
+        typeTag.textContent = 'Warn';
+      } else {
+        typeTag.textContent = 'Nota';
+      }
+      tdType.appendChild(typeTag);
+
+      const tdDetail = document.createElement('td');
+      tdDetail.textContent = log.detail;
+
+      const tdTarget = document.createElement('td');
+      tdTarget.textContent = log.target;
+
+      tr.appendChild(tdDate);
+      tr.appendChild(tdStaff);
+      tr.appendChild(tdType);
+      tr.appendChild(tdDetail);
+      tr.appendChild(tdTarget);
+
+      logsTableBody.appendChild(tr);
+    });
+  }
+
+  function renderTicketsTable(filterStatus) {
+    ticketsTableBody.innerHTML = '';
+    const status = (filterStatus || '').toLowerCase();
+
+    TICKETS_DATA.forEach(ticket => {
+      if (status && ticket.status !== status) return;
+
+      const tr = document.createElement('tr');
+
+      const tdId = document.createElement('td');
+      tdId.textContent = ticket.id;
+
+      const tdStatus = document.createElement('td');
+      const statusBadge = document.createElement('span');
+      statusBadge.classList.add('badge-status');
+      if (ticket.status === 'open') {
+        statusBadge.classList.add('badge-open');
+        statusBadge.textContent = 'Aperto';
+      } else if (ticket.status === 'pending') {
+        statusBadge.classList.add('badge-pending');
+        statusBadge.textContent = 'In attesa';
+      } else {
+        statusBadge.classList.add('badge-closed');
+        statusBadge.textContent = 'Chiuso';
+      }
+      tdStatus.appendChild(statusBadge);
+
+      const tdUser = document.createElement('td');
+      tdUser.textContent = ticket.user;
+
+      const tdAssigned = document.createElement('td');
+      tdAssigned.textContent = ticket.assigned;
+
+      const tdUpdated = document.createElement('td');
+      tdUpdated.textContent = ticket.updated;
+
+      const tdActions = document.createElement('td');
+      const btnOpen = document.createElement('button');
+      btnOpen.classList.add('btn-small');
+      btnOpen.textContent = 'Apri';
+      tdActions.appendChild(btnOpen);
+
+      tr.appendChild(tdId);
+      tr.appendChild(tdStatus);
+      tr.appendChild(tdUser);
+      tr.appendChild(tdAssigned);
+      tr.appendChild(tdUpdated);
+      tr.appendChild(tdActions);
+
+      ticketsTableBody.appendChild(tr);
+    });
+  }
+
+  function showSection(sectionId) {
+    Object.keys(sections).forEach(id => {
+      if (id === sectionId) sections[id].classList.remove('hidden');
+      else sections[id].classList.add('hidden');
+    });
+  }
+
+  // ==========================
+  // INIT
+  // ==========================
+
+  window.addEventListener('load', () => {
+    const user = getLoggedInUser();
+    if (user) {
+      usernameLabel.textContent = user;
+      userRolePill.textContent = getRoleForUser(user);
+      setAvatarFromName(user);
+      updateDashboardMetrics();
+      renderStaffTable('');
+      renderLogsTable('');
+      renderTicketsTable('');
+      erlcApiKeyInput.value = ERLC_API_KEY ? '********' : '';
+      showView(dashboardView);
+    } else {
       showView(loginView);
     }
+  });
 
-    // Inizializzazione
-    window.addEventListener('load', () => {
-      const user = getLoggedInUser();
-      if (user) {
-        usernameLabel.textContent = user;
-        apiKeyStatus.textContent = ERLC_API_KEY ? 'Sì' : 'No';
-        if (!isPasswordChanged()) {
-          showView(changeView);
-        } else {
-          showView(dashboardView);
-        }
-      } else {
-        showView(loginView);
-      }
-    });
+  // ==========================
+  // LOGIN HANDLER
+  // ==========================
 
-    // Login
-    loginForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      loginError.classList.add('hidden');
-      const user = loginUsername.value.trim();
-      const pass = loginPassword.value;
+  loginForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    loginError.classList.add('hidden');
+    const user = loginUsername.value.trim();
+    const pass = loginPassword.value;
 
-      if (user !== DEFAULT_USERNAME || pass !== getStoredPassword()) {
-        loginError.textContent = 'Credenziali non valide';
-        loginError.classList.remove('hidden');
-        return;
-      }
+    if (user !== DEFAULT_USERNAME || pass !== getStoredPassword()) {
+      loginError.textContent = 'Credenziali non valide';
+      loginError.classList.remove('hidden');
+      return;
+    }
 
-      setLoggedIn(user);
+    setLoggedIn(user);
+    usernameLabel.textContent = user;
+    userRolePill.textContent = getRoleForUser(user);
+    setAvatarFromName(user);
+    updateDashboardMetrics();
+    renderStaffTable('');
+    renderLogsTable('');
+    renderTicketsTable('');
+    erlcApiKeyInput.value = ERLC_API_KEY ? '********' : '';
 
-      if (!isPasswordChanged()) {
-        showView(changeView);
-      } else {
-        usernameLabel.textContent = user;
-        apiKeyStatus.textContent = ERLC_API_KEY ? 'Sì' : 'No';
-        showView(dashboardView);
-      }
-    });
-
-    // Cambio password obbligatorio
-    changeForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      changeError.classList.add('hidden');
-
-      const newPwd = newPasswordInput.value;
-      const confirmPwd = confirmPasswordInput.value;
-
-      if (newPwd.length < 10) {
-        changeError.textContent = 'La password deve avere almeno 10 caratteri';
-        changeError.classList.remove('hidden');
-        return;
-      }
-      if (newPwd !== confirmPwd) {
-        changeError.textContent = 'Le password non coincidono';
-        changeError.classList.remove('hidden');
-        return;
-      }
-
-      setNewPassword(newPwd);
-
-      const user = getLoggedInUser() || DEFAULT_USERNAME;
-      usernameLabel.textContent = user;
-      apiKeyStatus.textContent = ERLC_API_KEY ? 'Sì' : 'No';
+    if (!isPasswordChanged()) {
+      showView(changeView);
+    } else {
       showView(dashboardView);
-    });
+    }
+  });
 
-    // Logout
-    logoutBtn.addEventListener('click', () => {
-      logout();
+  // ==========================
+  // CHANGE PASSWORD HANDLER
+  // ==========================
+
+  changeForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    changeError.classList.add('hidden');
+
+    const newPwd = newPasswordInput.value;
+    const confirmPwd = confirmPasswordInput.value;
+
+    if (newPwd.length < 10) {
+      changeError.textContent = 'La password deve avere almeno 10 caratteri';
+      changeError.classList.remove('hidden');
+      return;
+    }
+    if (newPwd !== confirmPwd) {
+      changeError.textContent = 'Le password non coincidono';
+      changeError.classList.remove('hidden');
+      return;
+    }
+
+    setNewPassword(newPwd);
+
+    const user = getLoggedInUser() || DEFAULT_USERNAME;
+    usernameLabel.textContent = user;
+    userRolePill.textContent = getRoleForUser(user);
+    setAvatarFromName(user);
+    updateDashboardMetrics();
+    renderStaffTable('');
+    renderLogsTable('');
+    renderTicketsTable('');
+    erlcApiKeyInput.value = ERLC_API_KEY ? '********' : '';
+
+    showView(dashboardView);
+  });
+
+  changeBackLogin.addEventListener('click', () => {
+    logout();
+  });
+
+  // ==========================
+  // LOGOUT
+  // ==========================
+
+  logoutBtn.addEventListener('click', () => {
+    logout();
+  });
+
+  // ==========================
+  // NAVIGATION
+  // ==========================
+
+  navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const sectionId = link.getAttribute('data-section');
+      if (!sectionId) return;
+
+      navLinks.forEach(l => l.classList.remove('active'));
+      link.classList.add('active');
+
+      showSection(sectionId);
     });
-  </script>
+  });
+
+  // ==========================
+  // STAFF EVENTS
+  // ==========================
+
+  staffFilterInput.addEventListener('input', () => {
+    renderStaffTable(staffFilterInput.value);
+  });
+
+  staffRefreshBtn.addEventListener('click', () => {
+    renderStaffTable(staffFilterInput.value);
+  });
+
+  // ==========================
+  // LOGS EVENTS
+  // ==========================
+
+  logsFilterType.addEventListener('change', () => {
+    renderLogsTable(logsFilterType.value);
+  });
+
+  logsRefreshBtn.addEventListener('click', () => {
+    renderLogsTable(logsFilterType.value);
+  });
+
+  // ==========================
+  // TICKETS EVENTS
+  // ==========================
+
+  ticketsFilterStatus.addEventListener('change', () => {
+    renderTicketsTable(ticketsFilterStatus.value);
+  });
+
+  ticketsRefreshBtn.addEventListener('click', () => {
+    renderTicketsTable(ticketsFilterStatus.value);
+  });
+
+  // ==========================
+  // ERLC EVENTS
+  // ==========================
+
+  erlcTestBtn.addEventListener('click', () => {
+    // Mock: in un sistema reale qui chiameresti il backend che usa la ERLC_API_KEY lato server
+    const now = new Date().toLocaleString();
+    if (!ERLC_API_KEY) {
+      erlcTestResult.textContent =
+        `[${now}] ERRORE: nessuna API key configurata lato server (placeholder vuoto nel client).`;
+    } else {
+      erlcTestResult.textContent =
+        `[${now}] OK: chiamata mock ERLC eseguita lato server (simulata).`;
+    }
+  });
+
+  erlcClearBtn.addEventListener('click', () => {
+    erlcTestResult.textContent = 'Nessun test eseguito.';
+  });
+
+  // ==========================
+  // SETTINGS EVENTS
+  // ==========================
+
+  settingsRefreshBtn.addEventListener('click', () => {
+    // Mock: in un sistema reale ricaricheresti le impostazioni dal backend
+    alert('Impostazioni aggiornate (mock).');
+  });
+
+  settingsForceChangeBtn.addEventListener('click', () => {
+    localStorage.removeItem('passwordChanged');
+    localStorage.removeItem('userPassword');
+    alert('Cambio password forzato. Al prossimo login verrà richiesta una nuova password.');
+  });
+</script>
 </body>
 </html>
