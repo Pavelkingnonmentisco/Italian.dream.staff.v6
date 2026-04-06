@@ -1,715 +1,397 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<title>Staff Panel RP – Melonly Style</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Staff Panel RP - Melonly Style</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.4.3/bcrypt.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <style>
+        :root {
+            --bg: #020617;
+            --panel: #0F172A;
+            --primary: #38BDF8;
+            --primary-dark: #0EA5E9;
+            --text: #E5E7EB;
+            --muted: #94A3B8;
+            --border: rgba(56,189,248,0.25);
+            --glow: rgba(56,189,248,0.35);
+        }
 
-<!-- bcryptjs -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.4.3/bcrypt.min.js"></script>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: "Poppins", system-ui, sans-serif;
+            overflow-x: hidden;
+        }
 
-<!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        .hidden { display: none !important; }
 
-<style>
-    :root {
-        /* CAMBIA QUI I COLORI CON QUELLI DEL TUO LOGO */
-        --bg: #020617;
-        --panel: #0F172A;
-        --primary: #38BDF8;
-        --primary-dark: #0EA5E9;
-        --text: #E5E7EB;
-        --muted: #94A3B8;
-        --border: rgba(56,189,248,0.25);
-        --glow: rgba(56,189,248,0.35);
-    }
+        /* LOGIN */
+        .login-wrapper {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at top, rgba(56,189,248,0.15), transparent 60%), var(--bg);
+        }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+        .login-card {
+            background: var(--panel);
+            padding: 32px;
+            width: 380px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            box-shadow: 0 0 40px rgba(15,23,42,0.9);
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.6s ease;
+        }
 
-    body {
-        background: var(--bg);
-        color: var(--text);
-        font-family: "Poppins", system-ui, sans-serif;
-        overflow-x: hidden;
-    }
+        .login-card::before {
+            content: "";
+            position: absolute;
+            inset: -40%;
+            background: radial-gradient(circle at top, var(--glow), transparent 60%);
+            opacity: 0.4;
+            pointer-events: none;
+        }
 
-    .hidden { display: none !important; }
+        .login-inner { position: relative; z-index: 1; }
+        
+        .login-logo {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
 
-    /* LOGIN */
-    .login-wrapper {
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: radial-gradient(circle at top, rgba(56,189,248,0.15), transparent 60%), var(--bg);
-    }
+        .login-logo img {
+            height: 60px;
+            object-fit: contain;
+        }
 
-    .login-card {
-        background: var(--panel);
-        padding: 32px;
-        width: 380px;
-        border-radius: 20px;
-        border: 1px solid var(--border);
-        box-shadow: 0 0 40px rgba(15,23,42,0.9);
-        position: relative;
-        overflow: hidden;
-        animation: fadeIn 0.6s ease;
-    }
+        .login-title {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 6px;
+            text-shadow: 0 0 15px var(--glow);
+        }
 
-    .login-card::before {
-        content: "";
-        position: absolute;
-        inset: -40%;
-        background: radial-gradient(circle at top, var(--glow), transparent 60%);
-        opacity: 0.4;
-        pointer-events: none;
-    }
+        .login-subtitle {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--muted);
+            margin-bottom: 20px;
+        }
 
-    .login-inner { position: relative; z-index: 1; }
+        .input-group { margin-bottom: 14px; }
+        .input-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: #CBD5E1;
+            margin-bottom: 4px;
+        }
 
-    .login-logo {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 10px;
-    }
+        .input-group input {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid #1E293B;
+            background: #020617;
+            color: var(--text);
+            font-size: 0.95rem;
+            transition: 0.2s;
+        }
 
-    .login-logo img {
-        height: 60px;
-        object-fit: contain;
-    }
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 10px var(--glow);
+        }
 
-    .login-title {
-        text-align: center;
-        font-size: 1.8rem;
-        font-weight: 600;
-        color: var(--primary);
-        margin-bottom: 6px;
-        text-shadow: 0 0 15px var(--glow);
-    }
+        .btn-primary {
+            width: 100%;
+            padding: 11px;
+            border-radius: 10px;
+            border: none;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #0F172A;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: 0.2s;
+        }
 
-    .login-subtitle {
-        text-align: center;
-        font-size: 0.9rem;
-        color: var(--muted);
-        margin-bottom: 20px;
-    }
+        .btn-primary:hover {
+            box-shadow: 0 0 20px var(--glow);
+            transform: translateY(-1px);
+        }
 
-    .input-group {
-        margin-bottom: 14px;
-    }
+        .error-box {
+            background: rgba(239,68,68,0.15);
+            border: 1px solid rgba(239,68,68,0.4);
+            padding: 8px 10px;
+            border-radius: 10px;
+            color: #FCA5A5;
+            font-size: 0.8rem;
+            margin-bottom: 10px;
+            display: none;
+        }
 
-    .input-group label {
-        display: block;
-        font-size: 0.85rem;
-        color: #CBD5E1;
-        margin-bottom: 4px;
-    }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-    .input-group input {
-        width: 100%;
-        padding: 10px 12px;
-        border-radius: 10px;
-        border: 1px solid #1E293B;
-        background: #020617;
-        color: var(--text);
-        font-size: 0.95rem;
-        transition: 0.2s;
-    }
+        /* APP LAYOUT */
+        .app-wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
 
-    .input-group input:focus {
-        outline: none;
-        border-color: var(--primary);
-        box-shadow: 0 0 10px var(--glow);
-    }
+        .navbar {
+            width: 100%;
+            height: 70px;
+            background: #020617;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            box-shadow: 0 0 25px rgba(15,23,42,0.9);
+        }
 
-    .btn-primary {
-        width: 100%;
-        padding: 11px;
-        border-radius: 10px;
-        border: none;
-        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-        color: #0F172A;
-        font-weight: 700;
-        font-size: 0.95rem;
-        cursor: pointer;
-        margin-top: 8px;
-        transition: 0.2s;
-    }
+        .navbar-inner {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+            background: rgba(15,23,42,0.9);
+            padding: 8px 16px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            backdrop-filter: blur(14px);
+        }
 
-    .btn-primary:hover {
-        box-shadow: 0 0 20px var(--glow);
-        transform: translateY(-1px);
-    }
+        .navbar-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-right: 10px;
+            padding-right: 10px;
+            border-right: 1px solid rgba(148,163,184,0.4);
+        }
 
-    .error-box {
-        background: rgba(239,68,68,0.15);
-        border: 1px solid rgba(239,68,68,0.4);
-        padding: 8px 10px;
-        border-radius: 10px;
-        color: #FCA5A5;
-        font-size: 0.8rem;
-        margin-bottom: 10px;
-        display: none;
-    }
+        .navbar-logo img { height: 32px; object-fit: contain; }
+        .navbar-logo span { font-size: 0.9rem; font-weight: 600; color: var(--primary); }
 
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(15px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
+        .nav-item {
+            color: var(--muted);
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
+        }
 
-    /* APP LAYOUT */
-    .app-wrapper {
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-    }
+        .nav-item:hover { color: var(--primary); transform: translateY(-1px); }
+        .nav-item.active {
+            color: var(--primary);
+            background: rgba(56,189,248,0.12);
+            box-shadow: 0 0 15px rgba(56,189,248,0.25);
+        }
 
-    /* NAVBAR */
-    .navbar {
-        width: 100%;
-        height: 70px;
-        background: #020617;
-        border-bottom: 1px solid var(--border);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: sticky;
-        top: 0;
-        z-index: 50;
-        box-shadow: 0 0 25px rgba(15,23,42,0.9);
-    }
+        main { flex: 1; padding: 20px; max-width: 1400px; margin: 0 auto 30px; }
+        .section-title {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 16px;
+            text-shadow: 0 0 12px var(--glow);
+        }
 
-    .navbar-inner {
-        display: flex;
-        gap: 18px;
-        align-items: center;
-        background: rgba(15,23,42,0.9);
-        padding: 8px 16px;
-        border-radius: 16px;
-        border: 1px solid var(--border);
-        backdrop-filter: blur(14px);
-        box-shadow: 0 0 20px rgba(15,23,42,0.9);
-    }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+        }
 
-    .navbar-logo {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-right: 10px;
-        padding-right: 10px;
-        border-right: 1px solid rgba(148,163,184,0.4);
-    }
+        .card {
+            background: var(--panel);
+            border-radius: 18px;
+            border: 1px solid var(--border);
+            padding: 18px 20px;
+            position: relative;
+            overflow: hidden;
+        }
 
-    .navbar-logo img {
-        height: 32px;
-        object-fit: contain;
-    }
+        .stat-number { font-size: 2rem; font-weight: 700; text-shadow: 0 0 10px var(--glow); }
 
-    .navbar-logo span {
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: var(--primary);
-    }
+        /* Form styling */
+        .field-label { font-size: 0.8rem; color: var(--muted); margin-bottom: 3px; display:block; }
+        .field-input, .field-textarea, .field-select {
+            width: 100%;
+            padding: 8px 10px;
+            border-radius: 10px;
+            border: 1px solid #1E293B;
+            background: #020617;
+            color: var(--text);
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+        }
 
-    .nav-item {
-        color: var(--muted);
-        font-size: 0.85rem;
-        font-weight: 500;
-        padding: 8px 12px;
-        border-radius: 12px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        transition: 0.2s;
-    }
+        .btn-small {
+            padding: 7px 12px;
+            border-radius: 999px;
+            border: none;
+            font-size: 0.8rem;
+            cursor: pointer;
+            font-weight: 600;
+            background: #1E293B;
+            color: white;
+            transition: 0.2s;
+        }
 
-    .nav-item i { font-size: 1rem; }
+        .btn-small.primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #0F172A;
+        }
 
-    .nav-item:hover {
-        color: var(--primary);
-        transform: translateY(-1px);
-    }
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid #1E293B;
+            background: #020617;
+        }
 
-    .nav-item.active {
-        color: var(--primary);
-        background: rgba(56,189,248,0.12);
-        box-shadow: 0 0 15px rgba(56,189,248,0.25);
-    }
+        table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+        th, td { padding: 10px; border-bottom: 1px solid #111827; text-align: left; }
+        th { color: var(--muted); text-transform: uppercase; font-size: 0.7rem; }
 
-    .main {
-        flex: 1;
-        padding: 20px;
-        max-width: 1400px;
-        margin: 0 auto 30px;
-    }
-
-    .section-title {
-        font-size: 1.6rem;
-        font-weight: 600;
-        color: var(--primary);
-        margin-bottom: 16px;
-        text-shadow: 0 0 12px var(--glow);
-    }
-
-    .grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-        gap: 20px;
-    }
-
-    .card {
-        background: var(--panel);
-        border-radius: 18px;
-        border: 1px solid var(--border);
-        box-shadow: 0 0 30px rgba(15,23,42,0.9);
-        padding: 18px 20px;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .card::before {
-        content: "";
-        position: absolute;
-        inset: -40%;
-        background: radial-gradient(circle at top, var(--glow), transparent 60%);
-        opacity: 0.35;
-        pointer-events: none;
-    }
-
-    .card-inner { position: relative; z-index: 1; }
-
-    .card-title {
-        font-size: 1.05rem;
-        font-weight: 600;
-        color: var(--primary);
-        margin-bottom: 6px;
-    }
-
-    .card-sub {
-        font-size: 0.8rem;
-        color: var(--muted);
-        margin-bottom: 10px;
-    }
-
-    .stat-number {
-        font-size: 2rem;
-        font-weight: 700;
-        text-shadow: 0 0 10px var(--glow);
-    }
-
-    .log-item {
-        background: rgba(15,23,42,0.9);
-        border-radius: 10px;
-        border: 1px solid rgba(56,189,248,0.2);
-        padding: 8px 10px;
-        font-size: 0.8rem;
-        margin-bottom: 6px;
-    }
-
-    .log-item strong { color: var(--primary); }
-
-    .field-label {
-        font-size: 0.8rem;
-        color: var(--muted);
-        margin-bottom: 3px;
-    }
-
-    .field-input, .field-textarea, .field-select {
-        width: 100%;
-        padding: 8px 10px;
-        border-radius: 10px;
-        border: 1px solid #1E293B;
-        background: #020617;
-        color: var(--text);
-        font-size: 0.85rem;
-        margin-bottom: 8px;
-        resize: vertical;
-    }
-
-    .field-input:focus, .field-textarea:focus, .field-select:focus {
-        outline: none;
-        border-color: var(--primary);
-        box-shadow: 0 0 8px var(--glow);
-    }
-
-    .btn-small {
-        padding: 7px 10px;
-        border-radius: 999px;
-        border: none;
-        font-size: 0.8rem;
-        cursor: pointer;
-        font-weight: 500;
-        background: rgba(15,23,42,0.9);
-        color: var(--text);
-        border: 1px solid #1E293B;
-        transition: 0.2s;
-    }
-
-    .btn-small.primary {
-        background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-        color: #0F172A;
-        border: none;
-    }
-
-    .btn-small:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 0 10px rgba(15,23,42,0.8);
-    }
-
-    .badge {
-        display: inline-flex;
-        align-items: center;
-        padding: 2px 8px;
-        border-radius: 999px;
-        font-size: 0.7rem;
-        border: 1px solid #4B5563;
-        color: #E5E7EB;
-    }
-
-    .badge.admin { border-color: #f97316; color: #fed7aa; }
-    .badge.mod { border-color: #3b82f6; color: #bfdbfe; }
-    .badge.helper { border-color: #a855f7; color: #e9d5ff; }
-
-    .table-wrapper {
-        width: 100%;
-        overflow-x: auto;
-        border-radius: 12px;
-        border: 1px solid #1E293B;
-        background: #020617;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 0.8rem;
-    }
-
-    th, td {
-        padding: 6px 8px;
-        border-bottom: 1px solid #111827;
-        white-space: nowrap;
-    }
-
-    th {
-        text-align: left;
-        color: var(--muted);
-        font-weight: 500;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        font-size: 0.7rem;
-    }
-
-    @media (max-width: 768px) {
-        .navbar-inner { gap: 8px; padding: 6px 10px; }
-        .nav-item { font-size: 0.75rem; padding: 6px 8px; }
-        .main { padding: 14px; }
-        .navbar-logo span { display: none; }
-    }
-</style>
+        .badge {
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 0.7rem;
+            border: 1px solid #4B5563;
+        }
+        .badge.admin { border-color: #f97316; color: #fed7aa; }
+        .badge.mod { border-color: #3b82f6; color: #bfdbfe; }
+        .badge.helper { border-color: #a855f7; color: #e9d5ff; }
+    </style>
 </head>
-
 <body>
 
-<!-- LOGIN VIEW -->
 <div id="login-view" class="login-wrapper">
     <div class="login-card">
         <div class="login-inner">
             <div class="login-logo">
-                <!-- METTI QUI IL TUO LOGO -->
-                <img src="logo.png" alt="Logo">
+                <img src="https://res.cloudinary.com/dec4vnmzg/image/upload/v1775515801/rjmv1dsam6nqf1jfmnfw.webp" alt="Logo">
             </div>
             <div class="login-title">Staff Panel RP</div>
             <div class="login-subtitle">Accedi con il tuo account staff</div>
-
             <div id="login-error" class="error-box"></div>
-
             <div class="input-group">
                 <label>Username</label>
                 <input type="text" id="login-username" autocomplete="off">
             </div>
-
             <div class="input-group">
                 <label>Password</label>
                 <input type="password" id="login-password">
             </div>
-
             <button class="btn-primary" id="login-btn">Entra</button>
         </div>
     </div>
 </div>
 
-<!-- APP VIEW -->
 <div id="app-view" class="app-wrapper hidden">
-
-    <!-- NAVBAR -->
     <div class="navbar">
         <div class="navbar-inner">
             <div class="navbar-logo">
-                <!-- STESSO LOGO DEL LOGIN -->
-                <img src="logo.png" alt="Logo">
+                <img src="https://res.cloudinary.com/dec4vnmzg/image/upload/v1775515801/rjmv1dsam6nqf1jfmnfw.webp" alt="Logo">
                 <span>Staff Panel</span>
             </div>
-            <div class="nav-item active" data-section="dashboard">
-                <i>📊</i> Dashboard
-            </div>
-            <div class="nav-item" data-section="personal">
-                <i>👤</i> Area Personale
-            </div>
-            <div class="nav-item" data-section="duty">
-                <i>🕒</i> Duty
-            </div>
-            <div class="nav-item" data-section="logs">
-                <i>📁</i> Logs
-            </div>
-            <div class="nav-item" data-section="staff-manager">
-                <i>🛠️</i> Staff Manager
-            </div>
-            <div class="nav-item" id="logout-btn">
-                <i>🚪</i> Logout
-            </div>
+            <div class="nav-item active" data-section="dashboard">📊 Dashboard</div>
+            <div class="nav-item" data-section="personal">👤 Area Personale</div>
+            <div class="nav-item" data-section="duty">🕒 Duty</div>
+            <div class="nav-item" data-section="logs">📁 Logs</div>
+            <div class="nav-item" data-section="staff-manager">🛡️ Staff Manager</div>
+            <div class="nav-item" id="logout-btn">🚪 Logout</div>
         </div>
     </div>
 
-    <!-- MAIN CONTENT -->
-    <div class="main">
-
-        <!-- DASHBOARD -->
+    <main>
         <section id="dashboard-section" class="panel-section">
             <div class="section-title">Dashboard</div>
             <div class="grid">
                 <div class="card">
-                    <div class="card-inner">
-                        <div class="card-title">Staff Online</div>
-                        <div class="card-sub">Staff con duty attivo</div>
-                        <div class="stat-number" id="stat-staff-online">0</div>
-                    </div>
+                    <div class="card-title">Staff Online</div>
+                    <div class="stat-number" id="stat-staff-online">0</div>
                 </div>
-
                 <div class="card">
-                    <div class="card-inner">
-                        <div class="card-title">Punishment Logs Totali</div>
-                        <div class="card-sub">Tutti i log registrati</div>
-                        <div class="stat-number" id="stat-total-logs">0</div>
-                    </div>
+                    <div class="card-title">Logs Totali</div>
+                    <div class="stat-number" id="stat-total-logs">0</div>
                 </div>
-
                 <div class="card">
-                    <div class="card-inner">
-                        <div class="card-title">Sessioni Attive</div>
-                        <div class="card-sub">Sessioni staff in corso</div>
-                        <div class="stat-number" id="stat-sessions">0</div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-inner">
-                        <div class="card-title">Ore Staff (mock)</div>
-                        <div class="card-sub">Grafico dimostrativo (collegabile ai dati reali)</div>
-                        <canvas id="hoursChart" height="120"></canvas>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-inner">
-                        <div class="card-title">Ultimi 5 Logs</div>
-                        <div class="card-sub">Attività recente</div>
-                        <div id="dashboard-latest-logs"></div>
-                    </div>
+                    <canvas id="hoursChart" height="120"></canvas>
                 </div>
             </div>
         </section>
 
-        <!-- AREA PERSONALE -->
-        <section id="personal-section" class="panel-section hidden">
-            <div class="section-title">Area Personale</div>
-            <div class="grid">
-                <div class="card">
-                    <div class="card-inner">
-                        <div class="card-title">Profilo Staff</div>
-                        <div class="card-sub">Informazioni del tuo account</div>
-                        <p><b>Username:</b> <span id="personal-username"></span></p>
-                        <p><b>Ruolo:</b> <span id="personal-role"></span></p>
-                        <p><b>Matricola:</b> <span id="personal-badge"></span></p>
-                        <p><b>Ore totali:</b> <span id="personal-hours">0</span></p>
-                        <p><b>Warnings:</b> <span id="personal-warnings">0</span></p>
-                        <p><b>Strikes:</b> <span id="personal-strikes">0</span></p>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-inner">
-                        <div class="card-title">Ultimi Log Creati</div>
-                        <div class="card-sub">I tuoi ultimi 5 punishment logs</div>
-                        <div id="personal-latest-logs"></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- DUTY -->
-        <section id="duty-section" class="panel-section hidden">
-            <div class="section-title">Duty</div>
-            <div class="grid">
-                <div class="card">
-                    <div class="card-inner">
-                        <div class="card-title">Stato Duty</div>
-                        <div class="card-sub">Gestisci il tuo turno</div>
-                        <p><b>Stato:</b> <span id="duty-status">offline</span></p>
-                        <p><b>Timer:</b> <span id="duty-timer">00:00:00</span></p>
-                        <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
-                            <button class="btn-small primary" id="duty-start-btn">Attiva Shift</button>
-                            <button class="btn-small hidden" id="duty-break-btn">Pausa</button>
-                            <button class="btn-small hidden" id="duty-resume-btn">Riprendi</button>
-                            <button class="btn-small hidden" id="duty-end-btn">Termina</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-inner">
-                        <div class="card-title">Duty Logs</div>
-                        <div class="card-sub">Storico azioni duty</div>
-                        <div class="table-wrapper">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Data</th>
-                                        <th>Azione</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="duty-logs-table"></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- LOGS -->
         <section id="logs-section" class="panel-section hidden">
-            <div class="section-title">Punishment Logs</div>
-            <div class="grid">
-                <div class="card">
-                    <div class="card-inner">
-                        <div class="card-title">Crea Log</div>
-                        <div class="card-sub">Registra un nuovo punishment</div>
-
-                        <label class="field-label">User *</label>
-                        <input class="field-input" id="log-user">
-
-                        <label class="field-label">Roblox Player ID</label>
-                        <input class="field-input" id="log-player-id">
-
-                        <label class="field-label">Reason *</label>
-                        <textarea class="field-textarea" id="log-reason"></textarea>
-
-                        <label class="field-label">Previous Punishments</label>
-                        <input class="field-input" id="log-previous" type="number" min="0" value="0">
-
-                        <label class="field-label">Type</label>
-                        <select class="field-select" id="log-type">
-                            <option value="Warning">Warning</option>
-                            <option value="Kick">Kick</option>
-                            <option value="Ban">Ban</option>
-                        </select>
-
-                        <button class="btn-small primary" id="log-create-btn" style="margin-top:6px;">Crea Log</button>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-inner">
-                        <div class="card-title">Lista Logs</div>
-                        <div class="card-sub">Ultimi 50 logs</div>
-                        <div class="table-wrapper" style="max-height:320px; overflow-y:auto;">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Data</th>
-                                        <th>User</th>
-                                        <th>Type</th>
-                                        <th>Staff</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="logs-table"></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+            <div class="section-title">Crea Punishment Log</div>
+            <div class="card" style="max-width: 500px;">
+                <label class="field-label">User *</label>
+                <input class="field-input" id="log-user">
+                <label class="field-label">Reason *</label>
+                <textarea class="field-textarea" id="log-reason"></textarea>
+                <label class="field-label">Type</label>
+                <select class="field-select" id="log-type">
+                    <option value="Warning">Warning</option>
+                    <option value="Kick">Kick</option>
+                    <option value="Ban">Ban</option>
+                </select>
+                <button class="btn-small primary" id="log-create-btn">Crea Log</button>
             </div>
         </section>
-
-        <!-- STAFF MANAGER -->
+        
         <section id="staff-manager-section" class="panel-section hidden">
             <div class="section-title">Staff Manager</div>
-
-            <div id="staff-manager-locked" class="card" style="max-width:420px;">
-                <div class="card-inner">
-                    <div class="card-title">Accesso riservato</div>
-                    <div class="card-sub">Inserisci la password Staff Manager</div>
-                    <div id="sm-error" class="error-box" style="display:none;"></div>
-                    <label class="field-label">Password</label>
-                    <input class="field-input" type="password" id="sm-password">
-                    <button class="btn-small primary" id="sm-unlock-btn" style="margin-top:6px;">Sblocca</button>
-                </div>
+            <div id="staff-manager-locked" class="card" style="max-width:400px;">
+                <label class="field-label">Password Admin</label>
+                <input class="field-input" type="password" id="sm-password">
+                <button class="btn-small primary" id="sm-unlock-btn">Sblocca</button>
+                <div id="sm-error" class="error-box" style="margin-top:10px;"></div>
             </div>
-
-            <div id="staff-manager-unlocked" class="grid hidden">
-                <div class="card">
-                    <div class="card-inner">
-                        <div class="card-title">Staff</div>
-                        <div class="card-sub">Lista staff registrato</div>
-                        <div class="table-wrapper" style="max-height:320px; overflow-y:auto;">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Username</th>
-                                        <th>Ruolo</th>
-                                        <th>Matricola</th>
-                                        <th>Ore</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="sm-staff-table"></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-inner">
-                        <div class="card-title">Modifica Staff</div>
-                        <div class="card-sub">Seleziona uno staff dalla tabella</div>
-
-                        <label class="field-label">Username selezionato</label>
-                        <input class="field-input" id="sm-edit-username" disabled>
-
-                        <label class="field-label">Ruolo</label>
-                        <input class="field-input" id="sm-edit-role">
-
-                        <label class="field-label">Matricola</label>
-                        <input class="field-input" id="sm-edit-badge">
-
-                        <label class="field-label">Ore totali</label>
-                        <input class="field-input" id="sm-edit-hours" type="number" min="0">
-
-                        <label class="field-label">Warnings</label>
-                        <input class="field-input" id="sm-edit-warnings" type="number" min="0">
-
-                        <label class="field-label">Strikes</label>
-                        <input class="field-input" id="sm-edit-strikes" type="number" min="0">
-
-                        <button class="btn-small primary" id="sm-save-btn" style="margin-top:6px;">Salva</button>
-                    </div>
-                </div>
+            <div id="staff-manager-unlocked" class="hidden">
+                 <div class="table-wrapper">
+                    <table id="sm-staff-table">
+                        <thead>
+                            <tr><th>Username</th><th>Ruolo</th><th>Ore</th></tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                 </div>
             </div>
         </section>
-
-    </div>
+    </main>
 </div>
 
 <script>
@@ -719,509 +401,80 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
+const bcrypt = dcodeIO.bcrypt; // FIX: Accesso corretto alla libreria bcryptjs
 
-/* STATE */
 let currentUser = null;
-let dutyInterval = null;
-let dutySeconds = 0;
 
-/* ELEMENTS */
-const loginView = document.getElementById("login-view");
-const appView = document.getElementById("app-view");
-const loginError = document.getElementById("login-error");
-const loginUsername = document.getElementById("login-username");
-const loginPassword = document.getElementById("login-password");
+/* LOGIN LOGIC */
 const loginBtn = document.getElementById("login-btn");
-
-const navItems = document.querySelectorAll(".nav-item");
-const logoutBtn = document.getElementById("logout-btn");
-
-const personalUsername = document.getElementById("personal-username");
-const personalRole = document.getElementById("personal-role");
-const personalBadge = document.getElementById("personal-badge");
-const personalHours = document.getElementById("personal-hours");
-const personalWarnings = document.getElementById("personal-warnings");
-const personalStrikes = document.getElementById("personal-strikes");
-const personalLatestLogs = document.getElementById("personal-latest-logs");
-
-const statStaffOnline = document.getElementById("stat-staff-online");
-const statTotalLogs = document.getElementById("stat-total-logs");
-const statSessions = document.getElementById("stat-sessions");
-const dashboardLatestLogs = document.getElementById("dashboard-latest-logs");
-
-const dutyStatusEl = document.getElementById("duty-status");
-const dutyTimerEl = document.getElementById("duty-timer");
-const dutyStartBtn = document.getElementById("duty-start-btn");
-const dutyBreakBtn = document.getElementById("duty-break-btn");
-const dutyResumeBtn = document.getElementById("duty-resume-btn");
-const dutyEndBtn = document.getElementById("duty-end-btn");
-const dutyLogsTable = document.getElementById("duty-logs-table");
-
-const logUserInput = document.getElementById("log-user");
-const logPlayerIdInput = document.getElementById("log-player-id");
-const logReasonInput = document.getElementById("log-reason");
-const logPreviousInput = document.getElementById("log-previous");
-const logTypeSelect = document.getElementById("log-type");
-const logCreateBtn = document.getElementById("log-create-btn");
-const logsTable = document.getElementById("logs-table");
-
-const smLocked = document.getElementById("staff-manager-locked");
-const smUnlocked = document.getElementById("staff-manager-unlocked");
-const smPasswordInput = document.getElementById("sm-password");
-const smUnlockBtn = document.getElementById("sm-unlock-btn");
-const smError = document.getElementById("sm-error");
-const smStaffTable = document.getElementById("sm-staff-table");
-const smEditUsername = document.getElementById("sm-edit-username");
-const smEditRole = document.getElementById("sm-edit-role");
-const smEditBadge = document.getElementById("sm-edit-badge");
-const smEditHours = document.getElementById("sm-edit-hours");
-const smEditWarnings = document.getElementById("sm-edit-warnings");
-const smEditStrikes = document.getElementById("sm-edit-strikes");
-const smSaveBtn = document.getElementById("sm-save-btn");
-
-let smSelectedUser = null;
-
-/* LOGIN */
-function showLoginError(msg) {
-    loginError.textContent = msg;
-    loginError.style.display = "block";
-}
-
 loginBtn.addEventListener("click", async () => {
-    const user = loginUsername.value.trim();
-    const pass = loginPassword.value;
+    const user = document.getElementById("login-username").value.trim();
+    const pass = document.getElementById("login-password").value;
+    const errBox = document.getElementById("login-error");
 
     if (!user || !pass) {
-        showLoginError("Inserisci username e password.");
+        errBox.textContent = "Inserisci tutti i campi.";
+        errBox.style.display = "block";
         return;
     }
-
-    const ref = db.ref("staff/" + user);
-    const snap = await ref.get();
-
-    if (!snap.exists()) {
-        showLoginError("Utente non trovato.");
-        return;
-    }
-
-    const data = snap.val();
-    const hash = data.passwordHash;
 
     try {
-        // FIX: bcryptjs in browser → compareSync
-        const ok = bcrypt.compareSync(pass, hash);
-        if (!ok) {
-            showLoginError("Password errata.");
+        const snap = await db.ref("staff/" + user).get();
+        if (!snap.exists()) {
+            errBox.textContent = "Utente non trovato.";
+            errBox.style.display = "block";
             return;
         }
+
+        const data = snap.val();
+        // Verifica la password usando bcrypt
+        const match = bcrypt.compareSync(pass, data.passwordHash);
+
+        if (match) {
+            currentUser = user;
+            document.getElementById("login-view").classList.add("hidden");
+            document.getElementById("app-view").classList.remove("hidden");
+            initApp();
+        } else {
+            errBox.textContent = "Password errata.";
+            errBox.style.display = "block";
+        }
     } catch (e) {
-        showLoginError("Errore bcrypt.");
-        return;
+        console.error(e);
+        errBox.textContent = "Errore durante il login (Bcrypt/DB).";
+        errBox.style.display = "block";
     }
-
-    loginError.style.display = "none";
-    currentUser = user;
-
-    // Aggiorna lastLogin e dutyStatus
-    ref.update({
-        lastLogin: Date.now(),
-        dutyStatus: "offline"
-    });
-
-    // Mostra app
-    loginView.classList.add("hidden");
-    appView.classList.remove("hidden");
-
-    loadPersonalData();
-    setupDashboardListeners();
-    setupDutyListeners();
-    setupLogsListeners();
-    setupStaffManager();
 });
 
-/* NAVBAR */
-navItems.forEach(item => {
-    const section = item.getAttribute("data-section");
-    if (!section) return;
+/* NAVBAR NAVIGATION */
+document.querySelectorAll(".nav-item").forEach(item => {
     item.addEventListener("click", () => {
-        navItems.forEach(i => i.classList.remove("active"));
+        const section = item.getAttribute("data-section");
+        if (!section) return;
+        
+        document.querySelectorAll(".nav-item").forEach(i => i.classList.remove("active"));
         item.classList.add("active");
-        showSection(section);
+        
+        document.querySelectorAll(".panel-section").forEach(s => s.classList.add("hidden"));
+        document.getElementById(section + "-section").classList.remove("hidden");
     });
 });
 
-function showSection(section) {
-    document.querySelectorAll(".panel-section").forEach(sec => sec.classList.add("hidden"));
-    const target = document.getElementById(section + "-section");
-    if (target) target.classList.remove("hidden");
+document.getElementById("logout-btn").addEventListener("click", () => { location.reload(); });
+
+/* INIT APP FUNCTIONS */
+function initApp() {
+    setupDashboard();
+    // Altre inizializzazioni...
 }
 
-logoutBtn.addEventListener("click", () => {
-    currentUser = null;
-    if (dutyInterval) clearInterval(dutyInterval);
-    dutyInterval = null;
-    dutySeconds = 0;
-    dutyTimerEl.textContent = "00:00:00";
-    appView.classList.add("hidden");
-    loginView.classList.remove("hidden");
-});
-
-/* PERSONAL AREA */
-function loadPersonalData() {
-    if (!currentUser) return;
-    db.ref("staff/" + currentUser).on("value", snap => {
-        const data = snap.val() || {};
-        personalUsername.textContent = currentUser;
-        personalRole.textContent = data.role || "Staff";
-        personalBadge.textContent = data.badgeId || "N/A";
-        personalHours.textContent = data.hours || 0;
-        personalWarnings.textContent = data.warnings || 0;
-        personalStrikes.textContent = data.strikes || 0;
-    });
-
-    db.ref("punishmentLogs").orderByChild("staff").equalTo(currentUser).limitToLast(5).on("value", snap => {
-        personalLatestLogs.innerHTML = "";
-        const val = snap.val();
-        if (!val) return;
-        Object.values(val).reverse().forEach(log => {
-            const div = document.createElement("div");
-            div.className = "log-item";
-            div.innerHTML = `<strong>${log.user}</strong> – ${log.type}<br><small>${new Date(log.created).toLocaleString()}</small>`;
-            personalLatestLogs.appendChild(div);
-        });
-    });
-}
-
-/* DASHBOARD */
-function setupDashboardListeners() {
+function setupDashboard() {
     db.ref("staff").on("value", snap => {
-        let count = 0;
-        snap.forEach(s => {
-            if (s.val().dutyStatus === "online") count++;
-        });
-        statStaffOnline.textContent = count;
-    });
-
-    db.ref("punishmentLogs").on("value", snap => {
-        const total = snap.exists() ? Object.keys(snap.val()).length : 0;
-        statTotalLogs.textContent = total;
-    });
-
-    db.ref("sessions").on("value", snap => {
-        let active = 0;
-        snap.forEach(s => {
-            if (!s.val().end) active++;
-        });
-        statSessions.textContent = active;
-    });
-
-    db.ref("punishmentLogs").limitToLast(5).on("value", snap => {
-        dashboardLatestLogs.innerHTML = "";
-        const val = snap.val();
-        if (!val) return;
-        Object.values(val).reverse().forEach(log => {
-            const div = document.createElement("div");
-            div.className = "log-item";
-            div.innerHTML = `<strong>${log.user}</strong> – ${log.type}<br><small>${new Date(log.created).toLocaleString()}</small>`;
-            dashboardLatestLogs.appendChild(div);
-        });
-    });
-
-    const ctx = document.getElementById("hoursChart").getContext("2d");
-    new Chart(ctx, {
-        type: "line",
-        data: {
-            labels: ["6g fa","5g fa","4g fa","3g fa","2g fa","Ieri","Oggi"],
-            datasets: [{
-                label: "Ore (mock)",
-                data: [1,2,1.5,3,2.5,4,3],
-                borderColor: "#38BDF8",
-                backgroundColor: "rgba(56,189,248,0.25)",
-                borderWidth: 2,
-                tension: 0.4,
-                fill: true
-            }]
-        },
-        options: {
-            plugins: { legend: { labels: { color: "#E5E7EB" } } },
-            scales: {
-                x: { ticks: { color: "#94A3B8" } },
-                y: { ticks: { color: "#94A3B8" } }
-            }
-        }
+        let online = 0;
+        snap.forEach(s => { if(s.val().dutyStatus === "online") online++; });
+        document.getElementById("stat-staff-online").textContent = online;
     });
 }
-
-/* DUTY */
-function setupDutyListeners() {
-    if (!currentUser) return;
-
-    db.ref("staff/" + currentUser + "/dutyStatus").on("value", snap => {
-        const status = snap.val() || "offline";
-        dutyStatusEl.textContent = status;
-        updateDutyButtons(status);
-    });
-
-    db.ref("dutyLogs").orderByChild("staff").equalTo(currentUser).limitToLast(20).on("value", snap => {
-        dutyLogsTable.innerHTML = "";
-        const val = snap.val();
-        if (!val) return;
-        Object.values(val).sort((a,b) => b.created - a.created).forEach(log => {
-            const tr = document.createElement("tr");
-            const tdDate = document.createElement("td");
-            const tdAction = document.createElement("td");
-            tdDate.textContent = new Date(log.created).toLocaleString();
-            tdAction.textContent = log.action;
-            tr.appendChild(tdDate);
-            tr.appendChild(tdAction);
-            dutyLogsTable.appendChild(tr);
-        });
-    });
-}
-
-function updateDutyButtons(status) {
-    dutyStartBtn.classList.add("hidden");
-    dutyBreakBtn.classList.add("hidden");
-    dutyResumeBtn.classList.add("hidden");
-    dutyEndBtn.classList.add("hidden");
-
-    if (status === "offline") {
-        dutyStartBtn.classList.remove("hidden");
-        if (dutyInterval) clearInterval(dutyInterval);
-        dutyInterval = null;
-        dutySeconds = 0;
-        dutyTimerEl.textContent = "00:00:00";
-    } else if (status === "online") {
-        dutyBreakBtn.classList.remove("hidden");
-        dutyEndBtn.classList.remove("hidden");
-        startDutyTimer();
-    } else if (status === "break") {
-        dutyResumeBtn.classList.remove("hidden");
-        dutyEndBtn.classList.remove("hidden");
-        if (dutyInterval) clearInterval(dutyInterval);
-        dutyInterval = null;
-    }
-}
-
-function startDutyTimer() {
-    if (dutyInterval) return;
-    dutyInterval = setInterval(() => {
-        dutySeconds++;
-        const h = String(Math.floor(dutySeconds / 3600)).padStart(2,"0");
-        const m = String(Math.floor((dutySeconds % 3600) / 60)).padStart(2,"0");
-        const s = String(dutySeconds % 60).padStart(2,"0");
-        dutyTimerEl.textContent = `${h}:${m}:${s}`;
-    }, 1000);
-}
-
-function pushDutyLog(action) {
-    if (!currentUser) return;
-    db.ref("dutyLogs").push({
-        staff: currentUser,
-        action,
-        created: Date.now()
-    });
-}
-
-dutyStartBtn.addEventListener("click", () => {
-    if (!currentUser) return;
-    dutySeconds = 0;
-    db.ref("staff/" + currentUser).update({
-        dutyStatus: "online",
-        lastShiftStart: Date.now()
-    });
-    pushDutyLog("start");
-});
-
-dutyBreakBtn.addEventListener("click", () => {
-    if (!currentUser) return;
-    db.ref("staff/" + currentUser).update({
-        dutyStatus: "break"
-    });
-    pushDutyLog("break");
-});
-
-dutyResumeBtn.addEventListener("click", () => {
-    if (!currentUser) return;
-    db.ref("staff/" + currentUser).update({
-        dutyStatus: "online"
-    });
-    pushDutyLog("resume");
-});
-
-dutyEndBtn.addEventListener("click", async () => {
-    if (!currentUser) return;
-    const ref = db.ref("staff/" + currentUser);
-    const snap = await ref.get();
-    const data = snap.val() || {};
-    const start = data.lastShiftStart || Date.now();
-    const end = Date.now();
-    const diffHours = (end - start) / 3600000;
-    const newHours = (data.hours || 0) + diffHours;
-
-    await ref.update({
-        dutyStatus: "offline",
-        lastShiftEnd: end,
-        hours: newHours
-    });
-    pushDutyLog("end");
-});
-
-/* LOGS */
-function setupLogsListeners() {
-    db.ref("punishmentLogs").limitToLast(50).on("value", snap => {
-        logsTable.innerHTML = "";
-        const val = snap.val();
-        if (!val) return;
-        Object.values(val).sort((a,b) => b.created - a.created).forEach(log => {
-            const tr = document.createElement("tr");
-            const tdDate = document.createElement("td");
-            const tdUser = document.createElement("td");
-            const tdType = document.createElement("td");
-            const tdStaff = document.createElement("td");
-            tdDate.textContent = new Date(log.created).toLocaleString();
-            tdUser.textContent = log.user;
-            tdType.textContent = log.type;
-            tdStaff.textContent = log.staff;
-            tr.appendChild(tdDate);
-            tr.appendChild(tdUser);
-            tr.appendChild(tdType);
-            tr.appendChild(tdStaff);
-            logsTable.appendChild(tr);
-        });
-    });
-}
-
-logCreateBtn.addEventListener("click", () => {
-    if (!currentUser) {
-        alert("Devi essere loggato.");
-        return;
-    }
-    const user = logUserInput.value.trim();
-    const playerId = logPlayerIdInput.value.trim();
-    const reason = logReasonInput.value.trim();
-    const previous = parseInt(logPreviousInput.value || "0", 10);
-    const type = logTypeSelect.value;
-
-    if (!user || !reason) {
-        alert("User e Reason sono obbligatori.");
-        return;
-    }
-
-    db.ref("punishmentLogs").push({
-        user,
-        playerId,
-        reason,
-        previous,
-        type,
-        staff: currentUser,
-        created: Date.now()
-    });
-
-    logUserInput.value = "";
-    logPlayerIdInput.value = "";
-    logReasonInput.value = "";
-    logPreviousInput.value = "0";
-    logTypeSelect.value = "Warning";
-
-    alert("Log creato.");
-});
-
-/* STAFF MANAGER */
-function setupStaffManager() {
-    // password manager default
-    db.ref("settings/staffManager/adminPassword").once("value").then(snap => {
-        if (!snap.exists()) {
-            db.ref("settings/staffManager").set({
-                adminPassword: "admin123"
-            });
-        }
-    });
-
-    db.ref("staff").on("value", snap => {
-        smStaffTable.innerHTML = "";
-        const val = snap.val() || {};
-        Object.keys(val).forEach(username => {
-            const s = val[username];
-            const tr = document.createElement("tr");
-            tr.style.cursor = "pointer";
-            tr.addEventListener("click", () => selectStaffForEdit(username, s));
-
-            const tdUser = document.createElement("td");
-            const tdRole = document.createElement("td");
-            const tdBadge = document.createElement("td");
-            const tdHours = document.createElement("td");
-
-            tdUser.textContent = username;
-
-            const span = document.createElement("span");
-            span.className = "badge";
-            const role = (s.role || "Helper").toLowerCase();
-            if (role === "admin") span.classList.add("admin");
-            else if (role.includes("mod")) span.classList.add("mod");
-            else span.classList.add("helper");
-            span.textContent = s.role || "Helper";
-            tdRole.appendChild(span);
-
-            tdBadge.textContent = s.badgeId || "N/A";
-            tdHours.textContent = (s.hours || 0).toFixed(1);
-
-            tr.appendChild(tdUser);
-            tr.appendChild(tdRole);
-            tr.appendChild(tdBadge);
-            tr.appendChild(tdHours);
-
-            smStaffTable.appendChild(tr);
-        });
-    });
-}
-
-function selectStaffForEdit(username, data) {
-    smSelectedUser = username;
-    smEditUsername.value = username;
-    smEditRole.value = data.role || "Staff";
-    smEditBadge.value = data.badgeId || "";
-    smEditHours.value = (data.hours || 0).toFixed(1);
-    smEditWarnings.value = data.warnings || 0;
-    smEditStrikes.value = data.strikes || 0;
-}
-
-smUnlockBtn.addEventListener("click", async () => {
-    const pwd = smPasswordInput.value;
-    smError.style.display = "none";
-    const snap = await db.ref("settings/staffManager/adminPassword").get();
-    const real = snap.val() || "admin123";
-    if (pwd !== real) {
-        smError.textContent = "Password errata.";
-        smError.style.display = "block";
-        return;
-    }
-    smLocked.classList.add("hidden");
-    smUnlocked.classList.remove("hidden");
-});
-
-smSaveBtn.addEventListener("click", () => {
-    if (!smSelectedUser) {
-        alert("Seleziona uno staff dalla tabella.");
-        return;
-    }
-    const role = smEditRole.value.trim() || "Staff";
-    const badge = smEditBadge.value.trim();
-    const hours = parseFloat(smEditHours.value || "0");
-    const warnings = parseInt(smEditWarnings.value || "0", 10);
-    const strikes = parseInt(smEditStrikes.value || "0", 10);
-
-    db.ref("staff/" + smSelectedUser).update({
-        role,
-        badgeId: badge,
-        hours,
-        warnings,
-        strikes
-    });
-
-    alert("Dati staff aggiornati.");
-});
 </script>
-
 </body>
 </html>
