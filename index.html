@@ -20,11 +20,11 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f);font-size:14px;overflow:hidden;}
 ::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:2px;}
- 
+
 /* ── PAGES ── */
 .page{display:none;height:100vh;width:100vw;}
 .page.active{display:flex;}
- 
+
 /* ══════════════════════════════
    LOGIN PAGE
 ══════════════════════════════ */
@@ -63,7 +63,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .login-manager{margin-top:20px;text-align:center;font-size:12px;color:var(--muted);}
 .login-manager a{color:var(--cyan);text-decoration:none;cursor:pointer;}
 .login-manager a:hover{text-decoration:underline;}
- 
+
 /* ══════════════════════════════
    CREATE PASSWORD PAGE
 ══════════════════════════════ */
@@ -112,12 +112,12 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 }
 .btn-cpw.ready{opacity:1;pointer-events:all;}
 .btn-cpw.ready:hover{opacity:.88;}
- 
+
 /* ══════════════════════════════
    STAFF PANEL (main)
 ══════════════════════════════ */
 #page-panel{flex-direction:column;}
- 
+
 /* NAV BAR (floating pill style) */
 .navbar-wrap{
   position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
@@ -148,7 +148,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
   transition:all .2s;
 }
 .nav-logout:hover{color:var(--red);background:var(--red-dim);}
- 
+
 /* PANEL CONTENT */
 .panel-content{
   display:grid;grid-template-columns:320px 1fr 340px;
@@ -156,7 +156,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 }
 .panel-col{height:100vh;overflow-y:auto;border-right:1px solid var(--border);}
 .panel-col:last-child{border-right:none;}
- 
+
 /* LEFT COL */
 .left-col{padding:24px 20px;}
 .user-card{
@@ -188,7 +188,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .shift-btn.start{background:var(--green);color:#000;}
 .shift-btn.end{background:var(--red);color:#fff;}
 .shift-btn:hover{opacity:.88;}
- 
+
 .toolbox-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
 .toolbox-title{font-size:15px;font-weight:700;}
 .toolbox-gear{cursor:pointer;color:var(--muted);transition:color .15s;}
@@ -204,7 +204,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .tool-btn.green{background:var(--green);color:#000;}
 .tool-btn.blue{background:var(--blue);color:#fff;}
 .tool-btn.orange{background:var(--orange);color:#fff;grid-column:1/-1;}
- 
+
 /* CENTER COL */
 .center-col{padding:24px;}
 .col-title{font-family:var(--fh);font-size:18px;font-weight:800;margin-bottom:20px;}
@@ -248,7 +248,129 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .submit-btn:not(.default):hover{opacity:.87;}
 .dur-row{display:none;margin-bottom:14px;}
 .dur-row.show{display:block;}
- 
+
+/* ROBLOX USER SEARCH */
+.rblx-search-wrap{position:relative;margin-bottom:10px;}
+.rblx-search-wrap svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;}
+.rblx-inp{
+  width:100%;padding:11px 12px 11px 34px;
+  background:var(--bg3);border:1px solid var(--border2);border-radius:10px;
+  color:var(--text);font-family:var(--f);font-size:14px;outline:none;
+  transition:border-color .15s;
+}
+.rblx-inp:focus{border-color:var(--green);}
+.rblx-inp::placeholder{color:var(--muted);}
+.rblx-results{
+  background:var(--bg3);border:1px solid var(--border2);border-radius:10px;
+  margin-bottom:14px;overflow:hidden;display:none;
+}
+.rblx-results.show{display:block;}
+.rblx-result-item{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 13px;cursor:pointer;transition:background .12s;
+  border-bottom:1px solid var(--border);
+}
+.rblx-result-item:last-child{border-bottom:none;}
+.rblx-result-item:hover{background:var(--bg4);}
+.rblx-result-item.selected{background:var(--green-dim);border-left:3px solid var(--green);}
+.rblx-avatar{
+  width:40px;height:40px;border-radius:10px;
+  background:var(--bg4);flex-shrink:0;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+}
+.rblx-avatar img{width:100%;height:100%;object-fit:cover;border-radius:10px;}
+.rblx-avatar-placeholder{
+  width:40px;height:40px;border-radius:10px;
+  background:var(--bg4);display:flex;align-items:center;justify-content:center;
+  font-family:var(--fh);font-weight:700;font-size:14px;color:var(--muted2);flex-shrink:0;
+}
+.rblx-info{flex:1;}
+.rblx-name{font-weight:600;font-size:13px;color:var(--text);}
+.rblx-dispname{font-size:11px;color:var(--muted2);margin-top:1px;}
+.rblx-id{font-size:10px;color:var(--muted);margin-top:1px;}
+.rblx-tick{color:var(--green);font-size:16px;}
+.rblx-loading{padding:14px;text-align:center;color:var(--muted);font-size:13px;}
+.rblx-selected-card{
+  display:none;align-items:center;gap:12px;
+  background:var(--green-dim);border:1px solid rgba(34,197,94,0.3);
+  border-radius:10px;padding:12px 14px;margin-bottom:14px;
+}
+.rblx-selected-card.show{display:flex;}
+.rblx-sel-info{flex:1;}
+.rblx-sel-name{font-weight:700;font-size:14px;}
+.rblx-sel-id{font-size:11px;color:var(--muted2);margin-top:2px;}
+.rblx-clear{cursor:pointer;color:var(--muted2);font-size:18px;padding:2px 6px;border-radius:5px;transition:all .14s;}
+.rblx-clear:hover{color:var(--red);background:var(--red-dim);}
+
+/* TOOLBOX MODALS */
+.tbox-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.7);
+  backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;z-index:150;
+}
+.tbox-overlay.open{display:flex;}
+.tbox-modal{
+  background:var(--bg2);border:1px solid var(--border2);border-radius:16px;
+  padding:28px;width:480px;max-width:95vw;max-height:85vh;overflow-y:auto;
+  animation:up .2s ease;
+}
+.tbox-modal h2{font-family:var(--fh);font-size:18px;font-weight:800;margin-bottom:4px;}
+.tbox-modal p{font-size:13px;color:var(--muted2);margin-bottom:20px;}
+.tbox-section{margin-bottom:18px;}
+.tbox-lbl{font-size:11px;color:var(--muted2);font-weight:500;margin-bottom:6px;display:block;text-transform:uppercase;letter-spacing:.04em;}
+.tbox-inp{
+  width:100%;padding:10px 12px;background:var(--bg3);
+  border:1px solid var(--border2);border-radius:9px;
+  color:var(--text);font-family:var(--f);font-size:13px;outline:none;margin-bottom:10px;
+}
+.tbox-inp:focus{border-color:var(--green);}
+.tbox-sel{
+  width:100%;padding:10px 12px;background:var(--bg3);
+  border:1px solid var(--border2);border-radius:9px;
+  color:var(--text);font-family:var(--f);font-size:13px;outline:none;margin-bottom:10px;cursor:pointer;
+}
+.tbox-btn-row{display:flex;gap:9px;margin-top:4px;}
+.tbox-btn-cancel{
+  flex:1;padding:10px;border-radius:8px;border:1px solid var(--border2);
+  background:transparent;color:var(--muted2);font-family:var(--f);font-size:13px;cursor:pointer;
+}
+.tbox-btn-cancel:hover{background:var(--bg3);}
+.tbox-btn-submit{
+  flex:1;padding:10px;border-radius:8px;border:none;
+  font-family:var(--f);font-size:13px;font-weight:700;cursor:pointer;
+}
+.tbox-btn-submit:hover{opacity:.88;}
+/* LOA list */
+.loa-list{margin-top:16px;}
+.loa-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px;background:var(--bg3);border:1px solid var(--border);
+  border-radius:8px;margin-bottom:6px;font-size:13px;
+}
+.loa-item .loa-name{flex:1;font-weight:600;}
+.loa-item .loa-dates{font-size:11px;color:var(--muted2);}
+.loa-item .loa-status{font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;background:rgba(245,158,11,.15);color:#f59e0b;}
+/* Session list */
+.sess-card{
+  padding:12px 14px;background:var(--bg3);border:1px solid var(--border);
+  border-radius:8px;margin-bottom:8px;
+}
+.sess-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;}
+.sess-name{font-weight:600;font-size:13px;}
+.sess-status{font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;}
+.ss-open{background:var(--green-dim);color:var(--green);}
+.ss-closed{background:var(--red-dim);color:var(--red);}
+.sess-info{font-size:12px;color:var(--muted2);}
+/* Actions grid */
+.actions-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.action-tile{
+  padding:14px 10px;border-radius:10px;border:1px solid var(--border2);
+  text-align:center;cursor:pointer;transition:all .15s;
+}
+.action-tile:hover{border-color:var(--border2);background:var(--bg3);}
+.action-tile .tile-icon{font-size:22px;margin-bottom:6px;}
+.action-tile .tile-lbl{font-size:12px;font-weight:600;color:var(--text);}
+.action-tile .tile-sub{font-size:10px;color:var(--muted);margin-top:2px;}
+
 /* RIGHT COL */
 .right-col{padding:24px;}
 .log-search-wrap{position:relative;margin-bottom:16px;display:flex;gap:8px;}
@@ -282,7 +404,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 .log-reason{font-size:12px;color:var(--muted2);margin-top:2px;}
 .log-by{font-size:11px;color:var(--muted);margin-top:3px;}
 .empty-logs{padding:40px 20px;text-align:center;color:var(--muted);font-size:13px;}
- 
+
 /* ══════════════════════════════
    MANAGER PAGE
 ══════════════════════════════ */
@@ -370,7 +492,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 }
 .btn-save2:hover{opacity:.88;}
 .warn-note{background:var(--red-dim);border:1px solid rgba(239,68,68,.25);border-radius:8px;padding:10px 13px;font-size:12px;color:#fca5a5;line-height:1.6;margin-bottom:16px;max-width:540px;}
- 
+
 /* TOAST */
 .tstack{position:fixed;bottom:80px;right:20px;display:flex;flex-direction:column;gap:7px;z-index:999;}
 .toast{
@@ -381,7 +503,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 @keyframes tin{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:translateX(0)}}
 .tdot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
 .toast.s .tdot{background:var(--green)}.toast.e .tdot{background:var(--red)}.toast.i .tdot{background:var(--cyan)}
- 
+
 /* MODAL OVERLAY */
 .m-overlay{
   position:fixed;inset:0;background:rgba(0,0,0,.65);
@@ -402,7 +524,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 </style>
 </head>
 <body>
- 
+
 <!-- ═══════════════ LOGIN ═══════════════ -->
 <div class="page active" id="page-login">
   <div class="login-card">
@@ -420,7 +542,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
     </div>
   </div>
 </div>
- 
+
 <!-- ═══════════════ CREATE PASSWORD ═══════════════ -->
 <div class="page" id="page-createpw">
   <div class="cpw-card">
@@ -446,11 +568,11 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
     <button class="btn-cpw" id="btn-cpw" onclick="savePw()">Imposta password</button>
   </div>
 </div>
- 
+
 <!-- ═══════════════ MAIN PANEL ═══════════════ -->
 <div class="page" id="page-panel">
   <div class="panel-content">
- 
+
     <!-- LEFT: user + toolbox -->
     <div class="panel-col left-col">
       <div class="user-card">
@@ -468,41 +590,53 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         </span>
       </div>
       <button class="shift-btn start" id="shift-btn" onclick="toggleShift()">Inizia Turno</button>
- 
+
       <div class="toolbox-header">
         <span class="toolbox-title">Toolbox</span>
         <span class="toolbox-gear">⚙</span>
       </div>
       <div class="tool-grid">
-        <button class="tool-btn green" onclick="toast('Manage LOA aperto','i')">
+        <button class="tool-btn green" onclick="openTbox('loa')">
           <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8" cy="6" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
           Manage LOA
         </button>
-        <button class="tool-btn blue" onclick="toast('Actions aperto','i')">
-          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 2v12M2 8h12"/></svg>
+        <button class="tool-btn blue" onclick="openTbox('actions')">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 8h10M8 3l5 5-5 5"/></svg>
           Actions
         </button>
-        <button class="tool-btn orange" onclick="toast('Manage Session aperto','i')">
+        <button class="tool-btn orange" onclick="openTbox('session')">
           <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="12" height="10" rx="2"/><path d="M5 7h6M5 10h4"/></svg>
           Manage Session
         </button>
       </div>
     </div>
- 
+
     <!-- CENTER: create log -->
     <div class="panel-col center-col">
       <div class="col-title">Crea Nuovo Log</div>
- 
-      <label class="field-lbl">Utente <span class="req">*</span></label>
-      <input class="big-inp" type="text" id="log-user" placeholder="Inserisci username (⌘I / Ctrl+I)"/>
- 
+
+      <label class="field-lbl">Utente Roblox <span class="req">*</span></label>
+      <div class="rblx-search-wrap">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg>
+        <input class="rblx-inp" type="text" id="rblx-inp" placeholder="Cerca username Roblox… (⌘I / Ctrl+I)" oninput="searchRoblox(this.value)" autocomplete="off"/>
+      </div>
+      <div class="rblx-results" id="rblx-results"></div>
+      <div class="rblx-selected-card" id="rblx-selected">
+        <div class="rblx-avatar" id="rblx-sel-av"></div>
+        <div class="rblx-sel-info">
+          <div class="rblx-sel-name" id="rblx-sel-name">—</div>
+          <div class="rblx-sel-id" id="rblx-sel-id"></div>
+        </div>
+        <span class="rblx-clear" onclick="clearRobloxSel()" title="Rimuovi selezione">✕</span>
+      </div>
+
       <label class="field-lbl">Azione <span class="req">*</span></label>
       <div class="action-select">
         <div class="action-opt" id="opt-warn" onclick="selAction('warn')">⚠ Avvisa</div>
         <div class="action-opt" id="opt-kick" onclick="selAction('kick')">👢 Espelli</div>
         <div class="action-opt" id="opt-ban"  onclick="selAction('ban')">🔨 Banna</div>
       </div>
- 
+
       <div class="dur-row" id="dur-row">
         <label class="field-lbl">Durata ban</label>
         <select class="reason-sel" id="log-dur">
@@ -513,7 +647,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
           <option value="0">Permanente</option>
         </select>
       </div>
- 
+
       <label class="field-lbl">Motivo <span class="req">*</span></label>
       <select class="reason-sel" id="log-reason">
         <option value="">Seleziona motivo…</option>
@@ -528,13 +662,13 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         <option>Metagaming</option>
         <option>Altro</option>
       </select>
- 
+
       <label class="field-lbl" style="margin-top:2px;">Note aggiuntive</label>
       <input class="big-inp" type="text" id="log-note" placeholder="Dettagli opzionali…"/>
- 
+
       <button class="submit-btn default" id="submit-btn" onclick="submitLog()">Invia Log</button>
     </div>
- 
+
     <!-- RIGHT: punishment logs -->
     <div class="panel-col right-col">
       <div class="col-title">Punishment Logs</div>
@@ -549,9 +683,9 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         <div class="empty-logs">Nessun log ancora.<br><span style="font-size:11px;color:var(--muted)">Crea il primo log dal pannello centrale.</span></div>
       </div>
     </div>
- 
+
   </div>
- 
+
   <!-- NAVBAR floating pill -->
   <div class="navbar-wrap">
     <div class="navbar">
@@ -578,7 +712,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
     </div>
   </div>
 </div>
- 
+
 <!-- ═══════════════ MANAGER PAGE ═══════════════ -->
 <div class="page" id="page-manager">
   <div class="mgr-wrap">
@@ -601,7 +735,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
         Esci
       </div>
     </div>
- 
+
     <div class="mgr-content">
       <!-- STAFF SECTION -->
       <div id="mgr-staff">
@@ -643,7 +777,7 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
           </table>
         </div>
       </div>
- 
+
       <!-- CONFIG SECTION -->
       <div id="mgr-config" style="display:none">
         <div class="mgr-title">Configurazione</div>
@@ -667,7 +801,98 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
     </div>
   </div>
 </div>
- 
+
+<!-- ═══════════════ TOOLBOX MODALS ═══════════════ -->
+
+<!-- LOA Modal -->
+<div class="tbox-overlay" id="tbox-loa">
+  <div class="tbox-modal">
+    <h2>🏖 Manage LOA</h2>
+    <p>Gestisci le richieste di Leave of Absence del tuo team</p>
+    <div class="tbox-section">
+      <span class="tbox-lbl">Nuova richiesta LOA</span>
+      <input class="tbox-inp" type="text" id="loa-username" placeholder="Username staff…"/>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div>
+          <span class="tbox-lbl">Dal</span>
+          <input class="tbox-inp" type="date" id="loa-from"/>
+        </div>
+        <div>
+          <span class="tbox-lbl">Al</span>
+          <input class="tbox-inp" type="date" id="loa-to"/>
+        </div>
+      </div>
+      <span class="tbox-lbl">Motivo</span>
+      <input class="tbox-inp" type="text" id="loa-reason" placeholder="Motivo dell'assenza…"/>
+      <div class="tbox-btn-row">
+        <button class="tbox-btn-cancel" onclick="closeTbox('loa')">Chiudi</button>
+        <button class="tbox-btn-submit" style="background:var(--green);color:#000;" onclick="submitLOA()">Invia Richiesta</button>
+      </div>
+    </div>
+    <div class="loa-list" id="loa-list"></div>
+  </div>
+</div>
+
+<!-- ACTIONS Modal -->
+<div class="tbox-overlay" id="tbox-actions">
+  <div class="tbox-modal">
+    <h2>⚡ Actions</h2>
+    <p>Azioni rapide da inviare via comando ERLC al server</p>
+    <div class="actions-grid" id="actions-grid">
+      <div class="action-tile" onclick="runAction('announce')"><div class="tile-icon">📢</div><div class="tile-lbl">Annuncio</div><div class="tile-sub">Messaggio a tutti</div></div>
+      <div class="action-tile" onclick="runAction('lockdown')"><div class="tile-icon">🔒</div><div class="tile-lbl">Lockdown</div><div class="tile-sub">Blocca il server</div></div>
+      <div class="action-tile" onclick="runAction('unlockdown')"><div class="tile-icon">🔓</div><div class="tile-lbl">Unlockdown</div><div class="tile-sub">Sblocca il server</div></div>
+      <div class="action-tile" onclick="runAction('restart')"><div class="tile-icon">🔄</div><div class="tile-lbl">Restart server</div><div class="tile-sub">Riavvia il server</div></div>
+      <div class="action-tile" onclick="runAction('weather')"><div class="tile-icon">🌤</div><div class="tile-lbl">Meteo</div><div class="tile-sub">Cambia meteo</div></div>
+      <div class="action-tile" onclick="runAction('time')"><div class="tile-icon">🕐</div><div class="tile-lbl">Orario</div><div class="tile-sub">Imposta ora</div></div>
+    </div>
+    <!-- sub-form per azione selezionata -->
+    <div id="action-subform" style="display:none;">
+      <span class="tbox-lbl" id="action-subform-lbl">Parametro</span>
+      <input class="tbox-inp" type="text" id="action-param" placeholder=""/>
+      <div class="tbox-btn-row">
+        <button class="tbox-btn-cancel" onclick="document.getElementById('action-subform').style.display='none';document.getElementById('actions-grid').style.display='grid'">Indietro</button>
+        <button class="tbox-btn-submit" style="background:var(--blue);color:#fff;" onclick="sendAction()">Esegui</button>
+      </div>
+    </div>
+    <div style="margin-top:14px;">
+      <button class="tbox-btn-cancel" style="width:100%;" onclick="closeTbox('actions')">Chiudi</button>
+    </div>
+  </div>
+</div>
+
+<!-- SESSION Modal -->
+<div class="tbox-overlay" id="tbox-session">
+  <div class="tbox-modal">
+    <h2>🖥 Manage Session</h2>
+    <p>Gestisci le sessioni di pattugliamento del server</p>
+    <div class="tbox-section">
+      <span class="tbox-lbl">Apri nuova sessione</span>
+      <input class="tbox-inp" type="text" id="sess-name" placeholder="Nome sessione (es. Pattuglia Serale)…"/>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div>
+          <span class="tbox-lbl">Tipo</span>
+          <select class="tbox-sel" id="sess-type">
+            <option>Patrol</option>
+            <option>Training</option>
+            <option>Event</option>
+            <option>Ride-Along</option>
+          </select>
+        </div>
+        <div>
+          <span class="tbox-lbl">Min. staff</span>
+          <input class="tbox-inp" type="number" id="sess-min" value="3" min="1" max="20"/>
+        </div>
+      </div>
+      <div class="tbox-btn-row">
+        <button class="tbox-btn-cancel" onclick="closeTbox('session')">Chiudi</button>
+        <button class="tbox-btn-submit" style="background:var(--orange);color:#fff;" onclick="openSession()">Apri Sessione</button>
+      </div>
+    </div>
+    <div id="sess-list" style="margin-top:16px;"></div>
+  </div>
+</div>
+
 <!-- MODAL manager login -->
 <div class="m-overlay" id="mgr-login-overlay">
   <div class="m-box">
@@ -681,15 +906,15 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
     </div>
   </div>
 </div>
- 
+
 <div class="tstack" id="tstack"></div>
- 
+
 <script>
 /* ══════════════════════════════
    STORAGE HELPERS
 ══════════════════════════════ */
 function ls(k,v){if(v===undefined)return JSON.parse(localStorage.getItem(k)||'null');localStorage.setItem(k,JSON.stringify(v));}
- 
+
 /* ══════════════════════════════
    DEFAULT DATA INIT
 ══════════════════════════════ */
@@ -703,12 +928,12 @@ function initData(){
   if(ls('discord_hook')===null) ls('discord_hook','');
   if(ls('erlc_proxy')===null) ls('erlc_proxy','https://corsproxy.io/?');
 }
- 
+
 /* ══════════════════════════════
    LOGIN
 ══════════════════════════════ */
 let currentUser = null;
- 
+
 function doLogin(){
   const u = document.getElementById('l-user').value.trim();
   const p = document.getElementById('l-pass').value.trim();
@@ -723,9 +948,9 @@ function doLogin(){
     enterPanel();
   }
 }
- 
+
 document.getElementById('l-pass').addEventListener('keydown',e=>{if(e.key==='Enter') doLogin();});
- 
+
 /* ══════════════════════════════
    CREATE PASSWORD
 ══════════════════════════════ */
@@ -735,7 +960,7 @@ const rules = [
   {id:'r-num',   fn:p=>/\d/.test(p)},
   {id:'r-spec',  fn:p=>/[^A-Za-z0-9]/.test(p)},
 ];
- 
+
 function checkPw(){
   const p = document.getElementById('cpw-inp').value;
   let ok = 0;
@@ -749,12 +974,12 @@ function checkPw(){
   btn.classList.toggle('ready',ok===4);
   btn.textContent=ok===4?'Password sicura — Continua ✓':'Imposta password';
 }
- 
+
 function toggleEye(){
   const inp=document.getElementById('cpw-inp');
   inp.type=inp.type==='password'?'text':'password';
 }
- 
+
 function savePw(){
   const pw=document.getElementById('cpw-inp').value;
   if(!pw||rules.some(r=>!r.fn(pw))) return;
@@ -764,13 +989,13 @@ function savePw(){
   toast('Password impostata con successo!','s');
   setTimeout(enterPanel,600);
 }
- 
+
 /* ══════════════════════════════
    PANEL
 ══════════════════════════════ */
 let shiftOn = false;
 let currentAction = null;
- 
+
 function enterPanel(){
   document.getElementById('p-avatar').textContent=currentUser.username.slice(0,2).toUpperCase();
   document.getElementById('p-name').textContent='Hey, '+currentUser.username+'!';
@@ -778,7 +1003,7 @@ function enterPanel(){
   showPage('panel');
   renderLogs();
 }
- 
+
 function toggleShift(){
   shiftOn=!shiftOn;
   const pill=document.getElementById('shift-status');
@@ -794,7 +1019,7 @@ function toggleShift(){
     toast('Turno terminato','i');
   }
 }
- 
+
 function selAction(a){
   ['warn','kick','ban'].forEach(x=>{
     const el=document.getElementById('opt-'+x);
@@ -807,7 +1032,7 @@ function selAction(a){
   btn.className='submit-btn '+a;
   btn.textContent={warn:'Avvisa Giocatore',kick:'Espelli Giocatore',ban:'Banna Giocatore'}[a];
 }
- 
+
 async function submitLog(){
   const user=document.getElementById('log-user').value.trim();
   const reason=document.getElementById('log-reason').value;
@@ -844,39 +1069,78 @@ async function submitLog(){
   renderLogs();
   toast({warn:'Avviso inviato',kick:'Giocatore espulso',ban:'Giocatore bannato'}[currentAction||logEntry.action]+': '+user,'s');
 }
- 
-/* ── LOG RENDER ── */
-function renderLogs(filter=''){
-  const logs=ls('logs_list')||[];
-  const filtered=filter?logs.filter(l=>l.player.toLowerCase().includes(filter.toLowerCase())):logs;
-  const container=document.getElementById('logs-container');
-  if(!filtered.length){
-    container.innerHTML='<div class="empty-logs">Nessun log trovato.</div>';return;
-  }
-  container.innerHTML=filtered.map(l=>`
-    <div class="log-item">
-      <div class="log-top">
-        <span class="log-player">${l.player}</span>
-        <span class="log-action la-${l.action}">${{warn:'AVVISO',kick:'ESPULSIONE',ban:'BAN'}[l.action]}</span>
-      </div>
-      <div class="log-reason">${l.reason}${l.note?' — '+l.note:''}</div>
-      <div class="log-by">${l.date} ${l.time} · by ${l.by}</div>
-    </div>`).join('');
-}
-function filterLogs(v){renderLogs(v);}
- 
-/* ── NAVBAR ── */
-function navGo(s){
-  ['home','logs','create','settings'].forEach(x=>document.getElementById('nl-'+x)?.classList.remove('active'));
-  document.getElementById('nl-'+s)?.classList.add('active');
-  toast('Sezione: '+s,'i');
-}
- 
-function doLogout(){currentUser=null;showPage('login');}
- 
+
 /* ══════════════════════════════
-   MANAGER
+   ROBLOX USER SEARCH
 ══════════════════════════════ */
+let rblxSelected = null;
+let rblxTimer = null;
+
+async function searchRoblox(q){
+  const res = document.getElementById('rblx-results');
+  if(!q || q.length < 2){res.classList.remove('show');res.innerHTML='';return;}
+  clearTimeout(rblxTimer);
+  rblxTimer = setTimeout(async ()=>{
+    res.classList.add('show');
+    res.innerHTML='<div class="rblx-loading">🔍 Ricerca in corso…</div>';
+    try{
+      // Roblox Users API v1 search
+      const r = await fetch(`https://corsproxy.io/?${encodeURIComponent('https://users.roblox.com/v1/users/search?keyword='+encodeURIComponent(q)+'&limit=6')}`);
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      const data = await r.json();
+      const users = data.data || [];
+      if(!users.length){res.innerHTML='<div class="rblx-loading">Nessun utente trovato</div>';return;}
+      // Fetch thumbnails in parallel
+      const ids = users.map(u=>u.id).join(',');
+      let thumbMap = {};
+      try{
+        const tr = await fetch(`https://corsproxy.io/?${encodeURIComponent('https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds='+ids+'&size=48x48&format=Png')}`);
+        const td = await tr.json();
+        (td.data||[]).forEach(t=>thumbMap[t.targetId]=t.imageUrl);
+      }catch(e){}
+      res.innerHTML = users.map(u=>`
+        <div class="rblx-result-item" onclick="selectRobloxUser(${u.id},'${u.name.replace(/'/g,"\\'")}','${(u.displayName||u.name).replace(/'/g,"\\'")}','${thumbMap[u.id]||''}')">
+          ${thumbMap[u.id]
+            ? `<div class="rblx-avatar"><img src="${thumbMap[u.id]}" alt="${u.name}"/></div>`
+            : `<div class="rblx-avatar-placeholder">${u.name.slice(0,2).toUpperCase()}</div>`}
+          <div class="rblx-info">
+            <div class="rblx-name">${u.name}</div>
+            ${u.displayName&&u.displayName!==u.name?`<div class="rblx-dispname">${u.displayName}</div>`:''}
+            <div class="rblx-id">ID: ${u.id}</div>
+          </div>
+          <span class="rblx-tick" style="opacity:0">✓</span>
+        </div>`).join('');
+    }catch(e){
+      // Fallback: try without proxy for older API
+      res.innerHTML=`<div class="rblx-loading" style="color:var(--red)">Errore API Roblox. Configura il proxy CORS.<br><small>${e.message}</small></div>`;
+    }
+  }, 400);
+}
+
+function selectRobloxUser(id, name, displayName, thumb){
+  rblxSelected = {id, name, displayName, thumb};
+  // hide results
+  document.getElementById('rblx-results').classList.remove('show');
+  document.getElementById('rblx-inp').value = name;
+  // show selected card
+  const card = document.getElementById('rblx-selected');
+  card.classList.add('show');
+  document.getElementById('rblx-sel-name').textContent = name + (displayName!==name ? ' ('+displayName+')' : '');
+  document.getElementById('rblx-sel-id').textContent = 'User ID: '+id;
+  const av = document.getElementById('rblx-sel-av');
+  av.innerHTML = thumb
+    ? `<img src="${thumb}" alt="${name}" style="width:40px;height:40px;border-radius:10px;object-fit:cover;"/>`
+    : `<div style="width:40px;height:40px;border-radius:10px;background:var(--bg4);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--muted2)">${name.slice(0,2).toUpperCase()}</div>`;
+}
+
+function clearRobloxSel(){
+  rblxSelected = null;
+  document.getElementById('rblx-selected').classList.remove('show');
+  document.getElementById('rblx-inp').value = '';
+  document.getElementById('rblx-results').classList.remove('show');
+  document.getElementById('rblx-inp').focus();
+}
+
 function showManagerLogin(){
   document.getElementById('mgr-pw-inp').value='';
   document.getElementById('mgr-login-err').style.display='none';
@@ -895,15 +1159,15 @@ function doMgrLogin(){
   }
 }
 document.getElementById('mgr-pw-inp').addEventListener('keydown',e=>{if(e.key==='Enter')doMgrLogin();});
- 
+
 function mgrLogout(){showPage('login');}
- 
+
 function mgrGo(s){
   document.querySelectorAll('.mgr-ni').forEach(el=>el.classList.remove('active'));
   document.getElementById('mgr-staff').style.display=s==='staff'?'block':'none';
   document.getElementById('mgr-config').style.display=s==='config'?'block':'none';
 }
- 
+
 function renderStaffTable(){
   const staff=ls('staff_list')||[];
   const tbody=document.getElementById('staff-tbody');
@@ -920,7 +1184,7 @@ function renderStaffTable(){
       </td>
     </tr>`).join('');
 }
- 
+
 function addStaff(){
   const u=document.getElementById('add-user').value.trim();
   const p=document.getElementById('add-pass').value.trim();
@@ -935,7 +1199,7 @@ function addStaff(){
   renderStaffTable();
   toast('Staff aggiunto: '+u,'s');
 }
- 
+
 function removeStaff(i){
   const staff=ls('staff_list')||[];
   const name=staff[i].username;
@@ -944,7 +1208,7 @@ function removeStaff(i){
   renderStaffTable();
   toast('Rimosso: '+name,'i');
 }
- 
+
 function resetPw(i){
   const staff=ls('staff_list')||[];
   const tmp='temp'+Math.random().toString(36).slice(2,7);
@@ -954,7 +1218,7 @@ function resetPw(i){
   renderStaffTable();
   toast('Password resettata → '+tmp,'i');
 }
- 
+
 function loadCfgUI(){
   document.getElementById('cfg-erlc').value=ls('erlc_key')||'';
   document.getElementById('cfg-discord').value=ls('discord_hook')||'';
@@ -969,7 +1233,7 @@ function saveCfg(){
   if(px) ls('erlc_proxy',px);
   toast('Configurazione salvata!','s');
 }
- 
+
 /* ══════════════════════════════
    ERLC + DISCORD
 ══════════════════════════════ */
@@ -987,7 +1251,7 @@ async function erlcCmd(action,player,reason,dur){
   const r=await fetch(url,{method:'POST',headers:{'Server-Key':key,'Content-Type':'application/json'},body:JSON.stringify({command:cmds[action]})});
   if(!r.ok) throw new Error('HTTP '+r.status);
 }
- 
+
 async function sendDiscord(action,player,reason,note,dur){
   const hook=ls('discord_hook');
   if(!hook||hook.length<30) return;
@@ -1010,7 +1274,17 @@ async function sendDiscord(action,player,reason,note,dur){
     }]})
   });
 }
- 
+
+async function erlcCmd2(cmd){
+  const key=ls('erlc_key');
+  if(!key) return;
+  const proxy=ls('erlc_proxy')||'';
+  const base='https://api.policeroleplay.community/v1/server';
+  const url=proxy? proxy+encodeURIComponent(base+'/command') : base+'/command';
+  const r=await fetch(url,{method:'POST',headers:{'Server-Key':key,'Content-Type':'application/json'},body:JSON.stringify({command:cmd})});
+  if(!r.ok) throw new Error('HTTP '+r.status);
+}
+
 /* ══════════════════════════════
    TOAST + PAGE UTILS
 ══════════════════════════════ */
@@ -1025,16 +1299,18 @@ function toast(msg,type='i'){
   document.getElementById('tstack').appendChild(el);
   setTimeout(()=>el.remove(),3400);
 }
- 
+
 /* ══════════════════════════════
    INIT
 ══════════════════════════════ */
 initData();
-// Keyboard shortcut Ctrl+I / Cmd+I → focus user field
+if(!ls('loa_list')) ls('loa_list',[]);
+if(!ls('sessions_list')) ls('sessions_list',[]);
+// Keyboard shortcut Ctrl+I / Cmd+I → focus roblox search
 document.addEventListener('keydown',e=>{
   if((e.ctrlKey||e.metaKey)&&e.key==='i'){
     e.preventDefault();
-    const inp=document.getElementById('log-user');
+    const inp=document.getElementById('rblx-inp');
     if(inp) inp.focus();
   }
   if((e.ctrlKey||e.metaKey)&&e.key==='f'){
@@ -1045,4 +1321,4 @@ document.addEventListener('keydown',e=>{
 });
 </script>
 </body>
-</html
+</html>
