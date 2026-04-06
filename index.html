@@ -1,197 +1,631 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LSPD - OFFICIAL DATABASE</title>
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
-    <style>
-        :root { --bg: #02040a; --sidebar: #050a14; --accent: #1e4ba3; --gold: #d4af37; --border: #1a2a44; --text: #c0c0c0; }
-        body { background-color: var(--bg); color: var(--text); font-family: 'Share Tech Mono', monospace; margin: 0; display: flex; height: 100vh; overflow: hidden; }
-        .hidden { display: none !important; }
-
-        /* SIDEBAR */
-        aside { width: 260px; background: var(--sidebar); border-right: 2px solid var(--accent); display: flex; flex-direction: column; padding: 20px 0; }
-        .badge-area { text-align: center; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
-        .badge-area img { width: 100px; filter: drop-shadow(0 0 5px var(--gold)); }
-        nav { flex: 1; padding: 20px 0; }
-        nav button { width: 100%; background: transparent; border: none; color: #5a7090; padding: 15px 25px; text-align: left; cursor: pointer; font-family: inherit; text-transform: uppercase; font-size: 13px; }
-        nav button:hover, nav button.active { color: #fff; border-left: 4px solid var(--gold); background: rgba(30,75,163,0.2); }
-
-        /* MAIN */
-        main { flex: 1; padding: 40px; overflow-y: auto; background: radial-gradient(#0a1a33 0%, #02040a 100%); }
-        .header-title { border-bottom: 2px solid var(--accent); margin-bottom: 30px; padding-bottom: 10px; }
-        .header-title h1 { margin: 0; font-size: 26px; color: #fff; text-shadow: 0 0 10px var(--accent); }
-
-        .panel { background: rgba(5,10,20,0.8); border: 1px solid var(--border); padding: 25px; border-radius: 2px; margin-bottom: 20px; border-top: 3px solid var(--accent); }
-        .dash-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-        .data-label { font-size: 11px; color: var(--gold); text-transform: uppercase; }
-        .data-value { font-size: 24px; color: #fff; margin-top: 5px; }
-
-        .btn-police { background: var(--accent); border: 1px solid #3262c7; color: #fff; padding: 15px; cursor: pointer; font-family: inherit; text-transform: uppercase; font-weight: bold; width: 100%; }
-        .btn-police:hover { background: #285bc4; box-shadow: 0 0 15px var(--accent); }
-
-        table { width: 100%; border-collapse: collapse; }
-        th { background: var(--accent); color: #fff; padding: 12px; text-align: left; font-size: 12px; }
-        td { padding: 12px; border-bottom: 1px solid var(--border); color: #fff; font-size: 13px; }
-        tr.vacancy { color: #444; font-style: italic; }
-
-        footer { text-align: center; margin-top: 20px; font-size: 10px; color: #333; }
-    </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>AdminPanel — ERLC</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#080b0e;--bg2:#0d1117;--bg3:#131920;--bg4:#1a2230;
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.11);
+  --text:#dde4ed;--muted:#5a6a7a;--muted2:#7a8fa3;
+  --accent:#3b8bff;--adim:rgba(59,139,255,0.12);
+  --warn:#f59e0b;--kick:#3b82f6;--ban:#ef4444;--green:#22c55e;
+  --fh:'Syne',sans-serif;--fm:'DM Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--fm);font-size:14px;}
+::-webkit-scrollbar{width:3px;}::-webkit-scrollbar-thumb{background:var(--bg4);}
+.shell{display:flex;height:100vh;overflow:hidden;}
+ 
+/* SIDEBAR */
+.sidebar{width:230px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;}
+.sb-brand{padding:22px 18px 18px;border-bottom:1px solid var(--border);}
+.sb-logo{width:34px;height:34px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-weight:800;font-size:15px;color:#fff;margin-bottom:11px;}
+.sb-title{font-family:var(--fh);font-size:15px;font-weight:700;}
+.sb-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+.nav{flex:1;padding:10px 8px;overflow-y:auto;}
+.nav-sec{font-size:10px;letter-spacing:.1em;color:var(--muted);padding:10px 10px 4px;text-transform:uppercase;}
+.ni{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:7px;color:var(--muted2);cursor:pointer;font-size:13px;transition:all .14s;margin-bottom:1px;}
+.ni:hover{background:var(--bg3);color:var(--text);}
+.ni.active{background:var(--adim);color:var(--accent);}
+.ni svg{width:15px;height:15px;flex-shrink:0;}
+.nbadge{margin-left:auto;background:var(--bg4);font-size:10px;padding:2px 7px;border-radius:99px;color:var(--muted);}
+.ni.active .nbadge{background:rgba(59,139,255,.2);color:var(--accent);}
+.sb-foot{padding:14px 18px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);display:flex;align-items:center;gap:7px;}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:blink 2s infinite;flex-shrink:0;}
+.off-dot{width:7px;height:7px;border-radius:50%;background:var(--ban);flex-shrink:0;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+ 
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.topbar{padding:18px 26px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg2);flex-shrink:0;}
+.tb-left h1{font-family:var(--fh);font-size:17px;font-weight:700;}
+.tb-left p{font-size:12px;color:var(--muted);margin-top:2px;}
+.btn-ref{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:7px;border:1px solid var(--border2);background:var(--bg3);color:var(--text);font-family:var(--fm);font-size:12px;cursor:pointer;transition:all .14s;}
+.btn-ref:hover{background:var(--bg4);}
+.btn-ref.loading svg{animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.content{flex:1;overflow-y:auto;padding:22px 26px;}
+ 
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-bottom:22px;}
+.stat{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:15px 17px;}
+.stat-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.stat-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;}
+.stat-ico{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;}
+.stat-val{font-family:var(--fh);font-size:24px;font-weight:800;}
+.stat-hint{font-size:10px;color:var(--muted);margin-top:3px;}
+ 
+/* TOOLBAR */
+.toolbar{display:flex;gap:9px;margin-bottom:14px;}
+.srch{position:relative;flex:1;}
+.srch svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;}
+.srch input{width:100%;padding:9px 12px 9px 32px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--fm);font-size:13px;outline:none;transition:border-color .14s;}
+.srch input:focus{border-color:var(--accent);}
+.srch input::placeholder{color:var(--muted);}
+.fsel{padding:9px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--fm);font-size:13px;outline:none;cursor:pointer;}
+ 
+/* TABLE */
+.tbl{background:var(--bg2);border:1px solid var(--border);border-radius:11px;overflow:hidden;}
+.th{display:grid;padding:10px 17px;background:var(--bg3);font-size:9px;font-weight:500;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;border-bottom:1px solid var(--border);}
+.th-p{grid-template-columns:2fr 1fr .8fr .8fr .7fr 1.8fr;}
+.th-l{grid-template-columns:1.6fr 1fr 2fr .7fr;}
+.th-b{grid-template-columns:1.8fr 1fr 2fr .8fr .8fr;}
+.tr{display:grid;padding:12px 17px;align-items:center;border-bottom:1px solid var(--border);font-size:13px;transition:background .1s;}
+.tr:last-child{border-bottom:none;}
+.tr:hover{background:var(--bg3);}
+.tr-p{grid-template-columns:2fr 1fr .8fr .8fr .7fr 1.8fr;}
+.tr-l{grid-template-columns:1.6fr 1fr 2fr .7fr;}
+.tr-b{grid-template-columns:1.8fr 1fr 2fr .8fr .8fr;}
+.pcell{display:flex;align-items:center;gap:9px;}
+.av{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;font-family:var(--fh);}
+.pname{font-weight:600;color:var(--text);}
+.pid{font-size:10px;color:var(--muted);}
+.badge{font-size:10px;padding:3px 8px;border-radius:5px;font-weight:600;}
+.b-admin{background:rgba(59,139,255,.15);color:#60a5fa;}
+.b-mod{background:rgba(34,197,94,.12);color:#4ade80;}
+.b-staff{background:rgba(168,85,247,.12);color:#c084fc;}
+.b-vip{background:rgba(245,158,11,.12);color:#fbbf24;}
+.b-play{background:var(--bg4);color:var(--muted2);}
+.ping{font-size:12px;}
+.ping.g{color:var(--green)}.ping.o{color:var(--warn)}.ping.r{color:var(--ban)}
+.acts{display:flex;gap:5px;}
+.ab{padding:5px 9px;border-radius:6px;border:1px solid;font-family:var(--fm);font-size:11px;font-weight:500;cursor:pointer;transition:all .14s;}
+.ab:disabled{opacity:.4;cursor:not-allowed;}
+.ab-w{border-color:rgba(245,158,11,.3);color:var(--warn);background:rgba(245,158,11,.08);}
+.ab-w:hover:not(:disabled){background:rgba(245,158,11,.18);}
+.ab-k{border-color:rgba(59,130,246,.3);color:#60a5fa;background:rgba(59,130,246,.08);}
+.ab-k:hover:not(:disabled){background:rgba(59,130,246,.18);}
+.ab-b{border-color:rgba(239,68,68,.3);color:var(--ban);background:rgba(239,68,68,.08);}
+.ab-b:hover:not(:disabled){background:rgba(239,68,68,.18);}
+.ab-unban{border-color:rgba(34,197,94,.3);color:var(--green);background:rgba(34,197,94,.08);}
+.ab-unban:hover{background:rgba(34,197,94,.18);}
+ 
+/* SECTION */
+.sec{display:none;}.sec.active{display:block;}
+ 
+/* MODAL */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;z-index:100;}
+.overlay.open{display:flex;}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:26px;width:420px;max-width:95vw;animation:up .2s ease;}
+@keyframes up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.m-type{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px;}
+.m-type.warn{color:var(--warn)}.m-type.kick{color:#60a5fa}.m-type.ban{color:var(--ban)}
+.m-player{font-family:var(--fh);font-size:20px;font-weight:700;margin-bottom:18px;}
+.flbl{font-size:11px;color:var(--muted);margin-bottom:6px;display:block;letter-spacing:.03em;}
+.fsel2,.ftxt,.finp{width:100%;padding:9px 11px;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-family:var(--fm);font-size:13px;outline:none;transition:border-color .14s;margin-bottom:14px;}
+.fsel2:focus,.ftxt:focus,.finp:focus{border-color:var(--accent);}
+.ftxt{resize:vertical;min-height:68px;}
+.m-acts{display:flex;gap:9px;margin-top:2px;}
+.btn-cancel{flex:1;padding:9px;border-radius:8px;border:1px solid var(--border2);background:transparent;color:var(--muted2);font-family:var(--fm);font-size:13px;cursor:pointer;transition:all .14s;}
+.btn-cancel:hover{background:var(--bg3);color:var(--text);}
+.btn-confirm{flex:1;padding:9px;border-radius:8px;border:none;color:#fff;font-family:var(--fm);font-size:13px;font-weight:600;cursor:pointer;transition:opacity .14s;}
+.btn-confirm:disabled{opacity:.5;cursor:not-allowed;}
+.btn-confirm:hover:not(:disabled){opacity:.85;}
+.btn-confirm.warn{background:var(--warn)}.btn-confirm.kick{background:var(--kick)}.btn-confirm.ban{background:var(--ban)}
+ 
+/* CONFIG */
+.cfg-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:22px;margin-bottom:14px;max-width:580px;}
+.cfg-title{font-family:var(--fh);font-size:15px;font-weight:700;margin-bottom:16px;}
+.cfg-hint{font-size:11px;color:var(--muted);margin-top:-10px;margin-bottom:14px;}
+.warn-box{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.22);border-radius:8px;padding:12px 14px;margin-bottom:18px;font-size:12px;color:#fca5a5;line-height:1.6;max-width:580px;}
+.btn-save{padding:9px 18px;border-radius:8px;border:none;background:var(--accent);color:#fff;font-family:var(--fm);font-size:13px;font-weight:500;cursor:pointer;margin-top:4px;}
+.btn-save:hover{opacity:.88;}
+ 
+/* TOAST */
+.tstack{position:fixed;bottom:18px;right:18px;display:flex;flex-direction:column;gap:7px;z-index:200;}
+.toast{background:var(--bg3);border:1px solid var(--border2);border-radius:9px;padding:11px 15px;font-size:13px;display:flex;align-items:center;gap:9px;animation:tin .25s ease;min-width:220px;}
+@keyframes tin{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:translateX(0)}}
+.tdot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.toast.s .tdot{background:var(--green)}.toast.e .tdot{background:var(--ban)}.toast.i .tdot{background:var(--accent)}
+ 
+/* EMPTY / LOADING */
+.empty{padding:44px;text-align:center;color:var(--muted);font-size:13px;}
+.ldrow{padding:18px 17px;display:flex;align-items:center;gap:10px;color:var(--muted);}
+.sp{width:15px;height:15px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;}
+</style>
 </head>
 <body>
-
-    <div id="login-screen" style="position:fixed; inset:0; background:#000; z-index:999; display:flex; align-items:center; justify-content:center;">
-        <div class="panel" style="width:320px; text-align:center;">
-            <img src="https://res.cloudinary.com/dbxwiln0a/image/upload/v1773180435/fep1qiz1x7pqqidpnmix.png" width="80">
-            <h2 style="color:#fff;">LSPD ACCESS</h2>
-            <input type="text" id="user-in" placeholder="NOME UTENTE (es. best.pavel)" style="width:100%; background:#000; border:1px solid var(--accent); color:#fff; padding:10px; margin:10px 0;">
-            <button class="btn-police" onclick="login()">ENTRA</button>
-        </div>
+<div class="shell">
+ 
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sb-brand">
+    <div class="sb-logo">AP</div>
+    <div class="sb-title">AdminPanel</div>
+    <div class="sb-sub">ERLC — Gestione Server</div>
+  </div>
+  <nav class="nav">
+    <div class="nav-sec">Principale</div>
+    <div class="ni active" onclick="go('players')" id="nav-players">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="5" r="2.5"/><path d="M1 13c0-2.8 2.2-5 5-5h2c2.8 0 5 2.2 5 5"/><circle cx="11.5" cy="4.5" r="2"/><path d="M14.5 12.5c-.1-2-1.6-3.8-3.5-4.2"/></svg>
+      Giocatori
+      <span class="nbadge" id="nb-p">—</span>
     </div>
-
-    <aside class="hidden" id="sidebar">
-        <div class="badge-area">
-            <img src="https://res.cloudinary.com/dbxwiln0a/image/upload/v1773180435/fep1qiz1x7pqqidpnmix.png">
-            <div style="color:var(--gold); font-size:12px; margin-top:10px;">CENTRAL STATION</div>
+    <div class="ni" onclick="go('log')" id="nav-log">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M5 6h6M5 9h4"/></svg>
+      Registro Azioni
+      <span class="nbadge" id="nb-l">0</span>
+    </div>
+    <div class="ni" onclick="go('banned')" id="nav-banned">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M4.5 4.5l7 7"/></svg>
+      Bannati
+      <span class="nbadge" id="nb-b">—</span>
+    </div>
+    <div class="nav-sec">Sistema</div>
+    <div class="ni" onclick="go('config')" id="nav-config">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="2.5"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3 3l1.4 1.4M11.6 11.6L13 13M3 13l1.4-1.4M11.6 4.4L13 3"/></svg>
+      Configurazione
+    </div>
+  </nav>
+  <div class="sb-foot">
+    <span class="off-dot" id="conn-dot"></span>
+    <span id="conn-txt">Non connesso</span>
+  </div>
+</div>
+ 
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="tb-left">
+      <h1 id="pg-title">Giocatori Online</h1>
+      <p id="pg-sub">Configura prima l'API Key ERLC</p>
+    </div>
+    <button class="btn-ref" id="refBtn" onclick="loadData()">
+      <svg id="ref-icon" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13.5 8A5.5 5.5 0 1 1 8 2.5c2 0 3.8 1 4.9 2.5"/><path d="M14 2v4h-4"/></svg>
+      Aggiorna
+    </button>
+  </div>
+ 
+  <div class="content">
+ 
+    <!-- PLAYERS -->
+    <div class="sec active" id="sec-players">
+      <div class="stats-grid">
+        <div class="stat">
+          <div class="stat-top"><span class="stat-lbl">Online ora</span><div class="stat-ico" style="background:rgba(34,197,94,.12)"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#22c55e" stroke-width="2"><circle cx="8" cy="8" r="5"/></svg></div></div>
+          <div class="stat-val" id="st-on">—</div><div class="stat-hint">nel server</div>
         </div>
-        <nav>
-            <button onclick="tab('area')" id="btn-area">PROFILO AGENTE</button>
-            <button onclick="tab('servizio')" id="btn-servizio">STATO DI SERVIZIO</button>
-            <button onclick="tab('matricole')" id="btn-matricole">MATRICOLE</button>
-            <button id="adm-btn" class="hidden" onclick="tab('admin')" style="color:var(--gold)">COMANDO</button>
-            <button onclick="location.reload()" style="margin-top:20px; color:#ff4d4d;">LOGOUT</button>
-        </nav>
-    </aside>
-
-    <main class="hidden" id="main-content">
-        <div id="area">
-            <div class="header-title"><h1>DASHBOARD OPERATIVA</h1></div>
-            <div class="dash-grid">
-                <div class="panel"><div class="data-label">GRADO</div><div id="d-grado" class="data-value">-</div></div>
-                <div class="panel"><div class="data-label">MATRICOLA</div><div id="d-mat" class="data-value">-</div></div>
-                <div class="panel"><div class="data-label">ORE TOTALI</div><div id="d-ore" class="data-value">0.00</div></div>
-                <div class="panel"><div class="data-label">ID ACCOUNT</div><div id="d-acc" class="data-value">-</div></div>
-            </div>
+        <div class="stat">
+          <div class="stat-top"><span class="stat-lbl">Avvisi</span><div class="stat-ico" style="background:rgba(245,158,11,.12)"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M8 3l6 10H2z"/><path d="M8 7v3M8 12v.5"/></svg></div></div>
+          <div class="stat-val" id="st-w">0</div><div class="stat-hint">questa sessione</div>
         </div>
-
-        <div id="servizio" class="hidden">
-            <div class="header-title"><h1>10-8 | INIZIO SERVIZIO</h1></div>
-            <div class="panel" style="text-align:center;">
-                <div id="timer-display" style="font-size:50px; color:#fff; margin-bottom:20px;">00:00:00</div>
-                <button id="t-btn" class="btn-police" onclick="toggleT()">INIZIA TURNO</button>
-            </div>
+        <div class="stat">
+          <div class="stat-top"><span class="stat-lbl">Espulsioni</span><div class="stat-ico" style="background:rgba(59,130,246,.12)"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M10 8H2M5 5l-3 3 3 3M12 3v10"/></svg></div></div>
+          <div class="stat-val" id="st-k">0</div><div class="stat-hint">questa sessione</div>
         </div>
-
-        <div id="matricole" class="hidden">
-            <div class="header-title"><h1>ELENCO UFFICIALI</h1></div>
-            <table>
-                <thead><tr><th>ID</th><th>RANGO</th><th>NOME OPERATIVO</th></tr></thead>
-                <tbody id="m-body"></tbody>
-            </table>
+        <div class="stat">
+          <div class="stat-top"><span class="stat-lbl">Bannati</span><div class="stat-ico" style="background:rgba(239,68,68,.12)"><svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#ef4444" stroke-width="2"><circle cx="8" cy="8" r="5"/><path d="M5 5l6 6"/></svg></div></div>
+          <div class="stat-val" id="st-b">—</div><div class="stat-hint">storico totale</div>
         </div>
-
-        <div id="admin" class="hidden">
-            <div class="header-title"><h1>CENTRAL COMMAND</h1></div>
-            <div class="panel">
-                <p>Accesso riservato agli Alti Comandi per la gestione dei log e turni.</p>
-                </div>
+      </div>
+      <div class="toolbar">
+        <div class="srch">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg>
+          <input type="text" placeholder="Cerca giocatore…" id="srch" oninput="renderPlayers()"/>
         </div>
-        <footer>RECORDS PROPERTY OF LSPD - LOS SANTOS</footer>
-    </main>
-
-    <script>
-        const STAFF_DATA = [
-            {mat: "PD-01", rank: "Chief Of Police", user: "master_topo"},
-            {mat: "PD-02", rank: "Deputy Chief", user: "R. Anderson"},
-            {mat: "PD-03", rank: "Assistant Chief", user: "A. Monroe"},
-            {mat: "PD-04", rank: "Chief of Staff", user: "F. Lore"},
-            {mat: "PD-05", rank: "Captain", user: "best.pavel"},
-            {mat: "PD-06", rank: "Lieutenant", user: "Aperto"},
-            {mat: "PD-07", rank: "Sergeant Major", user: "Aperto"},
-            {mat: "PD-08", rank: "Sergeant", user: "D. Rodriguez"},
-            {mat: "PD-09", rank: "Sergeant", user: "Aperto"},
-            {mat: "PD-10", rank: "Sergeant", user: "Aperto"},
-            {mat: "PD-11", rank: "Corporal", user: "Aperto"},
-            {mat: "PD-12", rank: "Corporal", user: "A. Whitmore"},
-            {mat: "PD-13", rank: "Corporal", user: "matte_hoola.op."},
-            {mat: "PD-14", rank: "PO 1st Class", user: "H. Madison"},
-            {mat: "PD-27", rank: "PO 3rd Class", user: "A. Smith"},
-            {mat: "PD-28", rank: "PO 3rd Class", user: "alex664824"},
-            {mat: "PD-30", rank: "Recruit", user: "N."},
-            {mat: "PD-31", rank: "Recruit", user: "P. Walker"},
-            {mat: "PD-32", rank: "Recruit", user: "R. Custom"},
-            {mat: "PD-33", rank: "Recruit", user: "M. Muccia"}
-        ];
-
-        let db = JSON.parse(localStorage.getItem('LSPD_DB_V46')) || {};
-        let currentUser = null, sec = 0, interval = null, on = false;
-
-        function login() {
-            let u = document.getElementById('user-in').value.trim();
-            // Cerca l'utente nella lista o lascia entrare se esiste nel DB locale
-            let found = STAFF_DATA.find(s => s.user.toLowerCase() === u.toLowerCase());
-            
-            if(found || u === "best.pavel") {
-                currentUser = u;
-                if(!db[u]) {
-                    db[u] = { 
-                        grado: found ? found.rank : "Captain", 
-                        mat: found ? found.mat : "PD-05", 
-                        ore: 0 
-                    };
-                }
-                document.getElementById('login-screen').classList.add('hidden');
-                document.getElementById('sidebar').classList.remove('hidden');
-                document.getElementById('main-content').classList.remove('hidden');
-                
-                // Comandi Alti (Admin)
-                const highRank = ["Chief Of Police", "Deputy Chief", "Assistant Chief", "Chief of Staff", "Captain"];
-                if(highRank.includes(db[u].grado)) document.getElementById('adm-btn').classList.remove('hidden');
-                
-                updateUI(); renderMatricole(); tab('area');
-            } else { alert("ID AGENTE NON RICONOSCIUTO"); }
-        }
-
-        function toggleT() {
-            let b = document.getElementById('t-btn');
-            if(!on) {
-                on = true; b.innerText = "CHIUDI TURNO (10-7)";
-                interval = setInterval(() => { sec++; document.getElementById('timer-display').innerText = fmt(sec); }, 1000);
-            } else {
-                on = false; b.innerText = "INIZIA TURNO (10-8)";
-                clearInterval(interval);
-                db[currentUser].ore += (sec / 3600);
-                sec = 0; document.getElementById('timer-display').innerText = "00:00:00";
-                save(); updateUI();
-            }
-        }
-
-        function updateUI() {
-            document.getElementById('d-grado').innerText = db[currentUser].grado;
-            document.getElementById('d-mat').innerText = db[currentUser].mat;
-            document.getElementById('d-ore').innerText = db[currentUser].ore.toFixed(2);
-            document.getElementById('d-acc').innerText = currentUser;
-        }
-
-        function renderMatricole() {
-            document.getElementById('m-body').innerHTML = STAFF_DATA.map(s => `
-                <tr class="${s.user === 'Aperto' ? 'vacancy' : ''}">
-                    <td>${s.mat}</td>
-                    <td>${s.rank}</td>
-                    <td>${s.user}</td>
-                </tr>
-            `).join('');
-        }
-
-        function fmt(s) { return new Date(s * 1000).toISOString().substr(11, 8); }
-        function save() { localStorage.setItem('LSPD_DB_V46', JSON.stringify(db)); }
-        function tab(id) { 
-            document.querySelectorAll('main > div').forEach(d => d.classList.add('hidden')); 
-            document.getElementById(id).classList.remove('hidden');
-            document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-            document.getElementById('btn-'+id).classList.add('active');
-        }
-    </script>
+        <select class="fsel" id="fperm" onchange="renderPlayers()">
+          <option value="">Tutti</option>
+          <option>Server Owner</option>
+          <option>Admin</option>
+          <option>Moderatore</option>
+          <option>Player</option>
+        </select>
+      </div>
+      <div class="tbl">
+        <div class="th th-p"><span>Giocatore</span><span>Permesso</span><span>Ping</span><span>Callsign</span><span>Team</span><span>Azioni</span></div>
+        <div id="pbody"></div>
+      </div>
+    </div>
+ 
+    <!-- LOG -->
+    <div class="sec" id="sec-log">
+      <div class="tbl">
+        <div class="th th-l"><span>Giocatore</span><span>Azione</span><span>Motivo</span><span>Orario</span></div>
+        <div id="lbody"></div>
+      </div>
+    </div>
+ 
+    <!-- BANNED -->
+    <div class="sec" id="sec-banned">
+      <div class="tbl">
+        <div class="th th-b"><span>Giocatore</span><span>Durata</span><span>Motivo</span><span>Data</span><span>Azione</span></div>
+        <div id="bbody"></div>
+      </div>
+    </div>
+ 
+    <!-- CONFIG -->
+    <div class="sec" id="sec-config">
+      <div class="warn-box">⚠ Non condividere mai queste credenziali. Conserva questo file solo in locale sul tuo PC e non caricarlo online.</div>
+      <div class="cfg-card">
+        <div class="cfg-title">🔑 API Key ERLC</div>
+        <label class="flbl">Chiave API</label>
+        <input class="finp" type="password" id="cfg-erlc" placeholder="La tua API key ERLC…"/>
+        <div class="cfg-hint">Trovala su policeroleplay.com → Server Settings → API Key</div>
+        <label class="flbl" style="margin-top:4px;">Proxy CORS (opzionale)</label>
+        <input class="finp" type="text" id="cfg-proxy" placeholder="https://corsproxy.io/?" style="margin-bottom:4px;"/>
+        <div class="cfg-hint">Necessario se usi il pannello dal browser. Lascia vuoto se lo usi da server Node.js.</div>
+        <button class="btn-save" onclick="saveConfig()">Salva e connetti</button>
+      </div>
+      <div class="cfg-card">
+        <div class="cfg-title">🔔 Webhook Discord</div>
+        <label class="flbl">URL Webhook</label>
+        <input class="finp" type="password" id="cfg-discord" placeholder="https://discord.com/api/webhooks/ID/TOKEN"/>
+        <div class="cfg-hint">Discord → Impostazioni canale → Integrazioni → Webhook → Copia URL</div>
+        <button class="btn-save" onclick="saveConfig()">Salva webhook</button>
+      </div>
+    </div>
+ 
+  </div>
+</div>
+</div>
+ 
+<!-- MODAL -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="m-type warn" id="m-type">AVVISO</div>
+    <div class="m-player" id="m-player">—</div>
+    <label class="flbl">Motivo</label>
+    <select class="fsel2" id="m-reason">
+      <option>Linguaggio inappropriato</option>
+      <option>Spam nella chat</option>
+      <option>Comportamento scorretto</option>
+      <option>Cheating / Exploit</option>
+      <option>Molestia ad altri giocatori</option>
+      <option>VDM (Vehicle Deathmatch)</option>
+      <option>RDM (Random Deathmatch)</option>
+      <option>FailRP</option>
+      <option>Metagaming</option>
+      <option>Altro</option>
+    </select>
+    <div id="dur-wrap" style="display:none">
+      <label class="flbl">Durata ban</label>
+      <select class="fsel2" id="m-dur">
+        <option value="1">1 giorno</option>
+        <option value="3">3 giorni</option>
+        <option value="7">7 giorni</option>
+        <option value="30">30 giorni</option>
+        <option value="0">Permanente</option>
+      </select>
+    </div>
+    <label class="flbl">Note aggiuntive</label>
+    <textarea class="ftxt" id="m-note" placeholder="Dettagli opzionali…"></textarea>
+    <div class="m-acts">
+      <button class="btn-cancel" onclick="closeModal()">Annulla</button>
+      <button class="btn-confirm warn" id="m-ok" onclick="doAction()">Conferma</button>
+    </div>
+  </div>
+</div>
+ 
+<div class="tstack" id="tstack"></div>
+ 
+<script>
+/* ─── CONFIG ─── */
+const C = {
+  erlcKey:  ()=> localStorage.getItem('erlc_key')    || '',
+  discord:  ()=> localStorage.getItem('discord_hook')|| '',
+  proxy:    ()=> localStorage.getItem('erlc_proxy')  || 'https://corsproxy.io/?',
+  base:     ()=> C.proxy() + encodeURIComponent('https://api.policeroleplay.community/v1/server'),
+};
+ 
+/* ─── STATE ─── */
+const S = { players:[], banned:[], logs:[], sw:0, sk:0, modal:{} };
+ 
+/* ─── NAV ─── */
+const secs = ['players','log','banned','config'];
+const titles = {players:'Giocatori Online',log:'Registro Azioni',banned:'Giocatori Bannati',config:'Configurazione'};
+const subs   = {players:'Dati in tempo reale dal server ERLC',log:'Storico azioni moderazione',banned:'Gestisci i ban attivi',config:'Impostazioni API e Discord'};
+ 
+function go(s){
+  secs.forEach(x=>{
+    document.getElementById('sec-'+x).classList.toggle('active',x===s);
+    document.getElementById('nav-'+x).classList.toggle('active',x===s);
+  });
+  document.getElementById('pg-title').textContent = titles[s];
+  document.getElementById('pg-sub').textContent   = subs[s];
+  if(s==='config') loadCfgUI();
+}
+ 
+/* ─── ERLC FETCH ─── */
+async function erlcGet(ep){
+  if(!C.erlcKey()) throw new Error('API Key non configurata');
+  const url = C.proxy()
+    ? C.proxy() + encodeURIComponent('https://api.policeroleplay.community/v1/server'+ep)
+    : 'https://api.policeroleplay.community/v1/server'+ep;
+  const r = await fetch(url,{headers:{'Server-Key':C.erlcKey()}});
+  if(!r.ok) throw new Error('HTTP '+r.status);
+  return r.json();
+}
+ 
+async function erlcCmd(cmd){
+  if(!C.erlcKey()) throw new Error('API Key non configurata');
+  const url = C.proxy()
+    ? C.proxy() + encodeURIComponent('https://api.policeroleplay.community/v1/server/command')
+    : 'https://api.policeroleplay.community/v1/server/command';
+  const r = await fetch(url,{
+    method:'POST',
+    headers:{'Server-Key':C.erlcKey(),'Content-Type':'application/json'},
+    body:JSON.stringify({command:cmd})
+  });
+  if(!r.ok){const t=await r.text();throw new Error(r.status+' — '+t);}
+}
+ 
+/* ─── LOAD DATA ─── */
+async function loadData(){
+  if(!C.erlcKey()){toast('Configura prima l\'API Key ERLC','i');go('config');return;}
+  const btn=document.getElementById('refBtn');
+  btn.classList.add('loading');
+  document.getElementById('pbody').innerHTML='<div class="ldrow"><div class="sp"></div>Caricamento giocatori…</div>';
+  try{
+    const [pd,bd] = await Promise.all([erlcGet('/players'),erlcGet('/bans')]);
+    S.players = Array.isArray(pd)?pd:Object.values(pd||{});
+    S.banned  = Array.isArray(bd)?bd:Object.values(bd||{});
+    upStats();
+    renderPlayers();
+    renderBanned();
+    setConn(true);
+    toast('Dati aggiornati','s');
+  }catch(e){
+    console.error(e);
+    document.getElementById('pbody').innerHTML=`<div class="empty">⚡ Errore connessione ERLC<br><span style="font-size:11px;margin-top:6px;display:block;color:var(--muted)">${e.message}</span></div>`;
+    setConn(false);
+    toast('Errore: '+e.message,'e');
+  }
+  btn.classList.remove('loading');
+}
+ 
+function setConn(ok){
+  const dot=document.getElementById('conn-dot');
+  dot.className=ok?'live-dot':'off-dot';
+  document.getElementById('conn-txt').textContent=ok?'Connesso · ERLC':'Errore connessione';
+}
+ 
+function upStats(){
+  document.getElementById('st-on').textContent=S.players.length;
+  document.getElementById('st-b').textContent=S.banned.length;
+  document.getElementById('nb-p').textContent=S.players.length;
+  document.getElementById('nb-b').textContent=S.banned.length;
+}
+ 
+/* ─── RENDER PLAYERS ─── */
+const AVC=['rgba(59,139,255,.18)','rgba(34,197,94,.18)','rgba(245,158,11,.18)','rgba(168,85,247,.18)','rgba(239,68,68,.18)','rgba(8,145,178,.18)'];
+const ATC=['#60a5fa','#4ade80','#fbbf24','#c084fc','#f87171','#22d3ee'];
+ 
+function av(name,i){
+  return`<div class="av" style="background:${AVC[i%6]};color:${ATC[i%6]}">${name.slice(0,2).toUpperCase()}</div>`;
+}
+function pBadge(p){
+  if(!p) return'<span class="badge b-play">Player</span>';
+  const l=p.toLowerCase();
+  if(l.includes('owner')) return`<span class="badge b-admin">${p}</span>`;
+  if(l.includes('admin')) return`<span class="badge b-admin">${p}</span>`;
+  if(l.includes('mod'))   return`<span class="badge b-mod">${p}</span>`;
+  if(l.includes('staff')) return`<span class="badge b-staff">${p}</span>`;
+  if(l.includes('vip'))   return`<span class="badge b-vip">${p}</span>`;
+  return`<span class="badge b-play">${p}</span>`;
+}
+function pingCls(ms){if(!ms)return'';if(ms<80)return'g';if(ms<150)return'o';return'r';}
+ 
+function renderPlayers(){
+  const q=document.getElementById('srch').value.toLowerCase();
+  const pf=document.getElementById('fperm').value;
+  const list=S.players.filter(p=>{
+    const n=(p.Player||p.Username||'').toLowerCase();
+    const pr=p.Permission||p.Role||'';
+    return(!q||n.includes(q))&&(!pf||pr===pf);
+  });
+  if(!list.length){document.getElementById('pbody').innerHTML='<div class="empty">Nessun giocatore trovato</div>';return;}
+  document.getElementById('pbody').innerHTML=list.map((p,i)=>{
+    const name=p.Player||p.Username||'Sconosciuto';
+    const perm=p.Permission||p.Role||'';
+    const ping=p.Ping||null;
+    const cs=p.Callsign||'—';
+    const team=p.Team||'—';
+    return`<div class="tr tr-p">
+      <span class="pcell">${av(name,i)}<span><div class="pname">${name}</div><div class="pid">${p.Player_Id||p.UserId||''}</div></span></span>
+      <span>${pBadge(perm)}</span>
+      <span class="ping ${pingCls(ping)}">${ping?ping+'ms':'—'}</span>
+      <span style="color:var(--muted2);font-size:12px">${cs}</span>
+      <span style="color:var(--muted2);font-size:12px">${team}</span>
+      <span class="acts">
+        <button class="ab ab-w" onclick="openModal('warn','${name.replace(/'/g,"\\'")}')">Avvisa</button>
+        <button class="ab ab-k" onclick="openModal('kick','${name.replace(/'/g,"\\'")}')">Espelli</button>
+        <button class="ab ab-b" onclick="openModal('ban','${name.replace(/'/g,"\\'")}')">Banna</button>
+      </span>
+    </div>`;
+  }).join('');
+}
+ 
+/* ─── RENDER LOG ─── */
+function renderLog(){
+  document.getElementById('nb-l').textContent=S.logs.length;
+  if(!S.logs.length){document.getElementById('lbody').innerHTML='<div class="empty">Nessuna azione registrata</div>';return;}
+  const cm={warn:'rgba(245,158,11,.2)',kick:'rgba(59,130,246,.2)',ban:'rgba(239,68,68,.2)'};
+  const ct={warn:'#fbbf24',kick:'#60a5fa',ban:'#f87171'};
+  const lbl={warn:'AVVISO',kick:'ESPULSIONE',ban:'BAN'};
+  document.getElementById('lbody').innerHTML=S.logs.map(l=>`
+    <div class="tr tr-l">
+      <span style="font-weight:600">${l.player}</span>
+      <span><span class="badge" style="background:${cm[l.type]};color:${ct[l.type]}">${lbl[l.type]}</span></span>
+      <span style="color:var(--muted2);font-size:12px">${l.reason}</span>
+      <span style="color:var(--muted);font-size:12px">${l.time}</span>
+    </div>`).join('');
+}
+ 
+/* ─── RENDER BANNED ─── */
+function renderBanned(){
+  if(!S.banned.length){document.getElementById('bbody').innerHTML='<div class="empty">Nessun giocatore bannato ✅</div>';return;}
+  document.getElementById('bbody').innerHTML=S.banned.map((b,i)=>{
+    const name=b.Username||b.name||b.Player||'Sconosciuto';
+    const reason=b.Reason||b.reason||'—';
+    const dur=b.Duration===0?'Permanente':(b.Duration?b.Duration+' sec':'—');
+    const date=b.BannedAt?new Date(b.BannedAt*1000).toLocaleDateString('it-IT'):'—';
+    return`<div class="tr tr-b">
+      <span class="pcell">${av(name,i)}<span class="pname">${name}</span></span>
+      <span style="color:var(--muted2);font-size:12px">${dur}</span>
+      <span style="color:var(--muted2);font-size:12px">${reason}</span>
+      <span style="color:var(--muted);font-size:12px">${date}</span>
+      <span><button class="ab ab-unban" onclick="doUnban('${name.replace(/'/g,"\\'")}','${b.Player_Id||b.UserId||''}')">Sbanna</button></span>
+    </div>`;
+  }).join('');
+}
+ 
+/* ─── MODAL ─── */
+const mTypes={warn:'AVVISO',kick:'ESPULSIONE',ban:'BAN'};
+const mTxt={warn:'Invia Avviso',kick:'Espelli',ban:'Banna'};
+ 
+function openModal(action,player){
+  S.modal={action,player};
+  const ml=document.getElementById('m-type');
+  ml.textContent=mTypes[action];ml.className='m-type '+action;
+  document.getElementById('m-player').textContent=player;
+  document.getElementById('dur-wrap').style.display=action==='ban'?'block':'none';
+  document.getElementById('m-note').value='';
+  const ok=document.getElementById('m-ok');
+  ok.className='btn-confirm '+action;ok.textContent=mTxt[action];
+  document.getElementById('overlay').classList.add('open');
+}
+function closeModal(){document.getElementById('overlay').classList.remove('open');}
+ 
+async function doAction(){
+  const{action,player}=S.modal;
+  const reason=document.getElementById('m-reason').value;
+  const note=document.getElementById('m-note').value;
+  const dur=document.getElementById('m-dur').value;
+  const ok=document.getElementById('m-ok');
+  ok.disabled=true;ok.textContent='Esecuzione…';
+  try{
+    // Comando ERLC
+    const cmdMap={
+      warn:`:pm ${player} [AVVISO STAFF] ${reason}`,
+      kick:`:kick ${player} ${reason}`,
+      ban: dur==='0'?`:ban ${player} ${reason}`:`:ban ${player} ${dur}d ${reason}`,
+    };
+    await erlcCmd(cmdMap[action]);
+    // Notifica Discord
+    await sendDiscord(action,player,reason,note,dur);
+    // Aggiorna stato locale
+    const now=new Date();
+    const time=now.getHours().toString().padStart(2,'0')+':'+now.getMinutes().toString().padStart(2,'0');
+    S.logs.unshift({type:action,player,reason:reason+(note?' — '+note:''),time});
+    if(action==='warn'){S.sw++;document.getElementById('st-w').textContent=S.sw;}
+    if(action==='kick'||action==='ban'){
+      S.sk++;document.getElementById('st-k').textContent=S.sk;
+      S.players=S.players.filter(p=>(p.Player||p.Username)!==player);
+      document.getElementById('st-on').textContent=S.players.length;
+      document.getElementById('nb-p').textContent=S.players.length;
+    }
+    renderPlayers();renderLog();
+    closeModal();
+    const done={warn:'Avviso inviato',kick:'Giocatore espulso',ban:'Giocatore bannato'};
+    toast(done[action]+': '+player,'s');
+  }catch(e){toast('Errore: '+e.message,'e');}
+  ok.disabled=false;ok.textContent=mTxt[action];
+}
+ 
+/* ─── UNBAN ─── */
+async function doUnban(name,id){
+  try{
+    await erlcCmd(`:unban ${id||name}`);
+    S.banned=S.banned.filter(b=>(b.Username||b.name||b.Player)!==name);
+    document.getElementById('st-b').textContent=S.banned.length;
+    document.getElementById('nb-b').textContent=S.banned.length;
+    renderBanned();
+    toast('Sbannato: '+name,'s');
+  }catch(e){toast('Errore sban: '+e.message,'e');}
+}
+ 
+/* ─── DISCORD ─── */
+const DC={warn:0xf59e0b,kick:0x3b82f6,ban:0xef4444};
+const DE={warn:'⚠️',kick:'👢',ban:'🔨'};
+const DL={warn:'Avviso',kick:'Espulsione',ban:'Ban'};
+ 
+async function sendDiscord(action,player,reason,note,dur){
+  const hook=C.discord();
+  if(!hook||hook.length<20)return;
+  const fields=[
+    {name:'👤 Giocatore',value:'`'+player+'`',inline:true},
+    {name:'⚡ Azione',value:DL[action],inline:true},
+    {name:'📋 Motivo',value:reason,inline:false},
+  ];
+  if(note) fields.push({name:'📝 Note',value:note,inline:false});
+  if(action==='ban') fields.push({name:'⏱ Durata',value:dur==='0'?'Permanente':dur+' giorni',inline:true});
+  await fetch(hook,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      username:'AdminPanel ERLC',
+      embeds:[{
+        title:DE[action]+' '+DL[action],
+        color:DC[action],
+        fields,
+        footer:{text:'AdminPanel · '+new Date().toLocaleString('it-IT')}
+      }]
+    })
+  });
+}
+ 
+/* ─── CONFIG ─── */
+function loadCfgUI(){
+  document.getElementById('cfg-erlc').value   = localStorage.getItem('erlc_key')||'';
+  document.getElementById('cfg-discord').value = localStorage.getItem('discord_hook')||'';
+  document.getElementById('cfg-proxy').value   = localStorage.getItem('erlc_proxy')||'https://corsproxy.io/?';
+}
+function saveConfig(){
+  const ek=document.getElementById('cfg-erlc').value.trim();
+  const dh=document.getElementById('cfg-discord').value.trim();
+  const px=document.getElementById('cfg-proxy').value.trim();
+  if(ek) localStorage.setItem('erlc_key',ek);
+  if(dh) localStorage.setItem('discord_hook',dh);
+  localStorage.setItem('erlc_proxy',px);
+  toast('Configurazione salvata!','s');
+  setTimeout(()=>{go('players');loadData();},700);
+}
+ 
+/* ─── TOAST ─── */
+function toast(msg,type='i'){
+  const el=document.createElement('div');
+  el.className='toast '+type;
+  el.innerHTML=`<span class="tdot"></span>${msg}`;
+  document.getElementById('tstack').appendChild(el);
+  setTimeout(()=>el.remove(),3400);
+}
+ 
+/* ─── INIT ─── */
+window.addEventListener('DOMContentLoaded',()=>{
+  loadCfgUI();
+  if(!C.erlcKey()){
+    go('config');
+    toast('Configura l\'API Key ERLC per iniziare','i');
+  }else{
+    go('players');
+    loadData();
+  }
+  // Auto-refresh ogni 60 secondi
+  setInterval(()=>{if(C.erlcKey()&&document.getElementById('sec-players').classList.contains('active')) loadData();},60000);
+});
+</script>
 </body>
 </html>
