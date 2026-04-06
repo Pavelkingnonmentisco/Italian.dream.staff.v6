@@ -2,766 +2,484 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Staff Panel RP</title>
+  <title>Staff Panel RP – Realtime DB</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Firebase compat (Realtime Database) -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    html, body {
-      height: 100%;
-    }
-    body {
-      background: #020617;
-      color: #E5E7EB;
-      font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      -webkit-font-smoothing: antialiased;
-    }
-    a { color: inherit; text-decoration: none; }
-    button { font-family: inherit; }
-    .hidden { display: none !important; }
-
-    .top-nav-wrapper {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      margin-top: 1.2rem;
-      margin-bottom: 0.8rem;
-    }
-    .menu {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(20px);
-      border-radius: 24px;
-      border: 1px solid #ffffff;
-      display: flex;
-      gap: 6px;
-      padding: 4px;
-      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.45);
-    }
-    .link {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 52px;
-      height: 52px;
-      border-radius: 20px;
-      transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      color: #0f172a;
-      cursor: pointer;
-      overflow: hidden;
-      padding: 0 10px;
-      gap: 8px;
-      font-size: 0.85rem;
-      font-weight: 500;
-    }
-    .link span.icon {
-      font-size: 1.2rem;
-      flex-shrink: 0;
-    }
-    .link span.label {
-      white-space: nowrap;
-      opacity: 0;
-      transform: translateX(-6px);
-      transition: 0.3s ease;
-    }
-    .link:hover {
-      width: 135px;
-      background: #e4e4e7;
-    }
-    .link:hover span.label {
-      opacity: 1;
-      transform: translateX(0);
-    }
-    .link.active {
-      background: #0f172a;
-      color: #ffffff;
-      width: 135px;
-    }
-    .link.active span.label {
-      opacity: 1;
-      transform: translateX(0);
-    }
-
-    .auth-container {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-    }
-    .auth-card {
-      background: #020617;
-      padding: 2.5rem;
-      border-radius: 18px;
-      width: 100%;
-      max-width: 460px;
-      box-shadow: 0 0 45px rgba(15,23,42,0.9);
-      border: 1px solid #1f2937;
-      position: relative;
-      overflow: hidden;
-    }
-    .auth-card::before {
-      content: "";
-      position: absolute;
-      inset: -40%;
-      background: radial-gradient(circle at top left, #38bdf822, transparent 60%);
-      opacity: 0.5;
-      pointer-events: none;
-    }
-    .auth-inner {
-      position: relative;
-      z-index: 1;
-    }
-    .logo-wrapper {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 1rem;
-    }
-    .logo {
-      width: 90px;
-      height: 90px;
-      border-radius: 50%;
-      border: 2px solid #38bdf8;
-      box-shadow: 0 0 18px #38bdf855;
-      object-fit: cover;
-    }
-    .auth-title {
-      text-align: center;
-      margin-bottom: 0.5rem;
-      font-size: 1.6rem;
-      font-weight: 600;
-      color: #e5e7eb;
-    }
-    .auth-subtitle {
-      text-align: center;
-      margin-bottom: 1.2rem;
-      font-size: 0.9rem;
-      color: #9ca3af;
-    }
-    .auth-form {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      margin-top: 1rem;
-    }
-    .auth-form label {
-      font-size: 0.9rem;
-      color: #d1d5db;
-    }
-    .auth-form input {
-      padding: 0.6rem 0.8rem;
-      border-radius: 10px;
-      border: 1px solid #1f2937;
-      background: #020617;
-      color: #e5e7eb;
-      font-size: 0.95rem;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-    }
-    .auth-form input:focus {
-      outline: none;
-      border-color: #38bdf8;
-      box-shadow: 0 0 0 1px #38bdf855;
-      background: #020617;
-    }
-    .btn-primary {
-      margin-top: 0.5rem;
-      padding: 0.7rem;
-      border-radius: 999px;
-      border: none;
-      background: linear-gradient(135deg, #38bdf8, #0ea5e9);
-      color: #0b1120;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.2s ease;
-      font-size: 0.95rem;
-      letter-spacing: 0.02em;
-    }
-    .btn-primary:hover {
-      box-shadow: 0 0 18px #38bdf855;
-      transform: translateY(-1px);
-    }
-    .btn-secondary {
-      margin-top: 0.5rem;
-      padding: 0.7rem;
-      border-radius: 999px;
-      border: 1px solid #1f2937;
-      background: transparent;
-      color: #e5e7eb;
-      font-weight: 500;
-      cursor: pointer;
-      transition: 0.2s ease;
-      font-size: 0.9rem;
-    }
-    .btn-secondary:hover {
-      background: #020617;
-    }
-    .error {
-      background: #7f1d1d;
-      color: #fecaca;
-      padding: 0.6rem 0.8rem;
-      border-radius: 8px;
-      margin-bottom: 0.5rem;
-      font-size: 0.85rem;
-      border: 1px solid #f87171;
-    }
-    .success {
-      background: #022c22;
-      color: #bbf7d0;
-      padding: 0.6rem 0.8rem;
-      border-radius: 8px;
-      margin-bottom: 0.5rem;
-      font-size: 0.85rem;
-      border: 1px solid #22c55e;
-    }
-
-    .password-card {
-      background: #020617;
-      padding: 2.2rem;
-      border-radius: 18px;
-      border: 1px solid #1f2937;
-      box-shadow: 0 0 45px rgba(15,23,42,0.9);
-      max-width: 520px;
-      width: 100%;
-      position: relative;
-      overflow: hidden;
-    }
-    .password-card::before {
-      content: "";
-      position: absolute;
-      inset: -40%;
-      background: radial-gradient(circle at top, #38bdf822, transparent 60%);
-      opacity: 0.6;
-      pointer-events: none;
-    }
-    .password-inner {
-      position: relative;
-      z-index: 1;
-    }
-    .password-title {
-      font-size: 1.4rem;
-      font-weight: 600;
-      margin-bottom: 0.3rem;
-      color: #e5e7eb;
-    }
-    .password-subtitle {
-      font-size: 0.9rem;
-      color: #9ca3af;
-      margin-bottom: 1.2rem;
-    }
-    .password-input-wrapper {
-      position: relative;
-      margin-bottom: 1rem;
-    }
-    .password-input-wrapper input {
-      width: 100%;
-      padding: 0.8rem 2.6rem 0.8rem 2.6rem;
-      border-radius: 999px;
-      border: 1px solid #1f2937;
-      background: #020617;
-      color: #e5e7eb;
-      font-size: 0.95rem;
-      box-shadow: 0 0 0 1px #0f172a;
-    }
-    .password-input-wrapper input:focus {
-      outline: none;
-      border-color: #38bdf8;
-      box-shadow: 0 0 0 1px #38bdf855;
-    }
-    .password-input-wrapper .icon-left {
-      position: absolute;
-      left: 0.9rem;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 1rem;
-      color: #6b7280;
-    }
-    .password-input-wrapper .icon-right {
-      position: absolute;
-      right: 0.9rem;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 1rem;
-      color: #6b7280;
-      cursor: pointer;
-    }
-    .password-strength-title {
-      font-size: 0.9rem;
-      color: #a5b4fc;
-      margin-bottom: 0.4rem;
-    }
-    .password-checklist {
-      list-style: none;
-      margin-bottom: 0.8rem;
-    }
-    .password-checklist li {
-      font-size: 0.85rem;
-      color: #9ca3af;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      margin-bottom: 0.2rem;
-    }
-    .password-checklist span.dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      border: 1px solid #4b5563;
-      background: transparent;
-      flex-shrink: 0;
-    }
-    .password-checklist li.valid span.dot {
-      background: #22c55e;
-      border-color: #22c55e;
-    }
-    .password-checklist li.valid {
-      color: #bbf7d0;
-    }
-    .password-status-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0.35rem 0.8rem;
-      border-radius: 999px;
-      font-size: 0.8rem;
-      border: 1px solid #22c55e55;
-      background: #022c22;
-      color: #bbf7d0;
-      margin-top: 0.4rem;
-    }
-
-    .layout {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-    .main-content {
-      flex: 1;
-      padding: 0 1.5rem 1.5rem;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: minmax(260px, 320px) minmax(260px, 1fr) minmax(260px, 360px);
-      gap: 1.2rem;
-      margin-top: 1rem;
-    }
-    @media (max-width: 1024px) {
-      .dashboard-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-    .panel {
-      background: #020617;
-      border-radius: 18px;
-      border: 1px solid #1f2937;
-      box-shadow: 0 0 35px rgba(15,23,42,0.9);
-      padding: 1.2rem 1.4rem;
-      position: relative;
-      overflow: hidden;
-    }
-    .panel::before {
-      content: "";
-      position: absolute;
-      inset: -40%;
-      background: radial-gradient(circle at top, #38bdf822, transparent 60%);
-      opacity: 0.35;
-      pointer-events: none;
-    }
-    .panel-inner {
-      position: relative;
-      z-index: 1;
-    }
-    .status-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0.25rem 0.7rem;
-      border-radius: 999px;
-      border: 1px solid #16a34a55;
-      background: #022c22;
-      color: #bbf7d0;
-      font-size: 0.8rem;
-      margin-top: 0.3rem;
-    }
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #22c55e;
-    }
-    .panel-title {
-      font-size: 1.2rem;
-      font-weight: 600;
-      margin-bottom: 0.2rem;
-      color: #e5e7eb;
-    }
-    .panel-subtitle {
-      font-size: 0.85rem;
-      color: #9ca3af;
-      margin-bottom: 0.6rem;
-    }
-    .panel-section-title {
-      font-size: 0.9rem;
-      font-weight: 500;
-      margin-top: 0.8rem;
-      margin-bottom: 0.3rem;
-      color: #e5e7eb;
-    }
-    .activity-bar {
-      width: 100%;
-      height: 8px;
-      border-radius: 999px;
-      background: #020617;
-      border: 1px solid #1f2937;
-      overflow: hidden;
-      margin-top: 0.3rem;
-    }
-    .activity-bar-fill {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #22c55e, #a3e635);
-      transition: width 0.3s ease;
-    }
-    .activity-text {
-      font-size: 0.8rem;
-      color: #9ca3af;
-      margin-top: 0.3rem;
-    }
-    .toolbox-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 0.4rem;
-      margin-top: 0.4rem;
-    }
-    .toolbox-btn {
-      padding: 0.45rem 0.5rem;
-      border-radius: 999px;
-      border: none;
-      font-size: 0.8rem;
-      cursor: pointer;
-      font-weight: 500;
-      color: #020617;
-    }
-    .toolbox-btn.green { background: #22c55e; }
-    .toolbox-btn.blue { background: #3b82f6; }
-    .toolbox-btn.orange { background: #f97316; }
-    .toolbox-btn:hover { filter: brightness(1.05); }
-    .break-buttons {
-      display: flex;
-      gap: 0.5rem;
-      margin-top: 0.6rem;
-    }
-    .break-btn {
-      flex: 1;
-      padding: 0.45rem 0.5rem;
-      border-radius: 999px;
-      border: 1px solid #1f2937;
-      background: #020617;
-      color: #e5e7eb;
-      font-size: 0.8rem;
-      cursor: pointer;
-    }
-    .break-btn:hover {
-      background: #020617;
-      border-color: #38bdf8;
-    }
-
-    .field-label {
-      font-size: 0.85rem;
-      color: #9ca3af;
-      margin-bottom: 0.25rem;
-    }
-    .field-input {
-      width: 100%;
-      padding: 0.6rem 0.8rem;
-      border-radius: 10px;
-      border: 1px solid #1f2937;
-      background: #020617;
-      color: #e5e7eb;
-      font-size: 0.9rem;
-      margin-bottom: 0.6rem;
-    }
-    .field-input:focus {
-      outline: none;
-      border-color: #38bdf8;
-      box-shadow: 0 0 0 1px #38bdf855;
-    }
-    .field-textarea {
-      width: 100%;
-      min-height: 80px;
-      padding: 0.6rem 0.8rem;
-      border-radius: 10px;
-      border: 1px solid #1f2937;
-      background: #020617;
-      color: #e5e7eb;
-      font-size: 0.9rem;
-      resize: vertical;
-      margin-bottom: 0.6rem;
-    }
-    .field-textarea:focus {
-      outline: none;
-      border-color: #38bdf8;
-      box-shadow: 0 0 0 1px #38bdf855;
-    }
-    .log-type-select {
-      width: 100%;
-      padding: 0.5rem 0.7rem;
-      border-radius: 10px;
-      border: 1px solid #1f2937;
-      background: #020617;
-      color: #e5e7eb;
-      font-size: 0.9rem;
-      margin-bottom: 0.6rem;
-    }
-    .log-type-select:focus {
-      outline: none;
-      border-color: #38bdf8;
-      box-shadow: 0 0 0 1px #38bdf855;
-    }
-
-    .search-input {
-      width: 100%;
-      padding: 0.55rem 0.8rem;
-      border-radius: 999px;
-      border: 1px solid #1f2937;
-      background: #020617;
-      color: #e5e7eb;
-      font-size: 0.85rem;
-      margin-bottom: 0.6rem;
-    }
-    .search-input:focus {
-      outline: none;
-      border-color: #38bdf8;
-      box-shadow: 0 0 0 1px #38bdf855;
-    }
-    .logs-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-      max-height: 360px;
-      overflow-y: auto;
-      padding-right: 0.2rem;
-    }
-    .log-card {
-      background: #020617;
-      border-radius: 12px;
-      border: 1px solid #1f2937;
-      padding: 0.7rem 0.8rem;
-      font-size: 0.8rem;
-    }
-    .log-card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.3rem;
-    }
-    .log-card-title {
-      font-weight: 500;
-      color: #e5e7eb;
-    }
-    .log-card-badge {
-      padding: 0.15rem 0.5rem;
-      border-radius: 999px;
-      border: 1px solid #facc15;
-      color: #facc15;
-      font-size: 0.7rem;
-    }
-    .log-card-meta {
-      font-size: 0.75rem;
-      color: #9ca3af;
-      margin-bottom: 0.2rem;
-    }
-    .log-card-field {
-      margin-bottom: 0.15rem;
-    }
-    .log-card-field span.label {
-      color: #9ca3af;
-    }
-    .log-card-field span.value {
-      color: #e5e7eb;
-    }
-
-    .section {
-      margin-top: 1.5rem;
-      background: #020617;
-      border-radius: 18px;
-      border: 1px solid #1f2937;
-      box-shadow: 0 0 35px rgba(15,23,42,0.9);
-      padding: 1.2rem 1.4rem;
-      position: relative;
-      overflow: hidden;
-    }
-    .section::before {
-      content: "";
-      position: absolute;
-      inset: -40%;
-      background: radial-gradient(circle at top, #38bdf822, transparent 60%);
-      opacity: 0.35;
-      pointer-events: none;
-    }
-    .section-inner {
-      position: relative;
-      z-index: 1;
-    }
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 0.6rem;
-    }
-    .section-header h2 {
-      font-size: 1.1rem;
-      color: #e5e7eb;
-    }
-    .section-description {
-      font-size: 0.85rem;
-      color: #9ca3af;
-      margin-bottom: 0.6rem;
-    }
-    .table-wrapper {
-      width: 100%;
-      overflow-x: auto;
-      border-radius: 10px;
-      border: 1px solid #1f2937;
-      background: #020617;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.8rem;
-    }
-    thead {
-      background: #020617;
-    }
-    th, td {
-      padding: 0.5rem 0.7rem;
-      text-align: left;
-      border-bottom: 1px solid #111827;
-      white-space: nowrap;
-    }
-    th {
-      font-weight: 500;
-      color: #9ca3af;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-    tbody tr:hover {
-      background: #020617;
-    }
-    .badge-role {
-      padding: 0.15rem 0.5rem;
-      border-radius: 999px;
-      border: 1px solid #4b5563;
-      font-size: 0.75rem;
-      color: #e5e7eb;
-    }
-    .badge-role.admin {
-      border-color: #f97316;
-      color: #fed7aa;
-    }
-    .badge-role.mod {
-      border-color: #3b82f6;
-      color: #bfdbfe;
-    }
-    .badge-role.helper {
-      border-color: #a855f7;
-      color: #e9d5ff;
-    }
-    .btn-small {
-      padding: 0.25rem 0.6rem;
-      border-radius: 999px;
-      border: 1px solid #1f2937;
-      background: #020617;
-      color: #e5e7eb;
-      font-size: 0.75rem;
-      cursor: pointer;
-      transition: 0.15s ease;
-    }
-    .btn-small:hover {
-      border-color: #38bdf8;
-    }
-    .badge-password {
-      font-family: "JetBrains Mono", monospace;
-      font-size: 0.75rem;
-      color: #9ca3af;
-    }
-    .badge-password strong {
-      color: #e5e7eb;
-    }
-
-    @media (max-width: 768px) {
-      .auth-card, .password-card {
-        padding: 1.8rem;
-      }
-      .main-content {
-        padding: 0 1rem 1rem;
-      }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      background:#020617;
+      color:#E5E7EB;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      -webkit-font-smoothing:antialiased;
+    }
+    .hidden{display:none!important}
+    .top-nav-wrapper{
+      width:100%;
+      display:flex;
+      justify-content:center;
+      margin-top:1.2rem;
+      margin-bottom:0.8rem;
+    }
+    .menu{
+      background:rgba(255,255,255,0.85);
+      backdrop-filter:blur(20px);
+      border-radius:24px;
+      border:1px solid #fff;
+      display:flex;
+      gap:6px;
+      padding:4px;
+      box-shadow:0 18px 45px rgba(15,23,42,0.45);
+    }
+    .link{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      width:52px;
+      height:52px;
+      border-radius:20px;
+      transition:.4s cubic-bezier(0.175,0.885,0.32,1.275);
+      color:#0f172a;
+      cursor:pointer;
+      overflow:hidden;
+      padding:0 10px;
+      gap:8px;
+      font-size:.85rem;
+      font-weight:500;
+    }
+    .link span.icon{font-size:1.2rem;flex-shrink:0}
+    .link span.label{
+      white-space:nowrap;
+      opacity:0;
+      transform:translateX(-6px);
+      transition:.3s ease;
+    }
+    .link:hover{
+      width:135px;
+      background:#e4e4e7;
+    }
+    .link:hover span.label{
+      opacity:1;
+      transform:translateX(0);
+    }
+    .link.active{
+      background:#0f172a;
+      color:#fff;
+      width:135px;
+    }
+    .link.active span.label{
+      opacity:1;
+      transform:translateX(0);
+    }
+    .auth-container{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:1rem;
+    }
+    .auth-card{
+      background:#020617;
+      padding:2.5rem;
+      border-radius:18px;
+      width:100%;
+      max-width:460px;
+      box-shadow:0 0 45px rgba(15,23,42,0.9);
+      border:1px solid #1f2937;
+      position:relative;
+      overflow:hidden;
+    }
+    .auth-card::before{
+      content:"";
+      position:absolute;
+      inset:-40%;
+      background:radial-gradient(circle at top left,#38bdf822,transparent 60%);
+      opacity:.5;
+      pointer-events:none;
+    }
+    .auth-inner{position:relative;z-index:1}
+    .logo-wrapper{display:flex;justify-content:center;margin-bottom:1rem}
+    .logo{
+      width:90px;height:90px;border-radius:50%;
+      border:2px solid #38bdf8;
+      box-shadow:0 0 18px #38bdf855;
+      object-fit:cover;
+    }
+    .auth-title{
+      text-align:center;
+      margin-bottom:.5rem;
+      font-size:1.6rem;
+      font-weight:600;
+      color:#e5e7eb;
+    }
+    .auth-subtitle{
+      text-align:center;
+      margin-bottom:1.2rem;
+      font-size:.9rem;
+      color:#9ca3af;
+    }
+    .auth-form{
+      display:flex;
+      flex-direction:column;
+      gap:.75rem;
+      margin-top:1rem;
+    }
+    .auth-form label{
+      font-size:.9rem;
+      color:#d1d5db;
+    }
+    .auth-form input{
+      padding:.6rem .8rem;
+      border-radius:10px;
+      border:1px solid #1f2937;
+      background:#020617;
+      color:#e5e7eb;
+      font-size:.95rem;
+      transition:border-color .2s,box-shadow .2s,background .2s;
+    }
+    .auth-form input:focus{
+      outline:none;
+      border-color:#38bdf8;
+      box-shadow:0 0 0 1px #38bdf855;
+    }
+    .btn-primary{
+      margin-top:.5rem;
+      padding:.7rem;
+      border-radius:999px;
+      border:none;
+      background:linear-gradient(135deg,#38bdf8,#0ea5e9);
+      color:#0b1120;
+      font-weight:600;
+      cursor:pointer;
+      transition:.2s;
+      font-size:.95rem;
+      letter-spacing:.02em;
+    }
+    .btn-primary:hover{
+      box-shadow:0 0 18px #38bdf855;
+      transform:translateY(-1px);
+    }
+    .btn-secondary{
+      margin-top:.5rem;
+      padding:.7rem;
+      border-radius:999px;
+      border:1px solid #1f2937;
+      background:transparent;
+      color:#e5e7eb;
+      font-weight:500;
+      cursor:pointer;
+      transition:.2s;
+      font-size:.9rem;
+    }
+    .btn-secondary:hover{background:#020617}
+    .error{
+      background:#7f1d1d;
+      color:#fecaca;
+      padding:.6rem .8rem;
+      border-radius:8px;
+      margin-bottom:.5rem;
+      font-size:.85rem;
+      border:1px solid #f87171;
+    }
+    .success{
+      background:#022c22;
+      color:#bbf7d0;
+      padding:.6rem .8rem;
+      border-radius:8px;
+      margin-bottom:.5rem;
+      font-size:.85rem;
+      border:1px solid #22c55e;
+    }
+    .layout{min-height:100vh;display:flex;flex-direction:column}
+    .main-content{
+      flex:1;
+      padding:0 1.5rem 1.5rem;
+      max-width:1200px;
+      margin:0 auto;
+    }
+    .dashboard-grid{
+      display:grid;
+      grid-template-columns:minmax(260px,320px) minmax(260px,1fr) minmax(260px,360px);
+      gap:1.2rem;
+      margin-top:1rem;
+    }
+    @media(max-width:1024px){
+      .dashboard-grid{grid-template-columns:1fr}
+    }
+    .panel{
+      background:#020617;
+      border-radius:18px;
+      border:1px solid #1f2937;
+      box-shadow:0 0 35px rgba(15,23,42,0.9);
+      padding:1.2rem 1.4rem;
+      position:relative;
+      overflow:hidden;
+    }
+    .panel::before{
+      content:"";
+      position:absolute;
+      inset:-40%;
+      background:radial-gradient(circle at top,#38bdf822,transparent 60%);
+      opacity:.35;
+      pointer-events:none;
+    }
+    .panel-inner{position:relative;z-index:1}
+    .panel-title{font-size:1.2rem;font-weight:600;margin-bottom:.2rem;color:#e5e7eb}
+    .panel-subtitle{font-size:.85rem;color:#9ca3af;margin-bottom:.6rem}
+    .status-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:.4rem;
+      padding:.25rem .7rem;
+      border-radius:999px;
+      border:1px solid #16a34a55;
+      background:#022c22;
+      color:#bbf7d0;
+      font-size:.8rem;
+      margin-top:.3rem;
+    }
+    .status-dot{width:8px;height:8px;border-radius:50%;background:#22c55e}
+    .panel-section-title{
+      font-size:.9rem;
+      font-weight:500;
+      margin-top:.8rem;
+      margin-bottom:.3rem;
+      color:#e5e7eb;
+    }
+    .activity-bar{
+      width:100%;
+      height:8px;
+      border-radius:999px;
+      background:#020617;
+      border:1px solid #1f2937;
+      overflow:hidden;
+      margin-top:.3rem;
+    }
+    .activity-bar-fill{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg,#22c55e,#a3e635);
+      transition:width .3s;
+    }
+    .activity-text{font-size:.8rem;color:#9ca3af;margin-top:.3rem}
+    .toolbox-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:.4rem;
+      margin-top:.4rem;
+    }
+    .toolbox-btn{
+      padding:.45rem .5rem;
+      border-radius:999px;
+      border:none;
+      font-size:.8rem;
+      cursor:pointer;
+      font-weight:500;
+      color:#020617;
+    }
+    .toolbox-btn.green{background:#22c55e}
+    .toolbox-btn.blue{background:#3b82f6}
+    .toolbox-btn.orange{background:#f97316}
+    .toolbox-btn:hover{filter:brightness(1.05)}
+    .break-buttons{display:flex;gap:.5rem;margin-top:.6rem}
+    .break-btn{
+      flex:1;
+      padding:.45rem .5rem;
+      border-radius:999px;
+      border:1px solid #1f2937;
+      background:#020617;
+      color:#e5e7eb;
+      font-size:.8rem;
+      cursor:pointer;
+    }
+    .break-btn:hover{border-color:#38bdf8}
+    .field-label{font-size:.85rem;color:#9ca3af;margin-bottom:.25rem}
+    .field-input{
+      width:100%;
+      padding:.6rem .8rem;
+      border-radius:10px;
+      border:1px solid #1f2937;
+      background:#020617;
+      color:#e5e7eb;
+      font-size:.9rem;
+      margin-bottom:.6rem;
+    }
+    .field-input:focus{
+      outline:none;
+      border-color:#38bdf8;
+      box-shadow:0 0 0 1px #38bdf855;
+    }
+    .field-textarea{
+      width:100%;
+      min-height:80px;
+      padding:.6rem .8rem;
+      border-radius:10px;
+      border:1px solid #1f2937;
+      background:#020617;
+      color:#e5e7eb;
+      font-size:.9rem;
+      resize:vertical;
+      margin-bottom:.6rem;
+    }
+    .field-textarea:focus{
+      outline:none;
+      border-color:#38bdf8;
+      box-shadow:0 0 0 1px #38bdf855;
+    }
+    .log-type-select{
+      width:100%;
+      padding:.5rem .7rem;
+      border-radius:10px;
+      border:1px solid #1f2937;
+      background:#020617;
+      color:#e5e7eb;
+      font-size:.9rem;
+      margin-bottom:.6rem;
+    }
+    .log-type-select:focus{
+      outline:none;
+      border-color:#38bdf8;
+      box-shadow:0 0 0 1px #38bdf855;
+    }
+    .search-input{
+      width:100%;
+      padding:.55rem .8rem;
+      border-radius:999px;
+      border:1px solid #1f2937;
+      background:#020617;
+      color:#e5e7eb;
+      font-size:.85rem;
+      margin-bottom:.6rem;
+    }
+    .logs-list{
+      display:flex;
+      flex-direction:column;
+      gap:.6rem;
+      max-height:360px;
+      overflow-y:auto;
+      padding-right:.2rem;
+    }
+    .log-card{
+      background:#020617;
+      border-radius:12px;
+      border:1px solid #1f2937;
+      padding:.7rem .8rem;
+      font-size:.8rem;
+    }
+    .log-card-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:.3rem;
+    }
+    .log-card-title{font-weight:500;color:#e5e7eb}
+    .log-card-badge{
+      padding:.15rem .5rem;
+      border-radius:999px;
+      border:1px solid #facc15;
+      color:#facc15;
+      font-size:.7rem;
+    }
+    .log-card-meta{
+      font-size:.75rem;
+      color:#9ca3af;
+      margin-bottom:.2rem;
+    }
+    .log-card-field{margin-bottom:.15rem}
+    .log-card-field span.label{color:#9ca3af}
+    .log-card-field span.value{color:#e5e7eb}
+    .section{
+      margin-top:1.5rem;
+      background:#020617;
+      border-radius:18px;
+      border:1px solid #1f2937;
+      box-shadow:0 0 35px rgba(15,23,42,0.9);
+      padding:1.2rem 1.4rem;
+      position:relative;
+      overflow:hidden;
+    }
+    .section::before{
+      content:"";
+      position:absolute;
+      inset:-40%;
+      background:radial-gradient(circle at top,#38bdf822,transparent 60%);
+      opacity:.35;
+      pointer-events:none;
+    }
+    .section-inner{position:relative;z-index:1}
+    .section-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:1rem;
+      margin-bottom:.6rem;
+    }
+    .section-header h2{font-size:1.1rem;color:#e5e7eb}
+    .section-description{font-size:.85rem;color:#9ca3af;margin-bottom:.6rem}
+    .table-wrapper{
+      width:100%;
+      overflow-x:auto;
+      border-radius:10px;
+      border:1px solid #1f2937;
+      background:#020617;
+    }
+    table{width:100%;border-collapse:collapse;font-size:.8rem}
+    th,td{
+      padding:.5rem .7rem;
+      text-align:left;
+      border-bottom:1px solid #111827;
+      white-space:nowrap;
+    }
+    th{
+      font-weight:500;
+      color:#9ca3af;
+      font-size:.75rem;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+    }
+    .badge-role{
+      padding:.15rem .5rem;
+      border-radius:999px;
+      border:1px solid #4b5563;
+      font-size:.75rem;
+      color:#e5e7eb;
+    }
+    .badge-role.admin{border-color:#f97316;color:#fed7aa}
+    .badge-role.mod{border-color:#3b82f6;color:#bfdbfe}
+    .badge-role.helper{border-color:#a855f7;color:#e9d5ff}
+    .badge-password{
+      font-family:monospace;
+      font-size:.75rem;
+      color:#9ca3af;
+    }
+    .badge-password strong{color:#e5e7eb}
+    @media(max-width:768px){
+      .auth-card{padding:1.8rem}
+      .main-content{padding:0 1rem 1rem}
     }
   </style>
 </head>
 <body>
 
-<!-- LOGIN -->
+<!-- LOGIN (solo username, niente password reale) -->
 <div id="login-view" class="auth-container">
   <div class="auth-card">
     <div class="auth-inner">
       <div class="logo-wrapper">
-        <img src="https://res.cloudinary.com/dec4vnmzg/image/upload/v1775510756/dezbl6dcpfsvrwzjui1d.webp" alt="Logo" class="logo">
+        <img src="https://res.cloudinary.com/dec4vnmzg/image/upload/v1775510756/dezbl6dcpfsvrwzjui1d.webp" class="logo" alt="Logo">
       </div>
       <h1 class="auth-title">Staff Login</h1>
-      <p class="auth-subtitle">Accesso riservato allo staff. Login con username.</p>
+      <p class="auth-subtitle">Inserisci il tuo username per entrare nel pannello.</p>
 
       <div id="login-error" class="error hidden"></div>
-      <div id="login-success" class="success hidden"></div>
 
       <form id="login-form" class="auth-form">
         <label>Username</label>
         <input type="text" id="login-username" autocomplete="off" required>
-
-        <label>Password</label>
-        <input type="password" id="login-password" autocomplete="off" required>
-
-        <button type="submit" class="btn-primary">Accedi</button>
+        <button type="submit" class="btn-primary">Entra</button>
       </form>
-    </div>
-  </div>
-</div>
-
-<!-- CREATE PASSWORD -->
-<div id="change-password-view" class="auth-container hidden">
-  <div class="password-card">
-    <div class="password-inner">
-      <h2 class="password-title">Create Password 🔒</h2>
-      <p class="password-subtitle">Live validation con feedback moderno.</p>
-
-      <div id="change-error" class="error hidden"></div>
-      <div id="change-success" class="success hidden"></div>
-
-      <div class="password-input-wrapper">
-        <span class="icon-left">🔒</span>
-        <input type="password" id="new-password" placeholder="Inserisci nuova password" autocomplete="off">
-        <span class="icon-right" id="toggle-password-visibility">👁️</span>
-      </div>
-
-      <div class="password-strength-title">Strong Password</div>
-      <ul class="password-checklist">
-        <li id="rule-length"><span class="dot"></span>Almeno 8 caratteri</li>
-        <li id="rule-upper"><span class="dot"></span>Una lettera maiuscola</li>
-        <li id="rule-number"><span class="dot"></span>Un numero</li>
-        <li id="rule-special"><span class="dot"></span>Un carattere speciale</li>
-      </ul>
-
-      <div id="password-status" class="password-status-pill hidden">
-        Strong password ready
-      </div>
-
-      <button id="confirm-password-btn" class="btn-primary" style="margin-top: 1rem;">Conferma password</button>
-      <button type="button" id="change-back-login" class="btn-secondary">Logout</button>
     </div>
   </div>
 </div>
@@ -771,20 +489,16 @@
   <div class="top-nav-wrapper">
     <div class="menu">
       <div class="link active" data-section="dashboard-main">
-        <span class="icon">⬛</span>
-        <span class="label">Dashboard</span>
+        <span class="icon">⬛</span><span class="label">Dashboard</span>
       </div>
       <div class="link" data-section="staff-manager">
-        <span class="icon">👮‍♂️</span>
-        <span class="label">Staff Manager</span>
+        <span class="icon">👮‍♂️</span><span class="label">Staff Manager</span>
       </div>
       <div class="link" data-section="erlc-api">
-        <span class="icon">⚙️</span>
-        <span class="label">ERLC API</span>
+        <span class="icon">⚙️</span><span class="label">ERLC API</span>
       </div>
       <div class="link" id="logout-top">
-        <span class="icon">↩️</span>
-        <span class="label">Logout</span>
+        <span class="icon">↩️</span><span class="label">Logout</span>
       </div>
     </div>
   </div>
@@ -802,7 +516,7 @@
               <span class="status-dot"></span>
               <span id="online-time">ONLINE • 0h 00m 00s</span>
             </div>
-            <div class="panel-section-title" style="margin-top: 0.8rem;">Staff online</div>
+            <div class="panel-section-title" style="margin-top:.8rem;">Staff online</div>
             <div class="activity-text" id="staff-online-text">1 staff online</div>
 
             <div class="panel-section-title">My Activity</div>
@@ -833,7 +547,7 @@
             <div class="panel-subtitle">Registra un nuovo punishment log.</div>
 
             <label class="field-label">User *</label>
-            <input type="text" id="log-user" class="field-input" placeholder="Enter username (⌘I/Ctrl+I)">
+            <input type="text" id="log-user" class="field-input" placeholder="Enter username">
 
             <label class="field-label">Roblox Player ID</label>
             <input type="text" id="log-player-id" class="field-input" placeholder="ID giocatore">
@@ -851,7 +565,7 @@
               <option value="Ban">Ban</option>
             </select>
 
-            <button id="create-log-btn" class="btn-primary" style="margin-top: 0.6rem;">Create Log</button>
+            <button id="create-log-btn" class="btn-primary" style="margin-top:.6rem;">Create Log</button>
           </div>
         </div>
 
@@ -861,7 +575,7 @@
             <div class="panel-title">Punishment Logs</div>
             <div class="panel-subtitle">Storico punizioni.</div>
 
-            <input type="text" id="logs-search" class="search-input" placeholder="Search by username (⌘F/Ctrl+F)">
+            <input type="text" id="logs-search" class="search-input" placeholder="Search by username">
 
             <div class="logs-list" id="logs-list"></div>
           </div>
@@ -877,9 +591,9 @@
             <h2>Staff Manager</h2>
           </div>
           <p class="section-description">
-            Area riservata. Inserisci la password di amministrazione per accedere alla gestione staff e duty logs.
+            Area riservata. Password di default: <b>admin123</b> (salvata nel database).
           </p>
-          <div class="auth-form" style="max-width: 320px;">
+          <div class="auth-form" style="max-width:320px;">
             <label>Password Staff Manager</label>
             <input type="password" id="staff-manager-password" placeholder="Password admin">
             <button id="staff-manager-unlock" class="btn-primary">Sblocca</button>
@@ -892,25 +606,24 @@
             <h2>Staff Manager</h2>
           </div>
           <p class="section-description">
-            Gestione staff, hash password (demo) e duty logs. Le password reali sono gestite da Firebase Auth.
+            Gestione staff e duty logs. Tutto salvato nel Realtime Database.
           </p>
 
-          <h3 style="font-size:0.95rem;margin-bottom:0.4rem;">Staff & Password Hash</h3>
-          <div class="table-wrapper" style="margin-bottom: 1rem;">
+          <h3 style="font-size:.95rem;margin-bottom:.4rem;">Staff</h3>
+          <div class="table-wrapper" style="margin-bottom:1rem;">
             <table>
               <thead>
                 <tr>
                   <th>Username</th>
                   <th>Ruolo</th>
-                  <th>Password Hash (SHA-256)</th>
-                  <th>Ultimo cambio</th>
+                  <th>Ultimo login</th>
                 </tr>
               </thead>
               <tbody id="staff-manager-table-body"></tbody>
             </table>
           </div>
 
-          <h3 style="font-size:0.95rem;margin-bottom:0.4rem;">Duty Logs</h3>
+          <h3 style="font-size:.95rem;margin-bottom:.4rem;">Duty Logs</h3>
           <div class="table-wrapper">
             <table>
               <thead>
@@ -918,7 +631,6 @@
                   <th>Data</th>
                   <th>Staff</th>
                   <th>Azione</th>
-                  <th>Dettaglio</th>
                 </tr>
               </thead>
               <tbody id="duty-logs-table-body"></tbody>
@@ -928,7 +640,7 @@
       </div>
     </div>
 
-    <!-- ERLC API SECTION (solo UI) -->
+    <!-- ERLC API (solo UI) -->
     <div id="erlc-api-section" class="hidden">
       <div class="section">
         <div class="section-inner">
@@ -936,21 +648,17 @@
             <h2>ERLC API</h2>
           </div>
           <p class="section-description">
-            Interfaccia per l’integrazione con ERLC. La API key reale deve stare solo lato server, mai nel client.
+            Placeholder per integrazione futura. Nessuna chiamata reale viene fatta da qui.
           </p>
-
           <div class="table-wrapper" style="margin-bottom:1rem;">
             <table>
               <thead>
-                <tr>
-                  <th>Parametro</th>
-                  <th>Valore</th>
-                </tr>
+                <tr><th>Parametro</th><th>Valore</th></tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>API Key (client)</td>
-                  <td><span class="badge-password"><strong>********</strong> (placeholder, non reale)</span></td>
+                  <td>API Key</td>
+                  <td><span class="badge-password"><strong>********</strong> (placeholder)</span></td>
                 </tr>
                 <tr>
                   <td>Stato</td>
@@ -959,95 +667,54 @@
               </tbody>
             </table>
           </div>
-
-          <button id="erlc-test-btn" class="btn-primary" style="margin-right:0.5rem;">Test chiamata (mock)</button>
-          <button id="erlc-clear-btn" class="btn-secondary">Pulisci log test</button>
-
-          <p id="erlc-test-result" class="section-description" style="margin-top:0.8rem;">
-            Nessun test eseguito.
-          </p>
+          <button id="erlc-test-btn" class="btn-primary" style="margin-right:.5rem;">Test (mock)</button>
+          <button id="erlc-clear-btn" class="btn-secondary">Pulisci</button>
+          <p id="erlc-test-result" class="section-description" style="margin-top:.8rem;">Nessun test eseguito.</p>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import {
-    getAuth,
-    signInWithEmailAndPassword,
-    createUserWithEmailAndPassword,
-    updatePassword,
-    onAuthStateChanged,
-    signOut
-  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-  import {
-    getFirestore,
-    doc,
-    setDoc,
-    getDoc,
-    getDocs,
-    collection,
-    addDoc,
-    query,
-    where,
-    orderBy,
-    serverTimestamp
-  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
+<script>
+  // CONFIG SOLO REALTIME DATABASE
   const firebaseConfig = {
-    apiKey: "AIzaSyAaXFoIB1mhzj_BIXSePsQtLh3S17BHKLs",
-    authDomain: "staffpanelrp.firebaseapp.com",
-    projectId: "staffpanelrp",
-    storageBucket: "staffpanelrp.firebasestorage.app",
-    messagingSenderId: "440399713809",
-    appId: "1:440399713809:web:4c830e2990d71492d783b0",
-    measurementId: "G-XWC183N0P3"
+    databaseURL: "https://staffpanelrp-default-rtdb.europe-west1.firebasedatabase.app/"
   };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-
+  // ELEMENTI
   const loginView = document.getElementById('login-view');
-  const changeView = document.getElementById('change-password-view');
   const dashboardView = document.getElementById('dashboard-view');
-
   const loginForm = document.getElementById('login-form');
-  const loginError = document.getElementById('login-error');
-  const loginSuccess = document.getElementById('login-success');
   const loginUsername = document.getElementById('login-username');
-  const loginPassword = document.getElementById('login-password');
-
-  const newPasswordInput = document.getElementById('new-password');
-  const changeError = document.getElementById('change-error');
-  const changeSuccess = document.getElementById('change-success');
-  const togglePasswordVisibility = document.getElementById('toggle-password-visibility');
-  const passwordStatus = document.getElementById('password-status');
-  const confirmPasswordBtn = document.getElementById('confirm-password-btn');
-  const changeBackLogin = document.getElementById('change-back-login');
-
-  const ruleLength = document.getElementById('rule-length');
-  const ruleUpper = document.getElementById('rule-upper');
-  const ruleNumber = document.getElementById('rule-number');
-  const ruleSpecial = document.getElementById('rule-special');
+  const loginError = document.getElementById('login-error');
 
   const panelUsername = document.getElementById('panel-username');
+  const onlineTime = document.getElementById('online-time');
   const staffOnlineText = document.getElementById('staff-online-text');
   const activityBarFill = document.getElementById('activity-bar-fill');
   const activityText = document.getElementById('activity-text');
-  const onlineTime = document.getElementById('online-time');
-
-  const logsList = document.getElementById('logs-list');
-  const logsSearch = document.getElementById('logs-search');
-
-  const staffManagerSection = document.getElementById('staff-manager-section');
-  const erlcApiSection = document.getElementById('erlc-api-section');
-  const dashboardMainSection = document.getElementById('dashboard-main-section');
 
   const navLinks = document.querySelectorAll('.menu .link');
   const logoutTop = document.getElementById('logout-top');
+
+  const dashboardMainSection = document.getElementById('dashboard-main-section');
+  const staffManagerSection = document.getElementById('staff-manager-section');
+  const erlcApiSection = document.getElementById('erlc-api-section');
+
+  const logUserInput = document.getElementById('log-user');
+  const logPlayerIdInput = document.getElementById('log-player-id');
+  const logReasonInput = document.getElementById('log-reason');
+  const logPreviousInput = document.getElementById('log-previous');
+  const logTypeSelect = document.getElementById('log-type');
+  const createLogBtn = document.getElementById('create-log-btn');
+  const logsList = document.getElementById('logs-list');
+  const logsSearch = document.getElementById('logs-search');
+
+  const btnBreak = document.getElementById('btn-break');
+  const btnEndShift = document.getElementById('btn-end-shift');
 
   const staffManagerLocked = document.getElementById('staff-manager-locked');
   const staffManagerUnlocked = document.getElementById('staff-manager-unlocked');
@@ -1062,231 +729,15 @@
   const erlcClearBtn = document.getElementById('erlc-clear-btn');
   const erlcTestResult = document.getElementById('erlc-test-result');
 
-  const btnBreak = document.getElementById('btn-break');
-  const btnEndShift = document.getElementById('btn-end-shift');
-
-  const createLogBtn = document.getElementById('create-log-btn');
-  const logUserInput = document.getElementById('log-user');
-  const logPlayerIdInput = document.getElementById('log-player-id');
-  const logReasonInput = document.getElementById('log-reason');
-  const logPreviousInput = document.getElementById('log-previous');
-  const logTypeSelect = document.getElementById('log-type');
-
   let currentUsername = null;
   let onlineSeconds = 0;
   let onlineTimer = null;
+  let punishmentLogsCache = [];
 
   function showView(view) {
     loginView.classList.add('hidden');
-    changeView.classList.add('hidden');
     dashboardView.classList.add('hidden');
     view.classList.remove('hidden');
-  }
-
-  function usernameToEmail(username) {
-    return `${username}@staffpanelrp.fake`;
-  }
-
-  async function sha256(text) {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(text);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    return hashHex;
-  }
-
-  function validatePasswordRules(pwd) {
-    const lengthValid = pwd.length >= 8;
-    const upperValid = /[A-Z]/.test(pwd);
-    const numberValid = /[0-9]/.test(pwd);
-    const specialValid = /[^A-Za-z0-9]/.test(pwd);
-
-    function setRule(el, valid) {
-      if (valid) el.classList.add('valid');
-      else el.classList.remove('valid');
-    }
-
-    setRule(ruleLength, lengthValid);
-    setRule(ruleUpper, upperValid);
-    setRule(ruleNumber, numberValid);
-    setRule(ruleSpecial, specialValid);
-
-    const allValid = lengthValid && upperValid && numberValid && specialValid;
-    if (allValid) {
-      passwordStatus.classList.remove('hidden');
-    } else {
-      passwordStatus.classList.add('hidden');
-    }
-    return allValid;
-  }
-
-  async function ensureStaffDoc(username, email) {
-    const ref = doc(db, 'staff', username);
-    const snap = await getDoc(ref);
-    if (!snap.exists()) {
-      await setDoc(ref, {
-        username,
-        email,
-        role: 'admin',
-        passwordHash: null,
-        passwordChanged: false,
-        lastPasswordChange: null,
-        lastLogin: serverTimestamp(),
-        dutyStatus: 'online',
-        dutyTime: 0
-      });
-    } else {
-      await setDoc(ref, {
-        lastLogin: serverTimestamp()
-      }, { merge: true });
-    }
-  }
-
-  async function loadStaffInfo(username) {
-    const ref = doc(db, 'staff', username);
-    const snap = await getDoc(ref);
-    if (!snap.exists()) return null;
-    return snap.data();
-  }
-
-  async function renderPunishmentLogs(filterText) {
-    logsList.innerHTML = '';
-    const q = query(collection(db, 'punishmentLogs'), orderBy('created', 'desc'));
-    const snap = await getDocs(q);
-    const filter = (filterText || '').toLowerCase();
-
-    snap.forEach(docSnap => {
-      const log = docSnap.data();
-      const user = (log.user || '').toLowerCase();
-      if (filter && !user.includes(filter)) return;
-
-      const card = document.createElement('div');
-      card.classList.add('log-card');
-
-      const header = document.createElement('div');
-      header.classList.add('log-card-header');
-
-      const title = document.createElement('div');
-      title.classList.add('log-card-title');
-      title.textContent = log.user || 'Unknown';
-
-      const badge = document.createElement('div');
-      badge.classList.add('log-card-badge');
-      badge.textContent = log.type || 'Log';
-
-      header.appendChild(title);
-      header.appendChild(badge);
-
-      const meta = document.createElement('div');
-      meta.classList.add('log-card-meta');
-      const created = log.created?.toDate ? log.created.toDate().toLocaleString() : 'N/A';
-      meta.textContent = `${log.staff || 'Unknown'} • ${created}`;
-
-      const fUser = document.createElement('div');
-      fUser.classList.add('log-card-field');
-      fUser.innerHTML = `<span class="label">User: </span><span class="value">${log.user || ''}</span>`;
-
-      const fId = document.createElement('div');
-      fId.classList.add('log-card-field');
-      fId.innerHTML = `<span class="label">Roblox Player ID: </span><span class="value">${log.playerId || ''}</span>`;
-
-      const fReason = document.createElement('div');
-      fReason.classList.add('log-card-field');
-      fReason.innerHTML = `<span class="label">Reason: </span><span class="value">${log.reason || ''}</span>`;
-
-      const fPrev = document.createElement('div');
-      fPrev.classList.add('log-card-field');
-      fPrev.innerHTML = `<span class="label">Previous Punishments: </span><span class="value">${log.previous ?? 0}</span>`;
-
-      card.appendChild(header);
-      card.appendChild(meta);
-      card.appendChild(fUser);
-      card.appendChild(fId);
-      card.appendChild(fReason);
-      card.appendChild(fPrev);
-
-      logsList.appendChild(card);
-    });
-  }
-
-  async function renderStaffManagerTable() {
-    staffManagerTableBody.innerHTML = '';
-    const snap = await getDocs(collection(db, 'staff'));
-    snap.forEach(docSnap => {
-      const staff = docSnap.data();
-      const tr = document.createElement('tr');
-
-      const tdName = document.createElement('td');
-      tdName.textContent = staff.username || docSnap.id;
-
-      const tdRole = document.createElement('td');
-      const roleBadge = document.createElement('span');
-      roleBadge.classList.add('badge-role');
-      const role = staff.role || 'Helper';
-      if (role.toLowerCase() === 'admin') roleBadge.classList.add('admin');
-      else if (role.toLowerCase() === 'moderator' || role.toLowerCase() === 'mod') roleBadge.classList.add('mod');
-      else roleBadge.classList.add('helper');
-      roleBadge.textContent = role;
-      tdRole.appendChild(roleBadge);
-
-      const tdPass = document.createElement('td');
-      const passSpan = document.createElement('span');
-      passSpan.classList.add('badge-password');
-      const hash = staff.passwordHash || 'N/A';
-      passSpan.innerHTML = `<strong>${hash}</strong>`;
-      tdPass.appendChild(passSpan);
-
-      const tdChange = document.createElement('td');
-      const lastChange = staff.lastPasswordChange?.toDate ? staff.lastPasswordChange.toDate().toLocaleString() : 'N/A';
-      tdChange.textContent = lastChange;
-
-      tr.appendChild(tdName);
-      tr.appendChild(tdRole);
-      tr.appendChild(tdPass);
-      tr.appendChild(tdChange);
-
-      staffManagerTableBody.appendChild(tr);
-    });
-  }
-
-  async function renderDutyLogsTable() {
-    dutyLogsTableBody.innerHTML = '';
-    const q = query(collection(db, 'dutyLogs'), orderBy('created', 'desc'));
-    const snap = await getDocs(q);
-    snap.forEach(docSnap => {
-      const log = docSnap.data();
-      const tr = document.createElement('tr');
-
-      const tdDate = document.createElement('td');
-      const created = log.created?.toDate ? log.created.toDate().toLocaleString() : 'N/A';
-      tdDate.textContent = created;
-
-      const tdStaff = document.createElement('td');
-      tdStaff.textContent = log.staff || 'Unknown';
-
-      const tdAction = document.createElement('td');
-      tdAction.textContent = log.action || '';
-
-      const tdDetail = document.createElement('td');
-      tdDetail.textContent = log.detail || '';
-
-      tr.appendChild(tdDate);
-      tr.appendChild(tdStaff);
-      tr.appendChild(tdAction);
-      tr.appendChild(tdDetail);
-
-      dutyLogsTableBody.appendChild(tr);
-    });
-  }
-
-  function updateDashboardBasics() {
-    staffOnlineText.textContent = `1 staff online`;
-    const hours = 0;
-    const percent = 0;
-    activityBarFill.style.width = percent + '%';
-    activityText.textContent = `${hours.toFixed(2)} / 5 hours (${percent}%) this activity wave`;
-    erlcStatusCell.textContent = 'Configurazione richiesta';
   }
 
   function startOnlineTimer() {
@@ -1306,129 +757,174 @@
     onlineTimer = null;
   }
 
-  onAuthStateChanged(auth, async (user) => {
-    if (!user) {
-      currentUsername = null;
-      stopOnlineTimer();
-      showView(loginView);
-      return;
-    }
-    const email = user.email || '';
-    const username = email.split('@')[0];
-    currentUsername = username;
-    panelUsername.textContent = username;
-    startOnlineTimer();
-    updateDashboardBasics();
+  function updateActivity() {
+    const hours = onlineSeconds / 3600;
+    const percent = Math.min(100, Math.round((hours / 5) * 100));
+    activityBarFill.style.width = percent + '%';
+    activityText.textContent = `${hours.toFixed(2)} / 5 hours (${percent}%) this activity wave`;
+  }
 
-    const staffData = await loadStaffInfo(username);
-    const passwordChanged = staffData?.passwordChanged === true;
-    await renderPunishmentLogs('');
-    if (!passwordChanged) {
-      showView(changeView);
-    } else {
-      showView(dashboardView);
-    }
-  });
+  function renderPunishmentLogs(filterText) {
+    logsList.innerHTML = '';
+    const filter = (filterText || '').toLowerCase();
+    punishmentLogsCache
+      .filter(log => !filter || (log.user || '').toLowerCase().includes(filter))
+      .sort((a,b) => (b.created || 0) - (a.created || 0))
+      .forEach(log => {
+        const card = document.createElement('div');
+        card.classList.add('log-card');
 
-  loginForm.addEventListener('submit', async (e) => {
+        const header = document.createElement('div');
+        header.classList.add('log-card-header');
+
+        const title = document.createElement('div');
+        title.classList.add('log-card-title');
+        title.textContent = log.user || 'Unknown';
+
+        const badge = document.createElement('div');
+        badge.classList.add('log-card-badge');
+        badge.textContent = log.type || 'Log';
+
+        header.appendChild(title);
+        header.appendChild(badge);
+
+        const meta = document.createElement('div');
+        meta.classList.add('log-card-meta');
+        const created = log.created ? new Date(log.created).toLocaleString() : 'N/A';
+        meta.textContent = `${log.staff || 'Unknown'} • ${created}`;
+
+        const fUser = document.createElement('div');
+        fUser.classList.add('log-card-field');
+        fUser.innerHTML = `<span class="label">User: </span><span class="value">${log.user || ''}</span>`;
+
+        const fId = document.createElement('div');
+        fId.classList.add('log-card-field');
+        fId.innerHTML = `<span class="label">Roblox Player ID: </span><span class="value">${log.playerId || ''}</span>`;
+
+        const fReason = document.createElement('div');
+        fReason.classList.add('log-card-field');
+        fReason.innerHTML = `<span class="label">Reason: </span><span class="value">${log.reason || ''}</span>`;
+
+        const fPrev = document.createElement('div');
+        fPrev.classList.add('log-card-field');
+        fPrev.innerHTML = `<span class="label">Previous Punishments: </span><span class="value">${log.previous ?? 0}</span>`;
+
+        card.appendChild(header);
+        card.appendChild(meta);
+        card.appendChild(fUser);
+        card.appendChild(fId);
+        card.appendChild(fReason);
+        card.appendChild(fPrev);
+
+        logsList.appendChild(card);
+      });
+  }
+
+  function loadPunishmentLogs() {
+    db.ref('punishmentLogs').on('value', snap => {
+      const val = snap.val() || {};
+      punishmentLogsCache = Object.values(val);
+      renderPunishmentLogs(logsSearch.value);
+    });
+  }
+
+  function loadStaffForManager() {
+    db.ref('staff').on('value', snap => {
+      const val = snap.val() || {};
+      staffManagerTableBody.innerHTML = '';
+      Object.keys(val).forEach(username => {
+        const staff = val[username];
+        const tr = document.createElement('tr');
+
+        const tdName = document.createElement('td');
+        tdName.textContent = username;
+
+        const tdRole = document.createElement('td');
+        const roleBadge = document.createElement('span');
+        roleBadge.classList.add('badge-role');
+        const role = staff.role || 'Helper';
+        if (role.toLowerCase() === 'admin') roleBadge.classList.add('admin');
+        else if (role.toLowerCase().includes('mod')) roleBadge.classList.add('mod');
+        else roleBadge.classList.add('helper');
+        roleBadge.textContent = role;
+        tdRole.appendChild(roleBadge);
+
+        const tdLogin = document.createElement('td');
+        const lastLogin = staff.lastLogin ? new Date(staff.lastLogin).toLocaleString() : 'N/A';
+        tdLogin.textContent = lastLogin;
+
+        tr.appendChild(tdName);
+        tr.appendChild(tdRole);
+        tr.appendChild(tdLogin);
+
+        staffManagerTableBody.appendChild(tr);
+      });
+    });
+  }
+
+  function loadDutyLogs() {
+    db.ref('dutyLogs').on('value', snap => {
+      const val = snap.val() || {};
+      const arr = Object.values(val).sort((a,b) => (b.created || 0) - (a.created || 0));
+      dutyLogsTableBody.innerHTML = '';
+      arr.forEach(log => {
+        const tr = document.createElement('tr');
+        const tdDate = document.createElement('td');
+        const tdStaff = document.createElement('td');
+        const tdAction = document.createElement('td');
+
+        tdDate.textContent = log.created ? new Date(log.created).toLocaleString() : 'N/A';
+        tdStaff.textContent = log.staff || 'Unknown';
+        tdAction.textContent = log.action || '';
+
+        tr.appendChild(tdDate);
+        tr.appendChild(tdStaff);
+        tr.appendChild(tdAction);
+        dutyLogsTableBody.appendChild(tr);
+      });
+    });
+  }
+
+  function ensureStaffManagerPassword() {
+    const ref = db.ref('settings/staffManager');
+    ref.once('value').then(snap => {
+      if (!snap.exists()) {
+        ref.set({ adminPassword: 'admin123' });
+      }
+    });
+  }
+
+  // LOGIN (solo username)
+  loginForm.addEventListener('submit', e => {
     e.preventDefault();
-    loginError.classList.add('hidden');
-    loginSuccess.classList.add('hidden');
-
     const username = loginUsername.value.trim();
-    const password = loginPassword.value;
-
-    if (!username || !password) {
-      loginError.textContent = 'Inserisci username e password.';
+    if (!username) {
+      loginError.textContent = 'Inserisci uno username.';
       loginError.classList.remove('hidden');
       return;
     }
+    loginError.classList.add('hidden');
+    currentUsername = username;
+    panelUsername.textContent = username;
+    staffOnlineText.textContent = '1 staff online';
+    startOnlineTimer();
+    ensureStaffManagerPassword();
 
-    const email = usernameToEmail(username);
+    // salva/aggiorna staff nel DB
+    db.ref('staff/' + username).update({
+      username,
+      role: 'Staff',
+      lastLogin: Date.now()
+    });
 
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      loginSuccess.textContent = 'Login effettuato.';
-      loginSuccess.classList.remove('hidden');
-      await ensureStaffDoc(username, email);
-    } catch (err) {
-      if (err.code === 'auth/user-not-found') {
-        try {
-          const cred = await createUserWithEmailAndPassword(auth, email, password);
-          await ensureStaffDoc(username, email);
-          loginSuccess.textContent = 'Account creato e login effettuato.';
-          loginSuccess.classList.remove('hidden');
-        } catch (err2) {
-          loginError.textContent = 'Errore creazione account: ' + (err2.message || err2.code);
-          loginError.classList.remove('hidden');
-        }
-      } else if (err.code === 'auth/wrong-password') {
-        loginError.textContent = 'Password errata.';
-        loginError.classList.remove('hidden');
-      } else {
-        loginError.textContent = 'Errore login: ' + (err.message || err.code);
-        loginError.classList.remove('hidden');
-      }
-    }
+    showView(dashboardView);
   });
 
-  newPasswordInput.addEventListener('input', () => {
-    validatePasswordRules(newPasswordInput.value);
-  });
-
-  togglePasswordVisibility.addEventListener('click', () => {
-    if (newPasswordInput.type === 'password') {
-      newPasswordInput.type = 'text';
-    } else {
-      newPasswordInput.type = 'password';
-    }
-  });
-
-  confirmPasswordBtn.addEventListener('click', async () => {
-    changeError.classList.add('hidden');
-    changeSuccess.classList.add('hidden');
-    const pwd = newPasswordInput.value;
-    const ok = validatePasswordRules(pwd);
-    if (!ok) {
-      changeError.textContent = 'La password non rispetta tutti i requisiti.';
-      changeError.classList.remove('hidden');
-      return;
-    }
-    const user = auth.currentUser;
-    if (!user || !currentUsername) {
-      changeError.textContent = 'Sessione non valida, effettua di nuovo il login.';
-      changeError.classList.remove('hidden');
-      return;
-    }
-    try {
-      await updatePassword(user, pwd);
-      const hash = await sha256(pwd);
-      const ref = doc(db, 'staff', currentUsername);
-      await setDoc(ref, {
-        passwordHash: hash,
-        passwordChanged: true,
-        lastPasswordChange: serverTimestamp()
-      }, { merge: true });
-      changeSuccess.textContent = 'Password aggiornata correttamente.';
-      changeSuccess.classList.remove('hidden');
-      setTimeout(() => {
-        showView(dashboardView);
-      }, 800);
-    } catch (err) {
-      changeError.textContent = 'Errore aggiornamento password: ' + (err.message || err.code);
-      changeError.classList.remove('hidden');
-    }
-  });
-
-  changeBackLogin.addEventListener('click', async () => {
-    await signOut(auth);
-  });
-
+  // NAV
   navLinks.forEach(link => {
     link.addEventListener('click', () => {
       const section = link.getAttribute('data-section');
       if (!section) return;
-
       navLinks.forEach(l => l.classList.remove('active'));
       link.classList.add('active');
 
@@ -1436,92 +932,22 @@
       staffManagerSection.classList.add('hidden');
       erlcApiSection.classList.add('hidden');
 
-      if (section === 'dashboard-main') {
-        dashboardMainSection.classList.remove('hidden');
-      } else if (section === 'staff-manager') {
-        staffManagerSection.classList.remove('hidden');
-      } else if (section === 'erlc-api') {
-        erlcApiSection.classList.remove('hidden');
-      }
+      if (section === 'dashboard-main') dashboardMainSection.classList.remove('hidden');
+      if (section === 'staff-manager') staffManagerSection.classList.remove('hidden');
+      if (section === 'erlc-api') erlcApiSection.classList.remove('hidden');
     });
   });
 
-  logoutTop.addEventListener('click', async () => {
-    await signOut(auth);
+  logoutTop.addEventListener('click', () => {
+    currentUsername = null;
+    stopOnlineTimer();
+    showView(loginView);
   });
 
-  staffManagerUnlockBtn.addEventListener('click', async () => {
-    staffManagerError.classList.add('hidden');
-    const pwd = staffManagerPasswordInput.value;
-    if (!pwd) {
-      staffManagerError.textContent = 'Inserisci la password Staff Manager.';
-      staffManagerError.classList.remove('hidden');
-      return;
-    }
-    try {
-      const settingsRef = doc(db, 'settings', 'staffManager');
-      const snap = await getDoc(settingsRef);
-      if (!snap.exists()) {
-        const hash = await sha256('admin123');
-        await setDoc(settingsRef, {
-          adminPasswordHash: hash
-        });
-      }
-      const data = (await getDoc(settingsRef)).data();
-      const hashInput = await sha256(pwd);
-      if (hashInput !== data.adminPasswordHash) {
-        staffManagerError.textContent = 'Password Staff Manager errata.';
-        staffManagerError.classList.remove('hidden');
-        return;
-      }
-      staffManagerLocked.classList.add('hidden');
-      staffManagerUnlocked.classList.remove('hidden');
-      await renderStaffManagerTable();
-      await renderDutyLogsTable();
-    } catch (err) {
-      staffManagerError.textContent = 'Errore Staff Manager: ' + (err.message || err.code);
-      staffManagerError.classList.remove('hidden');
-    }
-  });
-
-  logsSearch.addEventListener('input', async () => {
-    await renderPunishmentLogs(logsSearch.value);
-  });
-
-  erlcTestBtn.addEventListener('click', () => {
-    const now = new Date().toLocaleString();
-    erlcTestResult.textContent = `[${now}] MOCK: chiamata ERLC simulata lato client.`;
-  });
-
-  erlcClearBtn.addEventListener('click', () => {
-    erlcTestResult.textContent = 'Nessun test eseguito.';
-  });
-
-  btnBreak.addEventListener('click', async () => {
-    if (!currentUsername) return;
-    await addDoc(collection(db, 'dutyLogs'), {
-      staff: currentUsername,
-      action: 'Break',
-      detail: 'Pausa',
-      created: serverTimestamp()
-    });
-    alert('Duty: Break (log salvato).');
-  });
-
-  btnEndShift.addEventListener('click', async () => {
-    if (!currentUsername) return;
-    await addDoc(collection(db, 'dutyLogs'), {
-      staff: currentUsername,
-      action: 'End Shift',
-      detail: 'Fine turno',
-      created: serverTimestamp()
-    });
-    alert('Duty: End Shift (log salvato).');
-  });
-
-  createLogBtn.addEventListener('click', async () => {
+  // CREATE LOG
+  createLogBtn.addEventListener('click', () => {
     if (!currentUsername) {
-      alert('Devi essere loggato per creare un log.');
+      alert('Devi essere loggato.');
       return;
     }
     const user = logUserInput.value.trim();
@@ -1535,31 +961,78 @@
       return;
     }
 
-    try {
-      await addDoc(collection(db, 'punishmentLogs'), {
-        user,
-        playerId,
-        reason,
-        previous,
-        type,
-        staff: currentUsername,
-        created: serverTimestamp()
-      });
-      logUserInput.value = '';
-      logPlayerIdInput.value = '';
-      logReasonInput.value = '';
-      logPreviousInput.value = '0';
-      logTypeSelect.value = 'Warning';
-      await renderPunishmentLogs(logsSearch.value);
-      alert('Log creato.');
-    } catch (err) {
-      alert('Errore creazione log: ' + (err.message || err.code));
-    }
+    db.ref('punishmentLogs').push({
+      user,
+      playerId,
+      reason,
+      previous,
+      type,
+      staff: currentUsername,
+      created: Date.now()
+    });
+
+    logUserInput.value = '';
+    logPlayerIdInput.value = '';
+    logReasonInput.value = '';
+    logPreviousInput.value = '0';
+    logTypeSelect.value = 'Warning';
+
+    alert('Log creato.');
   });
 
-  window.addEventListener('load', () => {
-    updateDashboardBasics();
+  logsSearch.addEventListener('input', () => {
+    renderPunishmentLogs(logsSearch.value);
   });
+
+  // DUTY
+  function addDuty(action) {
+    if (!currentUsername) {
+      alert('Devi essere loggato.');
+      return;
+    }
+    db.ref('dutyLogs').push({
+      staff: currentUsername,
+      action,
+      created: Date.now()
+    });
+    alert('Duty log: ' + action);
+  }
+
+  btnBreak.addEventListener('click', () => addDuty('Break'));
+  btnEndShift.addEventListener('click', () => addDuty('End Shift'));
+
+  // STAFF MANAGER
+  staffManagerUnlockBtn.addEventListener('click', () => {
+    const pwd = staffManagerPasswordInput.value;
+    staffManagerError.classList.add('hidden');
+    db.ref('settings/staffManager/adminPassword').once('value').then(snap => {
+      const real = snap.val() || 'admin123';
+      if (pwd !== real) {
+        staffManagerError.textContent = 'Password Staff Manager errata.';
+        staffManagerError.classList.remove('hidden');
+        return;
+      }
+      staffManagerLocked.classList.add('hidden');
+      staffManagerUnlocked.classList.remove('hidden');
+    });
+  });
+
+  // ERLC MOCK
+  erlcTestBtn.addEventListener('click', () => {
+    const now = new Date().toLocaleString();
+    erlcTestResult.textContent = `[${now}] MOCK: test ERLC eseguito (nessuna chiamata reale).`;
+  });
+  erlcClearBtn.addEventListener('click', () => {
+    erlcTestResult.textContent = 'Nessun test eseguito.';
+  });
+
+  // LISTENERS DB
+  loadPunishmentLogs();
+  loadStaffForManager();
+  loadDutyLogs();
+
+  // TIMER + ACTIVITY
+  setInterval(updateActivity, 5000);
 </script>
 </body>
 </html>
