@@ -5,7 +5,6 @@
     <title>Staff Panel RP | Melonly Edition</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- Librerie Esterne -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bcryptjs/2.4.3/bcrypt.min.js"></script>
@@ -27,7 +26,6 @@
             --warning: #F59E0B;
         }
 
-        /* Scrollbar Custom */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: var(--bg); }
         ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
@@ -46,7 +44,6 @@
 
         .hidden { display: none !important; }
 
-        /* --- ANIMAZIONI --- */
         @keyframes blurIn {
             from { opacity: 0; filter: blur(10px); transform: translateY(20px); }
             to { opacity: 1; filter: blur(0); transform: translateY(0); }
@@ -76,7 +73,7 @@
         .login-logo img { width: 100px; margin-bottom: 20px; filter: drop-shadow(0 0 10px var(--primary-glow)); }
         
         .input-group { margin-bottom: 20px; text-align: left; }
-        .input-group label { display: block; font-size: 0.8rem; color: var(--muted); margin-bottom: 6px; margin-left: 4px; }
+        .input-group label { display: block; font-size: 0.8rem; color: var(--muted); margin-bottom: 6px; }
         .input-group input {
             width: 100%;
             padding: 12px 16px;
@@ -85,7 +82,6 @@
             border-radius: 12px;
             color: white;
             outline: none;
-            transition: 0.3s;
         }
         .input-group input:focus { border-color: var(--primary); box-shadow: 0 0 15px var(--primary-glow); }
 
@@ -100,7 +96,6 @@
             cursor: pointer;
             transition: 0.3s;
         }
-        .btn-main:hover { transform: translateY(-2px); box-shadow: 0 8px 20px var(--primary-glow); }
 
         /* --- APP LAYOUT --- */
         .navbar {
@@ -112,9 +107,7 @@
             background: rgba(15, 23, 42, 0.8);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            position: sticky; top: 0; z-index: 100;
         }
 
         .nav-brand { display: flex; align-items: center; gap: 15px; }
@@ -128,97 +121,42 @@
             font-size: 0.9rem;
             color: var(--muted);
             transition: 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
-        .nav-item:hover, .nav-item.active { color: var(--primary); background: rgba(56, 189, 248, 0.1); }
+        .nav-item.active { color: var(--primary); background: rgba(56, 189, 248, 0.1); }
 
         main { padding: 40px; max-width: 1400px; margin: 0 auto; }
 
-        /* --- GRID & CARDS --- */
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 40px; }
-        
-        .stat-card {
-            background: var(--panel);
-            padding: 24px;
-            border-radius: 20px;
-            border: 1px solid var(--border);
-            position: relative;
-            overflow: hidden;
-        }
-        .stat-card h3 { font-size: 0.85rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
-        .stat-card .value { font-size: 2.2rem; font-weight: 700; margin-top: 5px; color: var(--primary); }
+        .stat-card { background: var(--panel); padding: 24px; border-radius: 20px; border: 1px solid var(--border); }
+        .stat-card .value { font-size: 2.2rem; font-weight: 700; color: var(--primary); }
 
         .content-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
+        .card { background: var(--panel); border-radius: 24px; border: 1px solid var(--border); padding: 30px; margin-bottom: 20px; }
 
-        .card {
-            background: var(--panel);
-            border-radius: 24px;
-            border: 1px solid var(--border);
-            padding: 30px;
-            margin-bottom: 20px;
-        }
-
-        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .card-title { font-size: 1.2rem; font-weight: 600; color: var(--primary); }
-
-        /* --- BADGES (MOLTI RUOLI) --- */
-        .badge {
-            padding: 4px 12px;
-            border-radius: 8px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            border: 1px solid;
-        }
-        /* Definizioni colori ruoli */
+        /* BADGES */
+        .badge { padding: 4px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; border: 1px solid; }
         .role-founder { border-color: #EF4444; color: #EF4444; background: rgba(239, 68, 68, 0.1); }
         .role-admin { border-color: #F97316; color: #F97316; background: rgba(249, 115, 22, 0.1); }
-        .role-srmod { border-color: #8B5CF6; color: #8B5CF6; background: rgba(139, 92, 246, 0.1); }
         .role-mod { border-color: #3B82F6; color: #3B82F6; background: rgba(59, 130, 246, 0.1); }
-        .role-helper { border-color: #10B981; color: #10B981; background: rgba(16, 185, 129, 0.1); }
-        .role-trial { border-color: #94A3B8; color: #94A3B8; background: rgba(148, 163, 184, 0.1); }
 
-        /* --- TABELLE --- */
-        .table-container { width: 100%; overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th { text-align: left; padding: 15px; color: var(--muted); font-size: 0.75rem; text-transform: uppercase; border-bottom: 1px solid var(--border); }
-        td { padding: 15px; border-bottom: 1px solid rgba(56, 189, 248, 0.05); font-size: 0.9rem; }
-
-        /* --- FORMS --- */
         .field-input, .field-select, .field-area {
-            width: 100%;
-            background: rgba(2, 6, 23, 0.5);
-            border: 1px solid var(--border);
-            padding: 12px;
-            border-radius: 10px;
-            color: white;
-            margin-bottom: 15px;
-            outline: none;
+            width: 100%; background: rgba(2, 6, 23, 0.5); border: 1px solid var(--border); padding: 12px; border-radius: 10px; color: white; margin-bottom: 15px;
         }
-        .field-area { height: 100px; resize: none; }
-
-        /* --- DUTY TIMER --- */
         .duty-box { text-align: center; padding: 20px; border-radius: 20px; background: rgba(2, 6, 23, 0.3); border: 1px dashed var(--border); }
-        .timer-val { font-size: 2.5rem; font-weight: 700; font-family: monospace; color: var(--primary); text-shadow: 0 0 15px var(--primary-glow); }
+        .timer-val { font-size: 2.5rem; font-weight: 700; color: var(--primary); }
     </style>
 </head>
 <body>
 
-<!-- LOGIN VIEW -->
 <div id="login-view" class="login-wrapper">
     <div class="login-card">
         <div class="login-logo">
             <img src="https://res.cloudinary.com/dec4vnmzg/image/upload/v1775515801/rjmv1dsam6nqf1jfmnfw.webp" alt="Logo">
         </div>
         <h2 style="margin-bottom: 10px;">Staff Access</h2>
-        <p style="color: var(--muted); font-size: 0.85rem; margin-bottom: 30px;">Inserisci le tue credenziali per continuare.</p>
-        
-        <div id="login-error" class="hidden" style="background: rgba(239,68,68,0.1); color: #FCA5A5; padding: 10px; border-radius: 10px; margin-bottom: 20px; font-size: 0.8rem; border: 1px solid rgba(239,68,68,0.2);"></div>
-
+        <div id="login-error" class="hidden" style="background: rgba(239,68,68,0.1); color: #FCA5A5; padding: 10px; border-radius: 10px; margin-bottom: 20px;"></div>
         <div class="input-group">
-            <label>Username Staff</label>
+            <label>Username</label>
             <input type="text" id="login-user" placeholder="Es: Mario_Rossi">
         </div>
         <div class="input-group">
@@ -229,171 +167,66 @@
     </div>
 </div>
 
-<!-- APP VIEW -->
 <div id="app-view" class="hidden">
     <nav class="navbar">
         <div class="nav-brand">
             <img src="https://res.cloudinary.com/dec4vnmzg/image/upload/v1775515801/rjmv1dsam6nqf1jfmnfw.webp" alt="Logo">
-            <div>
-                <div style="font-weight: 700; font-size: 1.1rem; line-height: 1;">MELONLY</div>
-                <div style="font-size: 0.7rem; color: var(--primary); letter-spacing: 2px;">STAFF PANEL</div>
-            </div>
+            <span>MELONLY STAFF</span>
         </div>
         <div class="nav-menu">
             <div class="nav-item active" data-sec="dashboard">Dashboard</div>
             <div class="nav-item" data-sec="duty">Duty Shift</div>
             <div class="nav-item" data-sec="punishments">Logs</div>
-            <div class="nav-item" data-sec="manager">Staff Manager</div>
+            <div class="nav-item" data-sec="manager">Manager</div>
         </div>
-        <button id="btn-logout" style="background: none; border: 1px solid var(--danger); color: var(--danger); padding: 8px 16px; border-radius: 10px; cursor: pointer; font-weight: 600;">LOGOUT</button>
+        <button id="btn-logout" style="border: 1px solid var(--danger); color: var(--danger); background:none; padding:8px 15px; border-radius:10px; cursor:pointer;">LOGOUT</button>
     </nav>
 
     <main>
-        <!-- SEZIONE DASHBOARD -->
-        <section id="sec-dashboard" class="panel-section">
+        <section id="sec-dashboard">
             <div class="stats-grid">
-                <div class="stat-card">
-                    <h3>Staff in Servizio</h3>
-                    <div class="value" id="stat-online">0</div>
-                </div>
-                <div class="stat-card">
-                    <h3>Sanzioni Totali</h3>
-                    <div class="value" id="stat-logs">0</div>
-                </div>
-                <div class="stat-card">
-                    <h3>Le Mie Ore</h3>
-                    <div class="value" id="stat-my-hours">0.0</div>
-                </div>
+                <div class="stat-card"><h3>Staff Online</h3><div class="value" id="stat-online">0</div></div>
+                <div class="stat-card"><h3>Sanzioni</h3><div class="value" id="stat-logs">0</div></div>
+                <div class="stat-card"><h3>Le Mie Ore</h3><div class="value" id="stat-my-hours">0.0</div></div>
             </div>
-
             <div class="content-grid">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">Andamento Settimanale</div>
-                    </div>
-                    <canvas id="mainChart" style="max-height: 300px;"></canvas>
-                </div>
-                <div class="card">
-                    <div class="card-title" style="margin-bottom: 20px;">Staff Online Ora</div>
-                    <div id="online-list">
-                        <!-- Lista dinamica -->
-                    </div>
+                <div class="card"><canvas id="mainChart"></canvas></div>
+                <div class="card"><div id="online-list"></div></div>
+            </div>
+        </section>
+
+        <section id="sec-duty" class="hidden">
+            <div class="card" style="max-width: 500px;">
+                <div class="duty-box">
+                    <div id="duty-timer" class="timer-val">00:00:00</div>
+                    <button id="duty-start" class="btn-main" style="margin-top:20px;">INIZIA TURNO</button>
+                    <button id="duty-end" class="btn-main hidden" style="background:var(--danger); margin-top:20px;">FINE TURNO</button>
                 </div>
             </div>
         </section>
 
-        <!-- SEZIONE DUTY -->
-        <section id="sec-duty" class="panel-section hidden">
-            <div class="content-grid" style="grid-template-columns: 1fr 1.5fr;">
-                <div class="card">
-                    <div class="card-title">Gestione Shift</div>
-                    <p style="color: var(--muted); font-size: 0.8rem; margin-bottom: 20px;">Il tempo viene salvato automaticamente a fine turno.</p>
-                    <div class="duty-box">
-                        <div id="duty-timer" class="timer-val">00:00:00</div>
-                        <div id="duty-status" style="margin: 10px 0; font-weight: 600; text-transform: uppercase; font-size: 0.8rem;">Stato: Offline</div>
-                        
-                        <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
-                            <button id="duty-start" class="btn-main">INIZIA TURNO</button>
-                            <div style="display: flex; gap: 10px;">
-                                <button id="duty-pause" class="btn-main hidden" style="background: var(--warning);">PAUSA</button>
-                                <button id="duty-resume" class="btn-main hidden" style="background: var(--success);">RIPRENDI</button>
-                                <button id="duty-end" class="btn-main hidden" style="background: var(--danger);">FINE TURNO</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-title">I miei ultimi Turni</div>
-                    <div class="table-container">
-                        <table>
-                            <thead>
-                                <tr><th>Data</th><th>Azione</th><th>Orario</th></tr>
-                            </thead>
-                            <tbody id="my-duty-logs"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- SEZIONE PUNISHMENTS -->
-        <section id="sec-punishments" class="panel-section hidden">
+        <section id="sec-punishments" class="hidden">
             <div class="card">
-                <div class="card-title">Nuovo Log Sanzione</div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 20px;">
-                    <div>
-                        <label class="field-label">Utente Sanzionato</label>
-                        <input type="text" id="log-target" class="field-input" placeholder="Nome_Cognome">
-                    </div>
-                    <div>
-                        <label class="field-label">Tipo Sanzione</label>
-                        <select id="log-type" class="field-select">
-                            <option value="Warn">Warn</option>
-                            <option value="Kick">Kick</option>
-                            <option value="Ban">Ban</option>
-                            <option value="Mute">Mute</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="field-label">Roblox ID (Opzionale)</label>
-                        <input type="text" id="log-rid" class="field-input" placeholder="12345678">
-                    </div>
-                </div>
-                <label class="field-label">Motivazione</label>
-                <textarea id="log-reason" class="field-area" placeholder="Descrivi l'accaduto..."></textarea>
-                <button id="btn-create-log" class="btn-main" style="width: 200px;">REGISTRA LOG</button>
-            </div>
-
-            <div class="card">
-                <div class="card-title">Storico Sanzioni Globali</div>
-                <div class="table-container">
-                    <table id="global-logs-table">
-                        <thead>
-                            <tr><th>Data</th><th>Staffer</th><th>Utente</th><th>Tipo</th><th>Motivo</th></tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
+                <h3>Nuova Sanzione</h3>
+                <input id="log-target" class="field-input" placeholder="Utente">
+                <select id="log-type" class="field-select"><option>Warn</option><option>Kick</option><option>Ban</option></select>
+                <textarea id="log-reason" class="field-area" placeholder="Motivazione"></textarea>
+                <button id="btn-create-log" class="btn-main">SALVA LOG</button>
             </div>
         </section>
 
-        <!-- SEZIONE MANAGER (PROTETTA) -->
-        <section id="sec-manager" class="panel-section hidden">
-            <div id="manager-lock" class="card" style="max-width: 400px; margin: 0 auto; text-align: center;">
-                <div class="card-title">Area Riservata</div>
-                <p style="font-size: 0.8rem; color: var(--muted); margin-bottom: 20px;">Inserisci la password Master per gestire lo staff.</p>
-                <input type="password" id="master-pass" class="field-input" placeholder="Password Master">
+        <section id="sec-manager" class="hidden">
+            <div id="manager-lock" class="card" style="max-width: 400px; margin: 0 auto;">
+                <h3>Password Master</h3>
+                <input type="password" id="master-pass" class="field-input">
                 <button id="btn-unlock-manager" class="btn-main">SBLOCCA</button>
             </div>
-
             <div id="manager-content" class="hidden">
-                <div class="content-grid" style="grid-template-columns: 1.5fr 1fr;">
-                    <div class="card">
-                        <div class="card-title">Lista Staff Registrato</div>
-                        <div class="table-container">
-                            <table id="manager-staff-table">
-                                <thead>
-                                    <tr><th>Username</th><th>Ruolo</th><th>Ore</th><th>Azioni</th></tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div id="edit-form" class="hidden">
-                            <div class="card-title">Modifica: <span id="edit-target-name" style="color:white"></span></div>
-                            <label class="field-label">Nuovo Ruolo</label>
-                            <input type="text" id="edit-role" class="field-input">
-                            <label class="field-label">Ore Totali</label>
-                            <input type="number" id="edit-hours" class="field-input">
-                            <label class="field-label">Password (Lascia vuoto per non cambiare)</label>
-                            <input type="password" id="edit-new-pass" class="field-input">
-                            <button id="btn-save-staff" class="btn-main">SALVA MODIFICHE</button>
-                        </div>
-                        <div id="edit-placeholder" style="text-align: center; color: var(--muted); padding-top: 50px;">
-                            Seleziona uno staffer dalla tabella per modificarlo.
-                        </div>
-                    </div>
+                <div class="card">
+                    <table style="width:100%">
+                        <thead><tr><th>User</th><th>Ruolo</th><th>Ore</th></tr></thead>
+                        <tbody id="manager-staff-table"></tbody>
+                    </table>
                 </div>
             </div>
         </section>
@@ -401,45 +234,17 @@
 </div>
 
 <script>
-/* -----------------------------------------------------------
-   CONFIGURAZIONE E STATO
------------------------------------------------------------ */
-const firebaseConfig = {
-    databaseURL: "https://staffpanelrp-default-rtdb.europe-west1.firebasedatabase.app/"
-};
+// --- CONFIGURAZIONE ---
+const firebaseConfig = { databaseURL: "https://staffpanelrp-default-rtdb.europe-west1.firebasedatabase.app/" };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
-const bcrypt = dcodeIO.bcrypt; // FIX BCRYPT
+const bcrypt = dcodeIO.bcrypt;
 
 let currentUser = null;
 let dutyTime = 0;
 let dutyInterval = null;
-let currentRole = "Staff";
 
-/* -----------------------------------------------------------
-   UTILI / HELPERS
------------------------------------------------------------ */
-function getRoleClass(role) {
-    const r = role.toLowerCase();
-    if (r.includes("found") || r.includes("prop")) return "role-founder";
-    if (r.includes("admin") || r.includes("gest")) return "role-admin";
-    if (r.includes("sr") || r.includes("sen")) return "role-srmod";
-    if (r.includes("mod")) return "role-mod";
-    if (r.includes("help")) return "role-helper";
-    if (r.includes("trial") || r.includes("test")) return "role-trial";
-    return "";
-}
-
-function formatTimer(s) {
-    const h = Math.floor(s / 3600).toString().padStart(2, '0');
-    const m = Math.floor((s % 3600) / 60).toString().padStart(2, '0');
-    const sec = (s % 60).toString().padStart(2, '0');
-    return `\${h}:\${m}:\${sec}`;
-}
-
-/* -----------------------------------------------------------
-   CORE: LOGIN
------------------------------------------------------------ */
+// --- LOGIN ---
 document.getElementById('btn-login').addEventListener('click', async () => {
     const user = document.getElementById('login-user').value.trim();
     const pass = document.getElementById('login-pass').value;
@@ -448,7 +253,7 @@ document.getElementById('btn-login').addEventListener('click', async () => {
     if(!user || !pass) return;
 
     try {
-        const snap = await db.ref(`staff/\${user}`).get();
+        const snap = await db.ref("staff/" + user).get();
         if(!snap.exists()) {
             err.textContent = "Utente non trovato.";
             err.classList.remove('hidden');
@@ -460,7 +265,6 @@ document.getElementById('btn-login').addEventListener('click', async () => {
 
         if(match) {
             currentUser = user;
-            currentRole = data.role || "Staff";
             document.getElementById('login-view').classList.add('hidden');
             document.getElementById('app-view').classList.remove('hidden');
             initApp();
@@ -469,270 +273,87 @@ document.getElementById('btn-login').addEventListener('click', async () => {
             err.classList.remove('hidden');
         }
     } catch(e) {
-        err.textContent = "Errore critico: Controlla la console.";
         console.error(e);
+        err.textContent = "Errore critico DB.";
         err.classList.remove('hidden');
     }
 });
 
-/* -----------------------------------------------------------
-   APP LOGIC
------------------------------------------------------------ */
 function initApp() {
-    setupNavigation();
-    setupDashboard();
-    setupDuty();
-    setupLogs();
-    setupManager();
-}
-
-// Navigazione
-function setupNavigation() {
+    // Navigazione
     document.querySelectorAll('.nav-item').forEach(item => {
         item.addEventListener('click', () => {
-            const secId = item.getAttribute('data-sec');
-            document.querySelectorAll('.panel-section').forEach(s => s.classList.add('hidden'));
+            const sec = item.getAttribute('data-sec');
+            document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            
-            document.getElementById(`sec-\${secId}`).classList.remove('hidden');
+            document.getElementById('sec-' + sec).classList.remove('hidden');
             item.classList.add('active');
         });
     });
-    document.getElementById('btn-logout').addEventListener('click', () => location.reload());
-}
 
-// Dashboard
-function setupDashboard() {
-    // Stats Online
+    document.getElementById('btn-logout').onclick = () => location.reload();
+
+    // Dashboard Stats
     db.ref('staff').on('value', snap => {
-        let onlineCount = 0;
-        const onlineList = document.getElementById('online-list');
-        onlineList.innerHTML = "";
-
-        snap.forEach(child => {
-            const val = child.val();
-            if(val.dutyStatus === "online") {
-                onlineCount++;
-                const div = document.createElement('div');
-                div.style = "display:flex; justify-content:space-between; padding:10px; border-bottom:1px solid rgba(255,255,255,0.05)";
-                div.innerHTML = `<span>\${child.key}</span><span class="badge \${getRoleClass(val.role)}">\${val.role}</span>`;
-                onlineList.appendChild(div);
+        let count = 0;
+        const list = document.getElementById('online-list');
+        list.innerHTML = "<h4>Staff Online:</h4>";
+        snap.forEach(s => {
+            if(s.val().dutyStatus === "online") {
+                count++;
+                list.innerHTML += "<div>" + s.key + " (" + s.val().role + ")</div>";
             }
-            if(child.key === currentUser) {
-                document.getElementById('stat-my-hours').textContent = (val.hours || 0).toFixed(1);
-            }
+            if(s.key === currentUser) document.getElementById('stat-my-hours').textContent = (s.val().hours || 0).toFixed(1);
         });
-        document.getElementById('stat-online').textContent = onlineCount;
+        document.getElementById('stat-online').textContent = count;
     });
 
-    // Stats Logs
-    db.ref('punishments').on('value', snap => {
-        document.getElementById('stat-logs').textContent = snap.numChildren();
-    });
-
-    // Chart mock
-    const ctx = document.getElementById('mainChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'],
-            datasets: [{
-                label: 'Sanzioni Registrate',
-                data: [12, 19, 15, 8, 22, 30, 25],
-                borderColor: '#38BDF8',
-                backgroundColor: 'rgba(56, 189, 248, 0.1)',
-                fill: true,
-                tension: 0.4
-            }]
-        },
-        options: { plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false }, ticks: { color: '#94A3B8'} } } }
-    });
-}
-
-// Duty
-function setupDuty() {
+    // Duty
     const btnStart = document.getElementById('duty-start');
-    const btnPause = document.getElementById('duty-pause');
-    const btnResume = document.getElementById('duty-resume');
     const btnEnd = document.getElementById('duty-end');
-    const timerDisplay = document.getElementById('duty-timer');
-    const statusDisplay = document.getElementById('duty-status');
-
-    let startTime = 0;
-
+    
     btnStart.onclick = () => {
-        startTime = Date.now();
-        dutyTime = 0;
         btnStart.classList.add('hidden');
-        btnPause.classList.remove('hidden');
         btnEnd.classList.remove('hidden');
-        statusDisplay.textContent = "Stato: In Servizio";
-        statusDisplay.style.color = "var(--success)";
-        
-        db.ref(`staff/\${currentUser}`).update({ dutyStatus: "online", lastShiftStart: startTime });
-        
+        db.ref('staff/' + currentUser).update({ dutyStatus: "online" });
         dutyInterval = setInterval(() => {
             dutyTime++;
-            timerDisplay.textContent = formatTimer(dutyTime);
+            document.getElementById('duty-timer').textContent = new Date(dutyTime * 1000).toISOString().substr(11, 8);
         }, 1000);
-
-        addDutyLog("Inizio Turno");
-    };
-
-    btnPause.onclick = () => {
-        clearInterval(dutyInterval);
-        btnPause.classList.add('hidden');
-        btnResume.classList.remove('hidden');
-        statusDisplay.textContent = "Stato: In Pausa";
-        statusDisplay.style.color = "var(--warning)";
-        db.ref(`staff/\${currentUser}`).update({ dutyStatus: "break" });
-        addDutyLog("Pausa");
-    };
-
-    btnResume.onclick = () => {
-        btnResume.classList.add('hidden');
-        btnPause.classList.remove('hidden');
-        statusDisplay.textContent = "Stato: In Servizio";
-        statusDisplay.style.color = "var(--success)";
-        db.ref(`staff/\${currentUser}`).update({ dutyStatus: "online" });
-        dutyInterval = setInterval(() => {
-            dutyTime++;
-            timerDisplay.textContent = formatTimer(dutyTime);
-        }, 1000);
-        addDutyLog("Ripresa");
     };
 
     btnEnd.onclick = async () => {
         clearInterval(dutyInterval);
-        const totalHoursAdded = dutyTime / 3600;
-        
-        const snap = await db.ref(`staff/\${currentUser}`).get();
-        const currentTotal = snap.val().hours || 0;
-        
-        await db.ref(`staff/\${currentUser}`).update({
+        const snap = await db.ref('staff/' + currentUser).get();
+        const oldHours = snap.val().hours || 0;
+        await db.ref('staff/' + currentUser).update({
             dutyStatus: "offline",
-            hours: currentTotal + totalHoursAdded
+            hours: oldHours + (dutyTime / 3600)
         });
-
-        location.reload(); // Reset semplice
+        location.reload();
     };
 
-    // Load Logs
-    db.ref(`duty_logs/\${currentUser}`).limitToLast(10).on('value', snap => {
-        const tbody = document.getElementById('my-duty-logs');
-        tbody.innerHTML = "";
-        snap.forEach(child => {
-            const v = child.val();
-            const tr = `<tr><td>\${new Date(v.time).toLocaleDateString()}</td><td>\${v.action}</td><td>\${new Date(v.time).toLocaleTimeString()}</td></tr>`;
-            tbody.insertAdjacentHTML('afterbegin', tr);
-        });
-    });
-}
-
-function addDutyLog(action) {
-    db.ref(`duty_logs/\${currentUser}`).push({
-        action: action,
-        time: Date.now()
-    });
-}
-
-// Logs Sanzioni
-function setupLogs() {
-    document.getElementById('btn-create-log').onclick = () => {
-        const target = document.getElementById('log-target').value;
-        const type = document.getElementById('log-type').value;
-        const rid = document.getElementById('log-rid').value;
-        const reason = document.getElementById('log-reason').value;
-
-        if(!target || !reason) return alert("Compila i campi obbligatori!");
-
-        db.ref('punishments').push({
-            staff: currentUser,
-            target,
-            type,
-            rid,
-            reason,
-            time: Date.now()
-        });
-
-        alert("Sanzione registrata!");
-        document.getElementById('log-target').value = "";
-        document.getElementById('log-reason').value = "";
-    };
-
-    db.ref('punishments').limitToLast(20).on('value', snap => {
-        const tbody = document.querySelector('#global-logs-table tbody');
-        tbody.innerHTML = "";
-        snap.forEach(child => {
-            const v = child.val();
-            const tr = `<tr>
-                <td>\${new Date(v.time).toLocaleDateString()}</td>
-                <td>\${v.staff}</td>
-                <td>\${v.target}</td>
-                <td><b>\${v.type}</b></td>
-                <td style="font-size:0.8rem; color:var(--muted)">\${v.reason}</td>
-            </tr>`;
-            tbody.insertAdjacentHTML('afterbegin', tr);
-        });
-    });
-}
-
-// Manager
-function setupManager() {
+    // Manager Unlock
     document.getElementById('btn-unlock-manager').onclick = async () => {
-        const pass = document.getElementById('master-pass').value;
+        const p = document.getElementById('master-pass').value;
         const snap = await db.ref('settings/masterKey').get();
-        const masterKey = snap.val() || "admin123"; // Password default se non esiste
-
-        if(pass === masterKey) {
+        if(p === (snap.val() || "admin123")) {
             document.getElementById('manager-lock').classList.add('hidden');
             document.getElementById('manager-content').classList.remove('hidden');
-            loadStaffTable();
-        } else {
-            alert("Chiave Master errata!");
+            loadManagerTable();
         }
     };
 }
 
-function loadStaffTable() {
+function loadManagerTable() {
     db.ref('staff').on('value', snap => {
-        const tbody = document.querySelector('#manager-staff-table tbody');
+        const tbody = document.getElementById('manager-staff-table');
         tbody.innerHTML = "";
-        snap.forEach(child => {
-            const v = child.val();
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>\${child.key}</td>
-                <td><span class="badge \${getRoleClass(v.role)}">\${v.role}</span></td>
-                <td>\${(v.hours || 0).toFixed(1)}h</td>
-                <td><button class="btn-main" style="padding:4px 10px; font-size:0.7rem;" onclick="editStaff('\${child.key}', '\${v.role}', \${v.hours || 0})">GESTISCI</button></td>
-            `;
-            tbody.appendChild(tr);
+        snap.forEach(s => {
+            tbody.innerHTML += "<tr><td>" + s.key + "</td><td>" + s.val().role + "</td><td>" + (s.val().hours || 0).toFixed(1) + "h</td></tr>";
         });
     });
 }
-
-window.editStaff = (user, role, hours) => {
-    document.getElementById('edit-placeholder').classList.add('hidden');
-    document.getElementById('edit-form').classList.remove('hidden');
-    document.getElementById('edit-target-name').textContent = user;
-    document.getElementById('edit-role').value = role;
-    document.getElementById('edit-hours').value = hours;
-    
-    document.getElementById('btn-save-staff').onclick = async () => {
-        const newRole = document.getElementById('edit-role').value;
-        const newHours = parseFloat(document.getElementById('edit-hours').value);
-        const newPass = document.getElementById('edit-new-pass').value;
-
-        let updates = { role: newRole, hours: newHours };
-        if(newPass) {
-            updates.passwordHash = bcrypt.hashSync(newPass, 10);
-        }
-
-        await db.ref(`staff/\${user}`).update(updates);
-        alert("Staffer aggiornato!");
-    };
-};
 </script>
 </body>
 </html>
