@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Staff Panel RP</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     * {
       box-sizing: border-box;
@@ -22,9 +23,6 @@
     button { font-family: inherit; }
     .hidden { display: none !important; }
 
-    /* ===========================
-       TOP NAV (stile immagine)
-       =========================== */
     .top-nav-wrapper {
       width: 100%;
       display: flex;
@@ -86,9 +84,6 @@
       transform: translateX(0);
     }
 
-    /* ===========================
-       AUTH VIEWS
-       =========================== */
     .auth-container {
       min-height: 100vh;
       display: flex;
@@ -211,10 +206,16 @@
       font-size: 0.85rem;
       border: 1px solid #f87171;
     }
+    .success {
+      background: #022c22;
+      color: #bbf7d0;
+      padding: 0.6rem 0.8rem;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+      font-size: 0.85rem;
+      border: 1px solid #22c55e;
+    }
 
-    /* ===========================
-       CREATE PASSWORD VIEW (stile immagine)
-       =========================== */
     .password-card {
       background: #020617;
       padding: 2.2rem;
@@ -330,9 +331,6 @@
       margin-top: 0.4rem;
     }
 
-    /* ===========================
-       MAIN LAYOUT DASHBOARD
-       =========================== */
     .layout {
       min-height: 100vh;
       display: flex;
@@ -376,8 +374,6 @@
       position: relative;
       z-index: 1;
     }
-
-    /* LEFT PANEL: Hey Pavel */
     .status-pill {
       display: inline-flex;
       align-items: center;
@@ -449,18 +445,10 @@
       font-weight: 500;
       color: #020617;
     }
-    .toolbox-btn.green {
-      background: #22c55e;
-    }
-    .toolbox-btn.blue {
-      background: #3b82f6;
-    }
-    .toolbox-btn.orange {
-      background: #f97316;
-    }
-    .toolbox-btn:hover {
-      filter: brightness(1.05);
-    }
+    .toolbox-btn.green { background: #22c55e; }
+    .toolbox-btn.blue { background: #3b82f6; }
+    .toolbox-btn.orange { background: #f97316; }
+    .toolbox-btn:hover { filter: brightness(1.05); }
     .break-buttons {
       display: flex;
       gap: 0.5rem;
@@ -481,7 +469,6 @@
       border-color: #38bdf8;
     }
 
-    /* MIDDLE PANEL: Create New Log */
     .field-label {
       font-size: 0.85rem;
       color: #9ca3af;
@@ -535,7 +522,6 @@
       box-shadow: 0 0 0 1px #38bdf855;
     }
 
-    /* RIGHT PANEL: Punishment Logs */
     .search-input {
       width: 100%;
       padding: 0.55rem 0.8rem;
@@ -598,7 +584,6 @@
       color: #e5e7eb;
     }
 
-    /* STAFF MANAGER SECTION */
     .section {
       margin-top: 1.5rem;
       background: #020617;
@@ -729,9 +714,10 @@
         <img src="https://res.cloudinary.com/dec4vnmzg/image/upload/v1775510756/dezbl6dcpfsvrwzjui1d.webp" alt="Logo" class="logo">
       </div>
       <h1 class="auth-title">Staff Login</h1>
-      <p class="auth-subtitle">Accesso riservato allo staff.</p>
+      <p class="auth-subtitle">Accesso riservato allo staff. Login con username.</p>
 
       <div id="login-error" class="error hidden"></div>
+      <div id="login-success" class="success hidden"></div>
 
       <form id="login-form" class="auth-form">
         <label>Username</label>
@@ -746,7 +732,7 @@
   </div>
 </div>
 
-<!-- CREATE PASSWORD (obbligatorio al primo accesso) -->
+<!-- CREATE PASSWORD -->
 <div id="change-password-view" class="auth-container hidden">
   <div class="password-card">
     <div class="password-inner">
@@ -754,6 +740,7 @@
       <p class="password-subtitle">Live validation con feedback moderno.</p>
 
       <div id="change-error" class="error hidden"></div>
+      <div id="change-success" class="success hidden"></div>
 
       <div class="password-input-wrapper">
         <span class="icon-left">🔒</span>
@@ -774,7 +761,7 @@
       </div>
 
       <button id="confirm-password-btn" class="btn-primary" style="margin-top: 1rem;">Conferma password</button>
-      <button type="button" id="change-back-login" class="btn-secondary">Torna al login</button>
+      <button type="button" id="change-back-login" class="btn-secondary">Logout</button>
     </div>
   </div>
 </div>
@@ -803,13 +790,13 @@
   </div>
 
   <div class="main-content">
-    <!-- DASHBOARD MAIN (3 colonne come immagine) -->
+    <!-- DASHBOARD MAIN -->
     <div id="dashboard-main-section">
       <div class="dashboard-grid">
-        <!-- LEFT: Hey Pavel -->
+        <!-- LEFT -->
         <div class="panel">
           <div class="panel-inner">
-            <div class="panel-title">Hey, <span id="panel-username">Pavel</span>!</div>
+            <div class="panel-title">Hey, <span id="panel-username">Staff</span>!</div>
             <div class="panel-subtitle">Benvenuto nel duty panel.</div>
             <div class="status-pill">
               <span class="status-dot"></span>
@@ -839,7 +826,7 @@
           </div>
         </div>
 
-        <!-- MIDDLE: Create New Log -->
+        <!-- MIDDLE -->
         <div class="panel">
           <div class="panel-inner">
             <div class="panel-title">Create New Log</div>
@@ -868,7 +855,7 @@
           </div>
         </div>
 
-        <!-- RIGHT: Punishment Logs -->
+        <!-- RIGHT -->
         <div class="panel">
           <div class="panel-inner">
             <div class="panel-title">Punishment Logs</div>
@@ -876,15 +863,13 @@
 
             <input type="text" id="logs-search" class="search-input" placeholder="Search by username (⌘F/Ctrl+F)">
 
-            <div class="logs-list" id="logs-list">
-              <!-- Popolato via JS -->
-            </div>
+            <div class="logs-list" id="logs-list"></div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- STAFF MANAGER (con password + logs duty) -->
+    <!-- STAFF MANAGER -->
     <div id="staff-manager-section" class="hidden">
       <div class="section">
         <div class="section-inner" id="staff-manager-locked">
@@ -907,23 +892,21 @@
             <h2>Staff Manager</h2>
           </div>
           <p class="section-description">
-            Gestione staff, password (demo) e duty logs. In un sistema reale le password sarebbero hashate e mai visibili in chiaro.
+            Gestione staff, hash password (demo) e duty logs. Le password reali sono gestite da Firebase Auth.
           </p>
 
-          <h3 style="font-size:0.95rem;margin-bottom:0.4rem;">Staff & Passwords</h3>
+          <h3 style="font-size:0.95rem;margin-bottom:0.4rem;">Staff & Password Hash</h3>
           <div class="table-wrapper" style="margin-bottom: 1rem;">
             <table>
               <thead>
                 <tr>
-                  <th>Nome</th>
+                  <th>Username</th>
                   <th>Ruolo</th>
-                  <th>Password (demo)</th>
+                  <th>Password Hash (SHA-256)</th>
                   <th>Ultimo cambio</th>
                 </tr>
               </thead>
-              <tbody id="staff-manager-table-body">
-                <!-- JS -->
-              </tbody>
+              <tbody id="staff-manager-table-body"></tbody>
             </table>
           </div>
 
@@ -938,16 +921,14 @@
                   <th>Dettaglio</th>
                 </tr>
               </thead>
-              <tbody id="duty-logs-table-body">
-                <!-- JS -->
-              </tbody>
+              <tbody id="duty-logs-table-body"></tbody>
             </table>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ERLC API SECTION (UI) -->
+    <!-- ERLC API SECTION (solo UI) -->
     <div id="erlc-api-section" class="hidden">
       <div class="section">
         <div class="section-inner">
@@ -955,8 +936,7 @@
             <h2>ERLC API</h2>
           </div>
           <p class="section-description">
-            Interfaccia per l’integrazione con ERLC. La API key reale deve stare solo lato server (es. variabile d’ambiente),
-            mai nel client.
+            Interfaccia per l’integrazione con ERLC. La API key reale deve stare solo lato server, mai nel client.
           </p>
 
           <div class="table-wrapper" style="margin-bottom:1rem;">
@@ -992,65 +972,57 @@
   </div>
 </div>
 
-<script>
-  // ==========================
-  // CONFIG & DEMO DATA
-  // ==========================
-  const DEFAULT_USERNAME = 'admin';
-  const DEFAULT_PASSWORD = 'admin123'; // demo, in produzione hash lato server
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import {
+    getAuth,
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    updatePassword,
+    onAuthStateChanged,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  import {
+    getFirestore,
+    doc,
+    setDoc,
+    getDoc,
+    getDocs,
+    collection,
+    addDoc,
+    query,
+    where,
+    orderBy,
+    serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-  // ERLC API KEY: in produzione NON qui.
-  const ERLC_API_KEY = ''; // placeholder
+  const firebaseConfig = {
+    apiKey: "AIzaSyAaXFoIB1mhzj_BIXSePsQtLh3S17BHKLs",
+    authDomain: "staffpanelrp.firebaseapp.com",
+    projectId: "staffpanelrp",
+    storageBucket: "staffpanelrp.firebasestorage.app",
+    messagingSenderId: "440399713809",
+    appId: "1:440399713809:web:4c830e2990d71492d783b0",
+    measurementId: "G-XWC183N0P3"
+  };
 
-  const STAFF_DATA = [
-    { name: 'Pavel', role: 'Admin', lastLogin: '2026-04-06 22:31', status: 'Online', passwordDemo: 'hash_pavel_123' },
-    { name: 'Luca', role: 'Moderator', lastLogin: '2026-04-06 21:10', status: 'Online', passwordDemo: 'hash_luca_456' },
-    { name: 'Marco', role: 'Helper', lastLogin: '2026-04-05 18:45', status: 'Offline', passwordDemo: 'hash_marco_789' },
-    { name: 'Giulia', role: 'Moderator', lastLogin: '2026-04-04 16:20', status: 'Offline', passwordDemo: 'hash_giulia_321' },
-    { name: 'Sara', role: 'Admin', lastLogin: '2026-04-03 14:05', status: 'Online', passwordDemo: 'hash_sara_654' }
-  ];
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
 
-  const PUNISHMENT_LOGS = [
-    {
-      user: 'Flavio_DeCanio25',
-      playerId: '5754185589',
-      reason: 'Guida irrealistica',
-      previous: 2,
-      type: 'Warning',
-      created: '8 months ago',
-      staff: 'Pavel (@ilboss_02)'
-    },
-    {
-      user: 'Flavio_DeCanio25',
-      playerId: '5754185589',
-      reason: 'No crash',
-      previous: 1,
-      type: 'Warning',
-      created: '8 months ago',
-      staff: 'Pavel (@ilboss_02)'
-    }
-  ];
-
-  const DUTY_LOGS = [
-    { date: '2026-04-06 22:00', staff: 'Pavel', action: 'Start Shift', detail: 'Duty iniziato' },
-    { date: '2026-04-06 22:30', staff: 'Pavel', action: 'Break', detail: 'Pausa 10 minuti' },
-    { date: '2026-04-06 22:45', staff: 'Pavel', action: 'End Break', detail: 'Rientro in duty' }
-  ];
-
-  // ==========================
-  // DOM ELEMENTS
-  // ==========================
   const loginView = document.getElementById('login-view');
   const changeView = document.getElementById('change-password-view');
   const dashboardView = document.getElementById('dashboard-view');
 
   const loginForm = document.getElementById('login-form');
   const loginError = document.getElementById('login-error');
+  const loginSuccess = document.getElementById('login-success');
   const loginUsername = document.getElementById('login-username');
   const loginPassword = document.getElementById('login-password');
 
   const newPasswordInput = document.getElementById('new-password');
   const changeError = document.getElementById('change-error');
+  const changeSuccess = document.getElementById('change-success');
   const togglePasswordVisibility = document.getElementById('toggle-password-visibility');
   const passwordStatus = document.getElementById('password-status');
   const confirmPasswordBtn = document.getElementById('confirm-password-btn');
@@ -1100,9 +1072,10 @@
   const logPreviousInput = document.getElementById('log-previous');
   const logTypeSelect = document.getElementById('log-type');
 
-  // ==========================
-  // STATE & HELPERS
-  // ==========================
+  let currentUsername = null;
+  let onlineSeconds = 0;
+  let onlineTimer = null;
+
   function showView(view) {
     loginView.classList.add('hidden');
     changeView.classList.add('hidden');
@@ -1110,31 +1083,17 @@
     view.classList.remove('hidden');
   }
 
-  function isPasswordChanged() {
-    return localStorage.getItem('passwordChanged') === 'true';
+  function usernameToEmail(username) {
+    return `${username}@staffpanelrp.fake`;
   }
 
-  function getStoredPassword() {
-    return localStorage.getItem('userPassword') || DEFAULT_PASSWORD;
-  }
-
-  function setNewPassword(pwd) {
-    localStorage.setItem('userPassword', pwd);
-    localStorage.setItem('passwordChanged', 'true');
-    localStorage.setItem('lastPasswordChange', new Date().toISOString());
-  }
-
-  function setLoggedIn(username) {
-    sessionStorage.setItem('loggedInUser', username);
-  }
-
-  function getLoggedInUser() {
-    return sessionStorage.getItem('loggedInUser');
-  }
-
-  function logout() {
-    sessionStorage.removeItem('loggedInUser');
-    showView(loginView);
+  async function sha256(text) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(text);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hashHex;
   }
 
   function validatePasswordRules(pwd) {
@@ -1162,12 +1121,45 @@
     return allValid;
   }
 
-  function renderPunishmentLogs(filterText) {
+  async function ensureStaffDoc(username, email) {
+    const ref = doc(db, 'staff', username);
+    const snap = await getDoc(ref);
+    if (!snap.exists()) {
+      await setDoc(ref, {
+        username,
+        email,
+        role: 'admin',
+        passwordHash: null,
+        passwordChanged: false,
+        lastPasswordChange: null,
+        lastLogin: serverTimestamp(),
+        dutyStatus: 'online',
+        dutyTime: 0
+      });
+    } else {
+      await setDoc(ref, {
+        lastLogin: serverTimestamp()
+      }, { merge: true });
+    }
+  }
+
+  async function loadStaffInfo(username) {
+    const ref = doc(db, 'staff', username);
+    const snap = await getDoc(ref);
+    if (!snap.exists()) return null;
+    return snap.data();
+  }
+
+  async function renderPunishmentLogs(filterText) {
     logsList.innerHTML = '';
+    const q = query(collection(db, 'punishmentLogs'), orderBy('created', 'desc'));
+    const snap = await getDocs(q);
     const filter = (filterText || '').toLowerCase();
 
-    PUNISHMENT_LOGS.forEach(log => {
-      if (filter && !log.user.toLowerCase().includes(filter)) return;
+    snap.forEach(docSnap => {
+      const log = docSnap.data();
+      const user = (log.user || '').toLowerCase();
+      if (filter && !user.includes(filter)) return;
 
       const card = document.createElement('div');
       card.classList.add('log-card');
@@ -1177,34 +1169,35 @@
 
       const title = document.createElement('div');
       title.classList.add('log-card-title');
-      title.textContent = log.user;
+      title.textContent = log.user || 'Unknown';
 
       const badge = document.createElement('div');
       badge.classList.add('log-card-badge');
-      badge.textContent = log.type;
+      badge.textContent = log.type || 'Log';
 
       header.appendChild(title);
       header.appendChild(badge);
 
       const meta = document.createElement('div');
       meta.classList.add('log-card-meta');
-      meta.textContent = `${log.staff} • ${log.created}`;
+      const created = log.created?.toDate ? log.created.toDate().toLocaleString() : 'N/A';
+      meta.textContent = `${log.staff || 'Unknown'} • ${created}`;
 
       const fUser = document.createElement('div');
       fUser.classList.add('log-card-field');
-      fUser.innerHTML = `<span class="label">User: </span><span class="value">${log.user}</span>`;
+      fUser.innerHTML = `<span class="label">User: </span><span class="value">${log.user || ''}</span>`;
 
       const fId = document.createElement('div');
       fId.classList.add('log-card-field');
-      fId.innerHTML = `<span class="label">Roblox Player ID: </span><span class="value">${log.playerId}</span>`;
+      fId.innerHTML = `<span class="label">Roblox Player ID: </span><span class="value">${log.playerId || ''}</span>`;
 
       const fReason = document.createElement('div');
       fReason.classList.add('log-card-field');
-      fReason.innerHTML = `<span class="label">Reason: </span><span class="value">${log.reason}</span>`;
+      fReason.innerHTML = `<span class="label">Reason: </span><span class="value">${log.reason || ''}</span>`;
 
       const fPrev = document.createElement('div');
       fPrev.classList.add('log-card-field');
-      fPrev.innerHTML = `<span class="label">Previous Punishments: </span><span class="value">${log.previous}</span>`;
+      fPrev.innerHTML = `<span class="label">Previous Punishments: </span><span class="value">${log.previous ?? 0}</span>`;
 
       card.appendChild(header);
       card.appendChild(meta);
@@ -1217,33 +1210,35 @@
     });
   }
 
-  function renderStaffManagerTable() {
+  async function renderStaffManagerTable() {
     staffManagerTableBody.innerHTML = '';
-    const lastChange = localStorage.getItem('lastPasswordChange') || 'N/A';
-
-    STAFF_DATA.forEach(staff => {
+    const snap = await getDocs(collection(db, 'staff'));
+    snap.forEach(docSnap => {
+      const staff = docSnap.data();
       const tr = document.createElement('tr');
 
       const tdName = document.createElement('td');
-      tdName.textContent = staff.name;
+      tdName.textContent = staff.username || docSnap.id;
 
       const tdRole = document.createElement('td');
       const roleBadge = document.createElement('span');
       roleBadge.classList.add('badge-role');
-      if (staff.role === 'Admin') roleBadge.classList.add('admin');
-      else if (staff.role === 'Moderator') roleBadge.classList.add('mod');
+      const role = staff.role || 'Helper';
+      if (role.toLowerCase() === 'admin') roleBadge.classList.add('admin');
+      else if (role.toLowerCase() === 'moderator' || role.toLowerCase() === 'mod') roleBadge.classList.add('mod');
       else roleBadge.classList.add('helper');
-      roleBadge.textContent = staff.role;
+      roleBadge.textContent = role;
       tdRole.appendChild(roleBadge);
 
       const tdPass = document.createElement('td');
       const passSpan = document.createElement('span');
       passSpan.classList.add('badge-password');
-      // DEMO: mostro stringa "hash_xxx", NON password reale
-      passSpan.innerHTML = `<strong>${staff.passwordDemo}</strong>`;
+      const hash = staff.passwordHash || 'N/A';
+      passSpan.innerHTML = `<strong>${hash}</strong>`;
       tdPass.appendChild(passSpan);
 
       const tdChange = document.createElement('td');
+      const lastChange = staff.lastPasswordChange?.toDate ? staff.lastPasswordChange.toDate().toLocaleString() : 'N/A';
       tdChange.textContent = lastChange;
 
       tr.appendChild(tdName);
@@ -1255,22 +1250,26 @@
     });
   }
 
-  function renderDutyLogsTable() {
+  async function renderDutyLogsTable() {
     dutyLogsTableBody.innerHTML = '';
-    DUTY_LOGS.forEach(log => {
+    const q = query(collection(db, 'dutyLogs'), orderBy('created', 'desc'));
+    const snap = await getDocs(q);
+    snap.forEach(docSnap => {
+      const log = docSnap.data();
       const tr = document.createElement('tr');
 
       const tdDate = document.createElement('td');
-      tdDate.textContent = log.date;
+      const created = log.created?.toDate ? log.created.toDate().toLocaleString() : 'N/A';
+      tdDate.textContent = created;
 
       const tdStaff = document.createElement('td');
-      tdStaff.textContent = log.staff;
+      tdStaff.textContent = log.staff || 'Unknown';
 
       const tdAction = document.createElement('td');
-      tdAction.textContent = log.action;
+      tdAction.textContent = log.action || '';
 
       const tdDetail = document.createElement('td');
-      tdDetail.textContent = log.detail;
+      tdDetail.textContent = log.detail || '';
 
       tr.appendChild(tdDate);
       tr.appendChild(tdStaff);
@@ -1281,68 +1280,98 @@
     });
   }
 
-  function updateDashboard() {
-    const onlineCount = STAFF_DATA.filter(s => s.status === 'Online').length;
-    staffOnlineText.textContent = `${onlineCount} staff online`;
-
+  function updateDashboardBasics() {
+    staffOnlineText.textContent = `1 staff online`;
     const hours = 0;
     const percent = 0;
     activityBarFill.style.width = percent + '%';
     activityText.textContent = `${hours.toFixed(2)} / 5 hours (${percent}%) this activity wave`;
-
-    if (ERLC_API_KEY) {
-      erlcStatusCell.textContent = 'Online (gestita lato server)';
-    } else {
-      erlcStatusCell.textContent = 'Configurazione richiesta';
-    }
+    erlcStatusCell.textContent = 'Configurazione richiesta';
   }
 
-  // ==========================
-  // INIT
-  // ==========================
-  window.addEventListener('load', () => {
-    const user = getLoggedInUser();
-    if (user) {
-      panelUsername.textContent = user;
-      updateDashboard();
-      renderPunishmentLogs('');
-      showView(dashboardView);
-    } else {
+  function startOnlineTimer() {
+    if (onlineTimer) clearInterval(onlineTimer);
+    onlineSeconds = 0;
+    onlineTimer = setInterval(() => {
+      onlineSeconds++;
+      const h = Math.floor(onlineSeconds / 3600);
+      const m = Math.floor((onlineSeconds % 3600) / 60);
+      const s = onlineSeconds % 60;
+      onlineTime.textContent = `ONLINE • ${String(h).padStart(2,'0')}h ${String(m).padStart(2,'0')}m ${String(s).padStart(2,'0')}s`;
+    }, 1000);
+  }
+
+  function stopOnlineTimer() {
+    if (onlineTimer) clearInterval(onlineTimer);
+    onlineTimer = null;
+  }
+
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      currentUsername = null;
+      stopOnlineTimer();
       showView(loginView);
-    }
-  });
-
-  // ==========================
-  // LOGIN
-  // ==========================
-  loginForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    loginError.classList.add('hidden');
-
-    const user = loginUsername.value.trim();
-    const pass = loginPassword.value;
-
-    if (user !== DEFAULT_USERNAME || pass !== getStoredPassword()) {
-      loginError.textContent = 'Credenziali non valide';
-      loginError.classList.remove('hidden');
       return;
     }
+    const email = user.email || '';
+    const username = email.split('@')[0];
+    currentUsername = username;
+    panelUsername.textContent = username;
+    startOnlineTimer();
+    updateDashboardBasics();
 
-    setLoggedIn(user);
-    panelUsername.textContent = user;
-    updateDashboard();
-    renderPunishmentLogs('');
-
-    if (!isPasswordChanged()) {
+    const staffData = await loadStaffInfo(username);
+    const passwordChanged = staffData?.passwordChanged === true;
+    await renderPunishmentLogs('');
+    if (!passwordChanged) {
       showView(changeView);
     } else {
       showView(dashboardView);
     }
   });
 
-  // ==========================
-  // CREATE PASSWORD
-  // ==========================
+  loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    loginError.classList.add('hidden');
+    loginSuccess.classList.add('hidden');
+
+    const username = loginUsername.value.trim();
+    const password = loginPassword.value;
+
+    if (!username || !password) {
+      loginError.textContent = 'Inserisci username e password.';
+      loginError.classList.remove('hidden');
+      return;
+    }
+
+    const email = usernameToEmail(username);
+
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      loginSuccess.textContent = 'Login effettuato.';
+      loginSuccess.classList.remove('hidden');
+      await ensureStaffDoc(username, email);
+    } catch (err) {
+      if (err.code === 'auth/user-not-found') {
+        try {
+          const cred = await createUserWithEmailAndPassword(auth, email, password);
+          await ensureStaffDoc(username, email);
+          loginSuccess.textContent = 'Account creato e login effettuato.';
+          loginSuccess.classList.remove('hidden');
+        } catch (err2) {
+          loginError.textContent = 'Errore creazione account: ' + (err2.message || err2.code);
+          loginError.classList.remove('hidden');
+        }
+      } else if (err.code === 'auth/wrong-password') {
+        loginError.textContent = 'Password errata.';
+        loginError.classList.remove('hidden');
+      } else {
+        loginError.textContent = 'Errore login: ' + (err.message || err.code);
+        loginError.classList.remove('hidden');
+      }
+    }
+  });
+
   newPasswordInput.addEventListener('input', () => {
     validatePasswordRules(newPasswordInput.value);
   });
@@ -1355,8 +1384,9 @@
     }
   });
 
-  confirmPasswordBtn.addEventListener('click', () => {
+  confirmPasswordBtn.addEventListener('click', async () => {
     changeError.classList.add('hidden');
+    changeSuccess.classList.add('hidden');
     const pwd = newPasswordInput.value;
     const ok = validatePasswordRules(pwd);
     if (!ok) {
@@ -1364,17 +1394,36 @@
       changeError.classList.remove('hidden');
       return;
     }
-    setNewPassword(pwd);
-    showView(dashboardView);
+    const user = auth.currentUser;
+    if (!user || !currentUsername) {
+      changeError.textContent = 'Sessione non valida, effettua di nuovo il login.';
+      changeError.classList.remove('hidden');
+      return;
+    }
+    try {
+      await updatePassword(user, pwd);
+      const hash = await sha256(pwd);
+      const ref = doc(db, 'staff', currentUsername);
+      await setDoc(ref, {
+        passwordHash: hash,
+        passwordChanged: true,
+        lastPasswordChange: serverTimestamp()
+      }, { merge: true });
+      changeSuccess.textContent = 'Password aggiornata correttamente.';
+      changeSuccess.classList.remove('hidden');
+      setTimeout(() => {
+        showView(dashboardView);
+      }, 800);
+    } catch (err) {
+      changeError.textContent = 'Errore aggiornamento password: ' + (err.message || err.code);
+      changeError.classList.remove('hidden');
+    }
   });
 
-  changeBackLogin.addEventListener('click', () => {
-    logout();
+  changeBackLogin.addEventListener('click', async () => {
+    await signOut(auth);
   });
 
-  // ==========================
-  // NAVBAR
-  // ==========================
   navLinks.forEach(link => {
     link.addEventListener('click', () => {
       const section = link.getAttribute('data-section');
@@ -1397,72 +1446,120 @@
     });
   });
 
-  logoutTop.addEventListener('click', () => {
-    logout();
+  logoutTop.addEventListener('click', async () => {
+    await signOut(auth);
   });
 
-  // ==========================
-  // STAFF MANAGER PASSWORD
-  // ==========================
-  staffManagerUnlockBtn.addEventListener('click', () => {
+  staffManagerUnlockBtn.addEventListener('click', async () => {
     staffManagerError.classList.add('hidden');
     const pwd = staffManagerPasswordInput.value;
-    // DEMO: stessa password dell'admin
-    if (pwd !== getStoredPassword()) {
-      staffManagerError.textContent = 'Password Staff Manager errata.';
+    if (!pwd) {
+      staffManagerError.textContent = 'Inserisci la password Staff Manager.';
       staffManagerError.classList.remove('hidden');
       return;
     }
-    staffManagerLocked.classList.add('hidden');
-    staffManagerUnlocked.classList.remove('hidden');
-    renderStaffManagerTable();
-    renderDutyLogsTable();
+    try {
+      const settingsRef = doc(db, 'settings', 'staffManager');
+      const snap = await getDoc(settingsRef);
+      if (!snap.exists()) {
+        const hash = await sha256('admin123');
+        await setDoc(settingsRef, {
+          adminPasswordHash: hash
+        });
+      }
+      const data = (await getDoc(settingsRef)).data();
+      const hashInput = await sha256(pwd);
+      if (hashInput !== data.adminPasswordHash) {
+        staffManagerError.textContent = 'Password Staff Manager errata.';
+        staffManagerError.classList.remove('hidden');
+        return;
+      }
+      staffManagerLocked.classList.add('hidden');
+      staffManagerUnlocked.classList.remove('hidden');
+      await renderStaffManagerTable();
+      await renderDutyLogsTable();
+    } catch (err) {
+      staffManagerError.textContent = 'Errore Staff Manager: ' + (err.message || err.code);
+      staffManagerError.classList.remove('hidden');
+    }
   });
 
-  // ==========================
-  // LOGS SEARCH
-  // ==========================
-  logsSearch.addEventListener('input', () => {
-    renderPunishmentLogs(logsSearch.value);
+  logsSearch.addEventListener('input', async () => {
+    await renderPunishmentLogs(logsSearch.value);
   });
 
-  // ==========================
-  // ERLC MOCK
-  // ==========================
   erlcTestBtn.addEventListener('click', () => {
     const now = new Date().toLocaleString();
-    if (!ERLC_API_KEY) {
-      erlcTestResult.textContent = `[${now}] ERRORE: nessuna API key configurata lato server (placeholder vuoto nel client).`;
-    } else {
-      erlcTestResult.textContent = `[${now}] OK: chiamata mock ERLC eseguita lato server (simulata).`;
-    }
+    erlcTestResult.textContent = `[${now}] MOCK: chiamata ERLC simulata lato client.`;
   });
 
   erlcClearBtn.addEventListener('click', () => {
     erlcTestResult.textContent = 'Nessun test eseguito.';
   });
 
-  // ==========================
-  // DUTY BUTTONS (mock)
-  // ==========================
-  btnBreak.addEventListener('click', () => {
-    alert('Duty: Break (mock).');
-  });
-  btnEndShift.addEventListener('click', () => {
-    alert('Duty: End Shift (mock).');
+  btnBreak.addEventListener('click', async () => {
+    if (!currentUsername) return;
+    await addDoc(collection(db, 'dutyLogs'), {
+      staff: currentUsername,
+      action: 'Break',
+      detail: 'Pausa',
+      created: serverTimestamp()
+    });
+    alert('Duty: Break (log salvato).');
   });
 
-  // ==========================
-  // ONLINE TIMER (mock)
-  // ==========================
-  let secondsOnline = 0;
-  setInterval(() => {
-    secondsOnline++;
-    const h = Math.floor(secondsOnline / 3600);
-    const m = Math.floor((secondsOnline % 3600) / 60);
-    const s = secondsOnline % 60;
-    onlineTime.textContent = `ONLINE • ${String(h).padStart(2,'0')}h ${String(m).padStart(2,'0')}m ${String(s).padStart(2,'0')}s`;
-  }, 1000);
+  btnEndShift.addEventListener('click', async () => {
+    if (!currentUsername) return;
+    await addDoc(collection(db, 'dutyLogs'), {
+      staff: currentUsername,
+      action: 'End Shift',
+      detail: 'Fine turno',
+      created: serverTimestamp()
+    });
+    alert('Duty: End Shift (log salvato).');
+  });
+
+  createLogBtn.addEventListener('click', async () => {
+    if (!currentUsername) {
+      alert('Devi essere loggato per creare un log.');
+      return;
+    }
+    const user = logUserInput.value.trim();
+    const playerId = logPlayerIdInput.value.trim();
+    const reason = logReasonInput.value.trim();
+    const previous = parseInt(logPreviousInput.value || '0', 10);
+    const type = logTypeSelect.value;
+
+    if (!user || !reason) {
+      alert('User e Reason sono obbligatori.');
+      return;
+    }
+
+    try {
+      await addDoc(collection(db, 'punishmentLogs'), {
+        user,
+        playerId,
+        reason,
+        previous,
+        type,
+        staff: currentUsername,
+        created: serverTimestamp()
+      });
+      logUserInput.value = '';
+      logPlayerIdInput.value = '';
+      logReasonInput.value = '';
+      logPreviousInput.value = '0';
+      logTypeSelect.value = 'Warning';
+      await renderPunishmentLogs(logsSearch.value);
+      alert('Log creato.');
+    } catch (err) {
+      alert('Errore creazione log: ' + (err.message || err.code));
+    }
+  });
+
+  window.addEventListener('load', () => {
+    updateDashboardBasics();
+  });
 </script>
 </body>
 </html>
