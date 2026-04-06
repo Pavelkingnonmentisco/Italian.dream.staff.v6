@@ -1,14 +1,1 @@
-body { background: #000; color: #fff; font-family: sans-serif; margin: 0; }
-#login-overlay { height: 100vh; display: flex; justify-content: center; align-items: center; background: #011627; }
-.glass-box { background: #051e34; padding: 30px; border-radius: 15px; text-align: center; border: 1px solid #102a43; }
-input, select { display: block; width: 100%; margin: 10px 0; padding: 10px; background: #000; border: 1px solid #333; color: #fff; box-sizing: border-box;}
-.btn-primary, button { width: 100%; padding: 10px; background: #007bff; border: none; color: #fff; cursor: pointer; font-weight: bold; }
-.navbar { display: flex; justify-content: space-between; padding: 15px; background: #051e34; border-bottom: 2px solid #007bff; }
-.container { padding: 20px; max-width: 900px; margin: auto; }
-.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-.card { background: #051e34; padding: 20px; border-radius: 10px; text-align: center; border: 1px solid #102a43; }
-.admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-.card-admin { background: #102a43; padding: 15px; border-radius: 10px; }
-.timer-card { text-align: center; background: #051e34; padding: 40px; border-radius: 20px; }
-#timer { font-size: 50px; margin: 10px 0; }
-.logout { width: auto; background: #dc3545; }
+
